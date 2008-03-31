@@ -71,6 +71,8 @@ typedef struct
 	char lastValueInit;	/**< Non 0 is the field lastValue has been initialize. */
 	double lastValue;	/**< Last value reported. */
 	double delta;	/**< Alowed change before the value is reported. */
+	long deltaTime; /**< Time until another update should be sent. */
+	long lastSent;	/**< Time the variable was last sent. */
 	int index;	/**< Index in the array. */
 } pv;
 

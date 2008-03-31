@@ -88,6 +88,8 @@ void event_handler (evargs args)
 {
     pv* pv = args.usr;
 
+	sem_wait(&pvArrayLock);	//lock the pv array before we change anything
+
     pv->status = args.status;
     if (args.status == ECA_NORMAL)
     {
@@ -97,6 +99,8 @@ void event_handler (evargs args)
         //print_time_val_sts(pv, pv->reqElems);
 		ls_updatepv(pv);	/* Update the database instead of printing to the console. */
     }
+
+	sem_post(&pvArrayLock);	//done with modifications
 }
 
 
@@ -168,10 +172,17 @@ void connection_handler ( struct connection_handler_args args )
     else if ( args.op == CA_OP_CONN_DOWN ) {
         nConn--;
         ppv->status = ECA_DISCONN;
-        print_time_val_sts(ppv, ppv->reqElems);
+        //print_time_val_sts(ppv, ppv->reqElems);
     }
 
-	ls_updatepv(ppv);
+	if(ppv->status != ECA_NORMAL)
+	{
+		//don't want to update if the value has been freed
+		//also keep it thread safe
+		sem_wait(&pvArrayLock);
+		ls_updatepv(ppv);
+		sem_post(&pvArrayLock);
+	}
 }
 
 

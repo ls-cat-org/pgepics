@@ -1,6 +1,7 @@
 #ifndef LSCAT_DBTOOLS_H
 #define LSCAT_DBTOOLS_H
 
+#include <semaphore.h>
 #include <stdio.h>
 #include <epicsStdlib.h>
 #include <string.h>
@@ -9,6 +10,12 @@
 #include <epicsGetopt.h>
 
 #include "tool_lib.h"
+
+/**
+* Used to control access to process variables.
+* Before chaning a process variable this simaphore MUST be locked.
+*/
+sem_t pvArrayLock;
 
 /**
 * Update the state of the data base.
