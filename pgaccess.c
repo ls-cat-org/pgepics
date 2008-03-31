@@ -341,15 +341,15 @@ void ls_run() {
 
     st.tv_usec=500000;
     st.tv_sec=0;
-    //    st.tv_usec=0;
+    //	  st.tv_usec=0;
 
     //select(PQsocket( connection)+1, &readfds, NULL, NULL, NULL);
     select(PQsocket( connection)+1, &readfds, NULL, NULL, &st);
 
-    //    res = PQexec( putConnect, "commit");
-    //    PQclear( res);
-    //    res = PQexec( putConnect, "begin");
-    //    PQclear( res);
+    //	  res = PQexec( putConnect, "commit");
+    //	  PQclear( res);
+    //	  res = PQexec( putConnect, "begin");
+    //	  PQclear( res);
 
     if( FD_ISSET( PQsocket( connection), &readfds)) {
       PQconsumeInput( connection);
