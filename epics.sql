@@ -631,7 +631,7 @@ CREATE OR REPLACE FUNCTION epics.popPutQueue( thePid bigint) RETURNS SETOF epics
     IF NOT FOUND THEN
       RAISE EXCEPTION 'Popping Put Queue with Illegal PID %: Please Kill Yourself', thePid;
     END IF;
-    FOR r IN SELECT  pqIndex, pqValue, pqKey FROM epics._putqueue order by pqKey limit 1 LOOP
+    FOR r IN SELECT  pqIndex, pqValue, pqKey FROM epics._putqueue order by pqKey LOOP
       DELETE FROM epics._putqueue WHERE pqKey=r.pqKey;
       rtn.index := r.pqIndex;
       rtn.value := r.pqValue;

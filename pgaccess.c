@@ -123,7 +123,6 @@ char checkReturn(PGresult* res, const char* funcName) {
 */
 void ls_update(int index, const char* value) {
   static char buffer[512];
-  //  static int zz = 0;
   const char* params[3];
   PGresult* res;
 
@@ -131,12 +130,6 @@ void ls_update(int index, const char* value) {
 
   if( quit)
     return;
-  /*
-  if( zz == 0) {
-    res = PQexec( putConnect, "begin");
-    PQclear( res);
-  }
-  */
 
   sprintf(buffer, "%i", index);
 
@@ -156,14 +149,6 @@ void ls_update(int index, const char* value) {
     return;
 
   PQclear(res);	/* not interested in the result. */
-  /*
-  zz++;
-  if( zz == 10) {
-    res = PQexec( putConnect, "commit");
-    PQclear( res);
-    zz = 0;
-  }
-  */
 }
 
 /**
@@ -341,8 +326,12 @@ void ls_run() {
 
   initialize_pgdb();	/* Initialize pvs. */
 
+  //  res = PQexec( putConnect, "begin");
+  //  PQclear( res);
+
   while(!quit) {
     //ca_pend_event(LS_PEND_TIMEOUT);	/* Monitor events. */
+
     if(quit)
       { break; }
 
@@ -350,24 +339,29 @@ void ls_run() {
     FD_ZERO(&readfds);
     FD_SET( PQsocket( connection), &readfds);
 
-    //st.tv_usec=500000;
+    st.tv_usec=500000;
     st.tv_sec=0;
-    st.tv_usec=0;
+    //    st.tv_usec=0;
 
-    select(PQsocket( connection)+1, &readfds, NULL, NULL, NULL);
-    //select(PQsocket( connection)+1, &readfds, NULL, NULL, &st);
+    //select(PQsocket( connection)+1, &readfds, NULL, NULL, NULL);
+    select(PQsocket( connection)+1, &readfds, NULL, NULL, &st);
 
-    printf( "After select\n");
+    //    res = PQexec( putConnect, "commit");
+    //    PQclear( res);
+    //    res = PQexec( putConnect, "begin");
+    //    PQclear( res);
 
-    PQconsumeInput( connection);
-    // ls_checkRunqueue();
-    notify = PQnotifies( connection);	
-    if( notify != NULL) {
-      printf( "In Notify\n");
-      PQfreemem( notify);
-      while( notify = PQnotifies( connection))
-	PQfreemem(notify);
-      ls_checkRunqueue();
+    if( FD_ISSET( PQsocket( connection), &readfds)) {
+      PQconsumeInput( connection);
+      // ls_checkRunqueue();
+      notify = PQnotifies( connection);	
+      if( notify != NULL) {
+	printf( "In Notify\n");
+	PQfreemem( notify);
+	while( notify = PQnotifies( connection))
+	  PQfreemem(notify);
+	ls_checkRunqueue();
+      }
     }
   }
 }
