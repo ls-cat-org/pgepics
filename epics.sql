@@ -34,6 +34,7 @@ CREATE TABLE epics._pvmonitors (
 	pvmKey serial primary key,			-- table key
 	pvmName text NOT NULL UNIQUE,				-- PV name
 	pvmPrec  int default NULL,			-- give us this many decimal places
+	pvmDTime numeric default 0,			-- update every dTime seconds even if the change is less than Delta
 	pvmDelta numeric default NULL,			-- don't update until change of this amount is seen
 	pvmValue text default NULL,			-- value of the pv
 	pvmValueN numeric default NULL,			-- value of the pv
@@ -161,7 +162,7 @@ CREATE OR REPLACE FUNCTION epics._pvmUpdateTF2() RETURNS TRIGGER AS $$
   DECLARE
     al record;	-- action list for this PV
   BEGIN
-    FOR al IN SELECT * FROM epics._pvactions WHERE pvaPv = NEW. pvmKey LOOP
+    FOR al IN SELECT * FROM epics._pvactions WHERE pvaPv = NEW.pvmKey LOOP
       IF al.pvaActive and not al.pvaTriggered and
         (coalesce(al.pvaTrigIsEqual=new.pvmValueN,false) or
          coalesce(al.pvaTrigIsGT<new.pvmValueN,false) or
@@ -328,6 +329,17 @@ CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPre
 ALTER TABLE epics.motions OWNER TO lsadmin;
 GRANT SELECT ON epics.motions TO PUBLIC;
 
+CREATE TABLE epics.errors (
+       --
+       -- error messages generated while servicing pvs
+       --
+       eKey serial primary key,
+       ets timestamp with time zone not null default now(),
+       epvn text default null,
+       emsg text not null
+);
+create index error_idx on epics.errors (epvn);
+
 CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns void AS $$
   DECLARE
     mrec   record;	-- motions record
@@ -338,7 +350,8 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
       --
       -- Perhaps we should allow the case where the PV is not in "motions" but is legally changable in "_pvmonitors"
       -- Wait 'til we need it
-      RAISE EXCEPTION 'PV name "%" Not found', pvname;
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'PV name "'||pvname||'" Not found');
+      return;
     END IF;
 
     -- Don't move nothing until we need to
@@ -351,25 +364,28 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
     -- Check Soft Limits
     --
     IF mrec.mll > reqpos THEN
-      RAISE EXCEPTION 'Requested postion for "%" of % is less than lower limit of %', pvname, reqpos, mrec.mll;
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is less than lower limit of '|| mrec.mll::text);
+      return;
     END IF;
 
     IF mrec.mhl < reqpos THEN
-      RAISE EXCEPTION 'Requested postion for "%" of % is greater than upper limit of %', pvname, reqpos, mrec.mhl;
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is greater than upper limit of '|| mrec.mhl::text);
+      return;
     END IF;
     --
     -- Check Hard Limits
     --
     IF mrec.mactpos > reqpos and mrec.mllhit != 0 THEN
-      RAISE EXCEPTION 'Requested postion for "%" of % is not allowed as as the lower hard limit has already been reached', pvname, reqpos;
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is not allowed as the lower hard limit has already been reached');
+      return;
     END IF;
 
     IF mrec.mactpos < reqpos and mrec.mhlhit != 0 THEN
-      RAISE EXCEPTION 'Requested postion for "%" of % is not allowed as as the upper hard limit has already been reached', pvname, reqpos;
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is not allowed as the upper hard limit has already been reached');
+      return;
     END IF;
 
 
-    --
     -- Get the pvnames for the various PVs associated with this motion
     --
     SELECT INTO usmrec * FROM epics._motions WHERE _motions.mkey=mrec.mkey;
@@ -459,6 +475,12 @@ CREATE OR REPLACE FUNCTION epics._pvmonitorUpdate() RETURNS trigger AS $$
   DECLARE
     lnk record;		-- link table entries for this pv
   BEGIN
+    --
+    -- Don't do anything if this is not really a new value
+    --
+    IF NEW.pvmValue = OLD.pvmValue THEN
+      RETURN null;
+    END IF;
     NEW.pvmValueN := NEW.pvmValue::numeric;
     NEW.pvmTs     := now();
     INSERT INTO epics._historyPvs (hpN, hpValue) VALUES (NEW.pvmHistoryKey, NEW.pvmValue);
@@ -550,7 +572,7 @@ CREATE OR REPLACE FUNCTION epics._genmotionpvs() RETURNS void AS $$
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ALTER FUNCTION epics._genmotionpvs() OWNER TO lsadmin;
 
-CREATE TYPE epics.pvnamestype AS ( index int, name text, delta numeric, prec int);
+CREATE TYPE epics.pvnamestype AS ( index int, name text, delta numeric, dtime numeric, prec int);
 
 CREATE OR REPLACE FUNCTION epics.getPvNames( thePid bigint) RETURNS SETOF epics.pvnamestype AS $$
   DECLARE
@@ -573,10 +595,12 @@ ALTER FUNCTION epics.getPvNames( bigint) OWNER TO lsadmin;
 
 CREATE TABLE epics._putqueue (
 -- Queue of pv values to put
-	pqKey serial primary key,	-- table key
-	pqIndex int NOT NULL,		-- index in camonitor's pv entry
-	pqValue text NOT NULL,		-- value to put
-	pqTS timestamp with time zone default now()
+	pqKey serial primary key,				-- table key
+	pqIndex int NOT NULL,					-- index in camonitor's pv entry
+	pqValue text NOT NULL,					-- value to put
+	pqTS timestamptz           default now(),		-- time item was entered
+	pqRunAfterTS timestamptz   default now(),		-- Don't run until at least this time
+	pqRunExpiresTS timestamptz default now()+'5 seconds'	-- don't run, just delete after this time
 );
 ALTER TABLE epics._putqueue OWNER TO lsadmin;
 
@@ -594,23 +618,28 @@ CREATE OR REPLACE FUNCTION epics.iniCAMonitor() RETURNS bigint AS $$
 $$ LANGUAGE sql SECURITY DEFINER;
 ALTER FUNCTION epics.iniCAMonitor() OWNER TO lsadmin;
 
-CREATE OR REPLACE FUNCTION epics.pushPutQueue( k int, v text) RETURNS void AS $$
-	INSERT INTO epics._putQueue (pqIndex, pqValue) SELECT pvmMonitorIndex, $2 FROM epics._pvMonitors WHERE pvmKey=$1;
-	NOTIFY caPutNotify;
-$$ LANGUAGE sql SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.pushPutQueue( int, text) OWNER TO lsadmin;
-
 CREATE OR REPLACE FUNCTION epics.pushPutQueue( k bigint, v text) RETURNS void AS $$
 	INSERT INTO epics._putQueue (pqIndex, pqValue) SELECT pvmMonitorIndex, $2 FROM epics._pvMonitors WHERE pvmKey=$1;
 	NOTIFY caPutNotify;
 $$ LANGUAGE sql SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.pushPutQueue( int, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
 
-CREATE OR REPLACE FUNCTION epics.pushPutQueue( pvname text, v text) RETURNS void AS $$
-	INSERT INTO epics._putQueue (pqIndex, pqValue) SELECT pvmMonitorIndex, $2 FROM epics._pvMonitors WHERE pvmname=$1 limit 1;
+CREATE OR REPLACE FUNCTION epics.pushPutQueue( k bigint, v text, expires timestamptz) RETURNS void AS $$
+	INSERT INTO epics._putQueue (pqIndex, pqValue, pqRunExpiresTS) SELECT pvmMonitorIndex, $2, $3 FROM epics._pvMonitors WHERE pvmKey=$1;
 	NOTIFY caPutNotify;
-$$ LANGUAGE sql SECURITY DEFINER;
-ALTER FUNCTION epics.pushPutQueue( text, text) OWNER TO lsadmin;
+$$ LANGUAGE sql SECURITY DEFINER VOLATILE;
+ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics.pushPutQueue( k bigint, v text, delayed timestamptz, expires timestamptz) RETURNS void AS $$
+	INSERT INTO epics._putQueue (pqIndex, pqValue, pqRunAfterTS, pqRunExpiresTS) SELECT pvmMonitorIndex, $2, $3, $4 FROM epics._pvMonitors WHERE pvmKey=$1;
+	NOTIFY caPutNotify;
+$$ LANGUAGE sql SECURITY DEFINER VOLATILE;
+ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
+
+
+
+
+
 
 
 CREATE OR REPLACE FUNCTION epics.checkPID( thePid bigint) RETURNS int AS $$
@@ -627,15 +656,24 @@ CREATE OR REPLACE FUNCTION epics.popPutQueue( thePid bigint) RETURNS SETOF epics
     k   int;			-- key of queue
     rtn epics.putQueueType;	-- index and value
   BEGIN
+    -- remove expired entries
+    DELETE FROM epics._putqueue WHERE pqRunExpiresTS <= now();
+
+    -- check to be sure our camonitor process is the current one
     PERFORM 1 FROM epics._pids WHERE pid=thePid;
     IF NOT FOUND THEN
       RAISE EXCEPTION 'Popping Put Queue with Illegal PID %: Please Kill Yourself', thePid;
     END IF;
-    FOR r IN SELECT  pqIndex, pqValue, pqKey FROM epics._putqueue order by pqKey LOOP
-      DELETE FROM epics._putqueue WHERE pqKey=r.pqKey;
+
+    --
+    -- Loop through all active queue entries: 
+    FOR r IN SELECT  pqIndex, pqValue, pqKey FROM epics._putqueue WHERE pqRunAfterTS <= now() ORDER BY pqKey LOOP
       rtn.index := r.pqIndex;
       rtn.value := r.pqValue;
+      -- send to the camonitor program the pv/values we want to "put"
       RETURN NEXT rtn;
+      -- remove the entry now that it is done
+      DELETE FROM epics._putqueue WHERE pqKey=r.pqKey;
     END LOOP;
     RETURN;
   END;
