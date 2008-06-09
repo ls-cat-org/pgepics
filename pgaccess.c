@@ -138,10 +138,10 @@ void ls_update(int index, const char* value) {
 	if(strlen(value))
 	{
 		printf("aselect epics.pvupdatevalue(%s, %s, %s)\n", params[0], params[1], params[2]);
-		res = PQexecParams(con, "select epics.pvupdatevalue($1::bigint,$2::int,$3)", 3, NULL, params, NULL, NULL, 0);
+		res = PQexecParams(connection, "select epics.pvupdatevalue($1::bigint,$2::int,$3)", 3, NULL, params, NULL, NULL, 0);
 	} else {
 		printf("bselect epics.pvupdatevalue(%s, %s, null)\n", params[0], params[1]);
-		res = PQexecParams(con, "select epics.pvupdatevalue($1::bigint,$2::int,null)", 2, NULL, params, NULL, NULL, 0);
+		res = PQexecParams(connection, "select epics.pvupdatevalue($1::bigint,$2::int,null)", 2, NULL, params, NULL, NULL, 0);
 	}
 				
 	if(checkReturn(res, "epics.pvupdatevalue"))
@@ -225,7 +225,8 @@ void ls_updatepv(pv* mpv) {
 	}
 
 	/* update the value in the database. */
-	ls_update( getconn(), mpv->index, val2str(mpv->value, mpv->dbrType, 0));
+	//ls_update( getconn(), mpv->index, val2str(mpv->value, mpv->dbrType, 0));
+	ls_update( mpv->index, val2str(mpv->value, mpv->dbrType, 0));
 }
 
 /**
@@ -243,6 +244,7 @@ void initialize_pgdb()
 		return;
 	}
 
+	getconn();
 	params[0] = pid;
 	printf("pid: %s\n", params[0]);
 	res = PQexecParams( getconn(),
@@ -266,7 +268,7 @@ void initialize_pgdb()
 		if(value < 0 || value >= pvArraySize)
 		{
 			printf("index %i is illegal", value);
-			PQClear(res);
+			PQclear(res);
 			quitConnection();
 			return;
 		}
@@ -282,7 +284,7 @@ void initialize_pgdb()
 		pvArray[value].lastValueInit = 0;
 		pvArray[value].onceConnected = 0;
 		
-		printf("pv(%i): %s\n", value, pvArray[value].name);
+		printf("pv(%i): %s   delta: %f  dTime: %ld\n", value, pvArray[value].name, pvArray[value].delta, pvArray[value].deltaTime);
 	}
 
 	//we are done with the database result, clean it up
@@ -345,7 +347,7 @@ void ls_checkRunqueue()
 		if(index >= pvArraySize)
 		{
 			/* Quit if the index is illeal the pvArray has been changed on the server side. */
-			PQClear(res);
+			PQclear(res);
 			quitConnection();
 			return;
 		}
@@ -364,9 +366,8 @@ void ls_checkRunqueue()
 /**
 * Converts a timespec to milliseconds.
 */
-long ls_clocktomilli(timespec spec)
-{
-	return (long)((long)spec.tv_sec * 1000 + spec.tv_nsec / 1000000);
+long ls_clocktomilli(struct timespec spec) {
+  return (long)(spec.tv_sec * 1000L + spec.tv_nsec / 1000000L);
 }
 
 /**
@@ -375,7 +376,7 @@ long ls_clocktomilli(timespec spec)
 */
 void ls_checkDeltaTime()
 {
-	timespec spec;
+	struct timespec spec;
 	long currentTime;
 	int i;
 
@@ -383,12 +384,14 @@ void ls_checkDeltaTime()
 	currentTime = ls_clocktomilli(spec);
 	for(i = 0; i < pvArraySize && !quit; i++)
 	{
-		//only update if deltaTime is enabled, the last value has been initialized, we have gone pased the delta time, and the value has changed
-		if(pvArray[i].deltaTime >= 0 && pvArray[i].lastValueInit && pvArray[i].lastSent + pvArray[i].deltaTime <= currentTime &&
-			val2d(pvArray[i]->value, pvArray[i]->dbrType, 0) != pvArray[i].lastValue)
+		//only update if deltaTime is enabled, the last value has been initialized, we have gone passed the delta time, and the value has changed
+		if( pvArray[i].deltaTime >= 0 &&
+        pvArray[i].lastValueInit &&
+        pvArray[i].lastSent + pvArray[i].deltaTime <= currentTime &&
+			  val2d(pvArray[i].value, pvArray[i].dbrType, 0) != pvArray[i].lastValue)
 		{
 			//updates the database
-			ls_update( pvArray[i]->index, val2str(pvArray[i]->value, pvArray[i]->dbrType, 0));
+			ls_update( pvArray[i].index, val2str(pvArray[i].value, pvArray[i].dbrType, 0));
 			pvArray[i].lastSent = currentTime;
 		}
 	}
@@ -412,7 +415,7 @@ void ls_run()
 		//set up the socket to listen for database commands on
 		FD_ZERO(&readfds);
 		FD_SET( PQsocket( connection), &readfds);
-		st.tv_usec=500000;	//keep a timeout so we can call ls_checkDeltaTime every now and then
+		st.tv_usec=100000;	//keep a timeout so we can call ls_checkDeltaTime every now and then
 		st.tv_sec=0;
 		select(PQsocket( connection)+1, &readfds, NULL, NULL, &st);
 
@@ -433,10 +436,9 @@ void ls_run()
 					PQfreemem(notify);
 				}
 
-				ls_checkRunqueue();
 			}
 		}
-
+		ls_checkRunqueue();
 		sem_post(&pvArrayLock);	//done talking to the database
 	}
 }
@@ -468,9 +470,9 @@ int main() {
 			ca_context_destroy();			/* stop backround threads. */
 			/* Closes and dealocates connection. */
 			PQfinish(connection);
-			PQfinish(putConnect);
+
 			/** free memory. */
-			if(pid)
+			if(pid != NULL)
 			{
 				free(pid);
 				pid = NULL;
@@ -486,7 +488,7 @@ int main() {
 	}
 
 	//done with the semaphore
-	sem_destory(&pvArrayLock);
+	sem_destroy(&pvArrayLock);
 
 	return 0;
 }

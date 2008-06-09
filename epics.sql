@@ -226,7 +226,7 @@ CREATE OR REPLACE FUNCTION epics._openSesame( pvmk bigint, value numeric) RETURN
     IF FOUND THEN
       PERFORM 1 FROM epics._pvmonitors as p1, epics._pvmonitors as p2 WHERE p1.pvmKey=sot.sobra and p1.pvmValueN=1 and p2.pvmKey=sot.sobrb and p2.pvmValueN=1;
       IF FOUND THEN
-        PERFORM epics.pushputqueue( sot.soso, '1');
+        PERFORM epics.pushputqueue( sot.soso, '1', now()+'10 seconds');
       END IF;
     END IF;    
     return;
@@ -246,7 +246,7 @@ CREATE OR REPLACE FUNCTION epics._maybeKillMotor( pvmk bigint, value numeric) RE
     IF FOUND THEN
       UPDATE epics._motions set mweareincontrol=false WHERE mkey=motion.mkey;
       IF motion.mKillPrefs = 'killafter' or (motion.mKillPrefs = 'restore' and motion.mPrevAmpEna=false) THEN
-        PERFORM epics.pushputqueue( motion.mKill, 1);
+        PERFORM epics.pushputqueue( motion.mKill, 1, now()+'10 seconds');
       END IF;
     END IF;
     return;
@@ -476,17 +476,17 @@ CREATE OR REPLACE FUNCTION epics._pvmonitorUpdate() RETURNS trigger AS $$
     lnk record;		-- link table entries for this pv
   BEGIN
     --
-    -- Don't do anything if this is not really a new value
+    -- When it is a new value then add it to the history values
+    -- and send out the notifies
     --
-    IF NEW.pvmValue = OLD.pvmValue THEN
-      RETURN null;
+    IF NEW.pvmValue != OLD.pvmValue THEN
+      NEW.pvmValueN := NEW.pvmValue::numeric;
+      NEW.pvmTs     := now();
+      INSERT INTO epics._historyPvs (hpN, hpValue) VALUES (NEW.pvmHistoryKey, NEW.pvmValue);
+      FOR lnk IN SELECT DISTINCT * FROM epics._pv2motion WHERE pv2mPv = NEW.pvmKey LOOP
+        PERFORM 'NOTIFY ' || lnk.pv2mNotify;
+      END LOOP;
     END IF;
-    NEW.pvmValueN := NEW.pvmValue::numeric;
-    NEW.pvmTs     := now();
-    INSERT INTO epics._historyPvs (hpN, hpValue) VALUES (NEW.pvmHistoryKey, NEW.pvmValue);
-    FOR lnk IN SELECT DISTINCT * FROM epics._pv2motion WHERE pv2mPv = NEW.pvmKey LOOP
-      PERFORM 'NOTIFY ' || lnk.pv2mNotify;
-    END LOOP;
     RETURN NEW;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -583,7 +583,7 @@ CREATE OR REPLACE FUNCTION epics.getPvNames( thePid bigint) RETURNS SETOF epics.
       RAISE EXCEPTION 'Getting PV Info with Illegal PID %: Please Kill Yourself', thePid;
     END IF;
 
-    FOR rtn IN SELECT pvmMonitorIndex, pvmName, pvmDelta, pvmPrec FROM epics._pvmonitors ORDER BY pvmMonitorIndex LOOP
+    FOR rtn IN SELECT pvmMonitorIndex, pvmName, pvmDelta, pvmdTime, pvmPrec FROM epics._pvmonitors ORDER BY pvmMonitorIndex LOOP
       RETURN NEXT rtn;
     END LOOP;
     RETURN;
