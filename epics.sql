@@ -340,11 +340,43 @@ CREATE TABLE epics.errors (
 );
 create index error_idx on epics.errors (epvn);
 
+CREATE OR REPLACE FUNCTION epics.updatePvmVar( pv text) returns void AS $$
+  BEGIN
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget( pvmName) WHERE pvmName=pv;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.updatePvmVar( text) OWNER TO lsadmin;
+
+
+CREATE OR REPLACE FUNCTION epics.updatePvmVars( pv text) returns void as $$
+  DECLARE
+    m record;
+  BEGIN 
+    SELECT * INTO m FROM epics._motions WHERE mMotorPvName = pv;
+    IF NOT FOUND THEN
+      RETURN;
+    END IF;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mRqsPos;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mActPos;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mInPos;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLl;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mHl;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLlHit;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mHlHit;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mAmpEna;
+    return;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.updatePvmVars( text) OWNER TO lsadmin;
+
 CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns void AS $$
   DECLARE
     mrec   record;	-- motions record
     usmrec record;	-- Corresponding _motions record
   BEGIN
+    -- Update epics variables
+    PERFORM epics.updatePvmVars( pvname);
+
     SELECT INTO mrec * FROM epics.motions WHERE mmotorpvname=pvname;
     IF NOT FOUND THEN
       --
@@ -353,6 +385,7 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'PV name "'||pvname||'" Not found');
       return;
     END IF;
+
 
     -- Don't move nothing until we need to
     --
@@ -397,15 +430,68 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
     -- If the motor is off, start it.
     -- The same command does it all.
     --
-    PERFORM epics.pushputqueue( usmrec.mabort, 1);
+    --    PERFORM epics.pushputqueue( usmrec.mabort, 1);
+    PERFORM epics.caput( pvmName, 1) FROM epics._pvmonitors WHERE pvmKey=usmrec.mabort::bigint;
+
     --
     -- Send the motor on its way
     --
-    PERFORM epics.pushputqueue( usmrec.mrqspos::int, reqpos);
+    --    PERFORM epics.pushputqueue( usmrec.mrqspos::int, reqpos);
+    PERFORM epics.caput( pvmName, reqpos) FROM epics._pvmonitors WHERE pvmKey=usmrec.mrqspos::bigint;
     return;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ALTER FUNCTION epics.moveit( text, numeric) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
+  DECLARE
+    RTN NUMERIC;
+  BEGIN
+    SELECT epics.caget( pvmName)::numeric INTO rtn FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    return rtn;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.position( text) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics.isthere( pv text) returns boolean as $$
+  DECLARE
+    rtn boolean;
+    rqspos numeric;
+  BEGIN
+    SELECT epics.caget( pvmName)::numeric INTO rqspos FROM epics._pvmonitors WHERE pvmKey IN (SELECT mRqsPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    SELECT epics.isstopped( pv) and abs(epics.position( pv) - rqspos) <= 10^(-mPrec) INTO rtn FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1;
+    return rtn;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.isthere( text) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics.isthere( pv text, pos numeric) returns boolean as $$
+  DECLARE
+    rtn boolean;
+    rqspos numeric;
+  BEGIN
+    SELECT epics.caget( pvmName)::numeric INTO rqspos FROM epics._pvmonitors WHERE pvmKey IN (SELECT mRqsPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    SELECT epics.isstopped( pv) and abs(epics.position( pv) - pos) <= 10^(-mPrec) INTO rtn FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1;
+    return rtn;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.isthere( text, numeric) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics.isstopped( pv text) returns boolean as $$
+  DECLARE
+    inpos boolean;
+    ampena boolean;
+    rtn boolean;
+  BEGIN
+    SELECT (epics.caget( pvmName)::text = '1') INTO inpos FROM epics._pvmonitors WHERE pvmKey IN (SELECT mInPos  FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    SELECT (epics.caget( pvmName)::text = '1') INTO ampena FROM epics._pvmonitors WHERE pvmKey IN (SELECT mAmpEna FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    rtn := not ampena or inpos;
+    return rtn;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.isstopped( text) OWNER TO lsadmin;
+
+
 
 CREATE TABLE epics._mfields (
 -- pv field names to match pvmonitor entries with columns in _motions
@@ -714,4 +800,69 @@ INSERT INTO epics._pvmonitors ( pvmName, pvmPrec, pvmDelta) VALUES ( 'S21ds:ID:S
 INSERT INTO epics._pvmonitors ( pvmName, pvmPrec, pvmDelta) VALUES ( '21:G1:scaler1_cts3.A', 0, 1);
 INSERT INTO epics._pvmonitors ( pvmName, pvmPrec, pvmDelta) VALUES ( '21:F1:scaler1_cts3.A', 0, 1);
 
+
+CREATE OR REPLACE FUNCTION epics.caget( pv text) returns text as $$
+  DECLARE
+    rtn text;
+  BEGIN
+    PERFORM pg_advisory_lock( 14850);
+    SELECT epics._caget( pv) INTO rtn;
+    PERFORM pg_advisory_unlock( 14850);
+    return rtn;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.caget( text) OWNER TO lsadmin;
+
+
+CREATE OR REPLACE FUNCTION epics.caput( pv text, v text) returns void as $$
+  BEGIN
+    PERFORM pg_advisory_lock( 14851);
+    PERFORM epics._caput( pv, v);
+    PERFORM pg_advisory_unlock( 14851);
+    return;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.caput( text, text) OWNER TO lsadmin;
+
+
+CREATE OR REPLACE FUNCTION epics._caget( pv text) returns text as $$
+  if not SD.has_key( "EpicsCA"):
+    import EpicsCA
+    SD["EpicsCA"] = EpicsCA
+  EpicsCA = SD["EpicsCA"]
+
+  if not SD.has_key( "pvdict"):
+    pvdict = {}
+    SD["pvdict"] = pvdict
+  pvdict = SD["pvdict"]
+
+  if not pvdict.has_key( pv):
+    try:
+      pvdict[pv] = EpicsCA.PV(pv)
+    except: 
+      return None
+  return pvdict[pv].value
+$$ LANGUAGE plpythonu SECURITY DEFINER;
+ALTER FUNCTION epics._caget( text) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics._caput( pv text, v text) returns void as $$
+  if not SD.has_key( "EpicsCA"):
+    import EpicsCA
+    SD["EpicsCA"] = EpicsCA
+  EpicsCA = SD["EpicsCA"]
+
+  if not SD.has_key( "pvdict"):
+    pvdict = {}
+    SD["pvdict"] = pvdict
+  pvdict = SD["pvdict"]
+
+  if not pvdict.has_key( pv):
+    try:
+      pvdict[pv] = EpicsCA.PV(pv)
+    except:
+      return
+  pvdict[pv].put( v)
+  return
+$$ LANGUAGE plpythonu SECURITY DEFINER;
+ALTER FUNCTION epics._caput( text, text) OWNER TO lsadmin;
 
