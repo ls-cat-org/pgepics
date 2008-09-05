@@ -2,7 +2,7 @@
 -- Support for epics process variables
 --
 --
-DROP SCHEMA epics CASCADE;
+#DROP SCHEMA epics CASCADE;
 CREATE SCHEMA epics;
 GRANT USAGE ON SCHEMA epics TO PUBLIC;
 
@@ -447,7 +447,7 @@ CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
   DECLARE
     RTN NUMERIC;
   BEGIN
-    SELECT epics.caget( pvmName)::numeric INTO rtn FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    SELECT epics._caget( pvmMonitorIndex)::numeric INTO rtn FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
@@ -724,8 +724,31 @@ ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
 
 
 
+CREATE TABLE epics.caPutQueue (
+       capKey serial primary key,
+       capPv text not null,
+       capVal text not null
+);
+ALTER TABLE epics.caPutQueue OWNER TO lsadmin;
 
+CREATE OR REPLACE FUNCTION epics.caPutPush( pv text, val text) returns void as $$
+  INSERT INTO epics.caPutQueue (capPv, capVal) VALUES ($1, $2);
+  NOTIFY caPutNotify;
+$$ LANGUAGE SQL SECURITY DEFINER VOLATILE;
+ALTER FUNCTION epics.caPutPush( text, text) OWNER TO lsadmin;
 
+CREATE OR REPLACE FUNCTION epics.caPutPop() returns setof epics.caPutQueue AS $$
+  DECLARE
+    rtn epics.caPutQueue;
+  BEGIN
+    FOR rtn IN SELECT * FROM epics.caPutQueue ORDER BY capKey asc LOOP
+      DELETE FROM epics.caPutQueue WHERE capKey=rtn.capKey;
+      return next rtn;
+    END LOOP;
+    return;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER VOLATILE;
+ALTER FUNCTION epics.caPutPop() OWNER TO lsadmin;
 
 
 CREATE OR REPLACE FUNCTION epics.checkPID( thePid bigint) RETURNS int AS $$
@@ -805,64 +828,75 @@ CREATE OR REPLACE FUNCTION epics.caget( pv text) returns text as $$
   DECLARE
     rtn text;
   BEGIN
-    PERFORM pg_advisory_lock( 14850);
-    SELECT epics._caget( pv) INTO rtn;
-    PERFORM pg_advisory_unlock( 14850);
+    SELECT epics._caget( pvmmonitorindex::int) INTO rtn FROM epics._pvmonitors WHERE pvmname=pv;
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
 ALTER FUNCTION epics.caget( text) OWNER TO lsadmin;
 
+CREATE OR REPLACE FUNCTION epics._caget( text) returns text as $$
+  SELECT epics.caget( $1);
+$$ LANGUAGE SQL SECURITY DEFINER;
+ALTER FUNCTION epics._caget( text) OWNER TO lsadmin;
+
 
 CREATE OR REPLACE FUNCTION epics.caput( pv text, v text) returns void as $$
-  BEGIN
-    PERFORM pg_advisory_lock( 14851);
-    PERFORM epics._caput( pv, v);
-    PERFORM pg_advisory_unlock( 14851);
-    return;
-  END;
-$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+  select  epics.caputpush( $1, $2);
+$$ LANGUAGE SQL SECURITY DEFINER;
 ALTER FUNCTION epics.caput( text, text) OWNER TO lsadmin;
 
 
-CREATE OR REPLACE FUNCTION epics._caget( pv text) returns text as $$
-  if not SD.has_key( "EpicsCA"):
-    import EpicsCA
-    SD["EpicsCA"] = EpicsCA
-  EpicsCA = SD["EpicsCA"]
+CREATE OR REPLACE FUNCTION epics._caget( pvi int) returns text as $$
 
-  if not SD.has_key( "pvdict"):
-    pvdict = {}
-    SD["pvdict"] = pvdict
-  pvdict = SD["pvdict"]
+  if not GD.has_key( "mmap"):
+    plpy.execute( "select pg_advisory_lock( 14850)")
+    import mmap
+    GD["mmap"] = mmap
+    plpy.execute( "select pg_advisory_unlock( 14850)")
+  mmap = GD["mmap"]
 
-  if not pvdict.has_key( pv):
+  if not GD.has_key( "mm"):
+    plpy.execute( "select pg_advisory_lock( 14850)")
+    mm = {}
+    GD["mm"] = mm
+    plpy.execute("select pg_advisory_unlock( 14850)")
+  mm = GD["mm"]
+
+  if not mm.has_key( "fd"):
+    plpy.execute( "select pg_advisory_lock( 14850)")
     try:
-      pvdict[pv] = EpicsCA.PV(pv)
-    except: 
-      return None
-  return pvdict[pv].value
-$$ LANGUAGE plpythonu SECURITY DEFINER;
-ALTER FUNCTION epics._caget( text) OWNER TO lsadmin;
-
-CREATE OR REPLACE FUNCTION epics._caput( pv text, v text) returns void as $$
-  if not SD.has_key( "EpicsCA"):
-    import EpicsCA
-    SD["EpicsCA"] = EpicsCA
-  EpicsCA = SD["EpicsCA"]
-
-  if not SD.has_key( "pvdict"):
-    pvdict = {}
-    SD["pvdict"] = pvdict
-  pvdict = SD["pvdict"]
-
-  if not pvdict.has_key( pv):
-    try:
-      pvdict[pv] = EpicsCA.PV(pv)
+      f = open( "/mnt/pvs/pvService", "r+")
+      s  = mmap.mmap( f.fileno(), 0)
     except:
-      return
-  pvdict[pv].put( v)
-  return
+      plpy.warning( "something bad happend while trying to create mm")
+      plpy.execute( "select pg_advisory_unlock( 14850)")
+      return None
+
+    mm["fd"] = f.fileno()
+    mm["s"]  = s
+    plpy.execute( "select pg_advisory_unlock( 14850)")
+
+  try:
+    plpy.execute( "select pg_advisory_lock( 14852, %d)" % (pvi))
+    mm["s"].seek(256*pvi)
+    readFlag = True
+    val = ""
+    while readFlag:
+      tmp = mm["s"].read_byte()
+      if tmp != "\0":
+        val += tmp
+      else:
+        readFlag = False
+
+  except:
+    plpy.warning( "something bad happend while trying to read the pv value")
+    del GD["mm"]
+    plpy.execute( "select pg_advisory_unlock( 14852, %d)" % (pvi))
+    return None
+
+  plpy.execute( "select pg_advisory_unlock( 14852, %d)" % (pvi))
+
+  return val
 $$ LANGUAGE plpythonu SECURITY DEFINER;
-ALTER FUNCTION epics._caput( text, text) OWNER TO lsadmin;
+ALTER FUNCTION epics._caget( int) OWNER TO lsadmin;
 
