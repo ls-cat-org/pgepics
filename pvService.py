@@ -114,6 +114,7 @@ class PvService:
             i = 256 * self.pvList[p]["index"]
             self.mms.seek( i)
             self.mms.write( tmp)
+            self.mms.write( "\0")
             
         self.mms.flush()
 

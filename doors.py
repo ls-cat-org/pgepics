@@ -64,19 +64,23 @@ class RemoteControl:
 
     def readyCB( self, pv=None, **kw):
         if self.readyAPv.get() == 1 and self.readyBPv.get() == 1 and (self.lastReadyA == 0 or self.lastReadyB == 0):
-            self.shutterPV.put( 1)
+            self.shutterPv.put( 1)
 
-        self.lastReadyA = readyAPv.get()
-        self.lastReadyB = readyBPv.get()
+        self.lastReadyA = self.readyAPv.get()
+        self.lastReadyB = self.readyBPv.get()
         
 
 class Doors:
     db = None
-    pvN = [{ 'station' : '21-ID-F', 'voice' : 'PA:21ID:IA_STA_F_CB1.VAL',    'shutter' : 'PC:21ID:Rem_FshtrOpen',
-             'door' : 'PA:21ID:IA_STA_F_DR2_CLOS.VAL',    'detector' : '21:F1:DT:D', 'readyA' : 'PA:21ID:STA_F_BEAM_READY', 'readyB' : 'PB:21ID:STA_F_BEAM_READY'},
+    pvN = [
+        { 'station' : '21-ID-D', 'voice' : 'PA:21ID:OA_STA_D_VOICE_1',    'shutter' : 'PC:21ID:Rem_DshtrOpen',
+          'door' : 'PA:21ID:IA_STA_D_DR2_CLOS.VAL',    'detector' : '21:D1:DT:Z', 'readyA' : 'PA:21ID:STA_D_BEAM_READY', 'readyB' : 'PB:21ID:STA_D_BEAM_READY'},
 
-           { 'station' : '21-ID-G', 'voice' : 'PA:21ID:IA_STA_FG_G_CB1.VAL', 'shutter' : 'PC:21ID:Rem_GshtrOpen.VAL',
-             'door' : 'PA:21ID:IA_STA_FG_G_DR1_CLOS.VAL', 'detector' : '21:G1:DT:D', 'readyA' : 'PA:21ID:STA_F_BEAM_READY', 'readyB' : 'PB:21ID:STA_F_BEAM_READY'}
+        { 'station' : '21-ID-F', 'voice' : 'PA:21ID:OA_STA_F_VOICE_1',    'shutter' : 'PC:21ID:Rem_FshtrOpen',
+          'door' : 'PA:21ID:IA_STA_F_DR2_CLOS.VAL',    'detector' : '21:F1:DT:D', 'readyA' : 'PA:21ID:STA_F_BEAM_READY', 'readyB' : 'PB:21ID:STA_F_BEAM_READY'},
+
+        { 'station' : '21-ID-G', 'voice' : 'PA:21ID:OA_STA_FG_G_VOICE_1', 'shutter' : 'PC:21ID:Rem_GshtrOpen.VAL',
+          'door' : 'PA:21ID:IA_STA_FG_G_DR1_CLOS.VAL', 'detector' : '21:G1:DT:D', 'readyA' : 'PA:21ID:STA_G_BEAM_READY', 'readyB' : 'PB:21ID:STA_G_BEAM_READY'}
            ]
 
     rcL = {}

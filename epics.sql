@@ -339,10 +339,13 @@ CREATE TABLE epics.errors (
        emsg text not null
 );
 create index error_idx on epics.errors (epvn);
+ALTER TABLE epics.errors OWNER TO lsadmin;
+
 
 CREATE OR REPLACE FUNCTION epics.updatePvmVar( pv text) returns void AS $$
   BEGIN
     UPDATE epics._pvmonitors SET pvmValue=epics.caget( pvmName) WHERE pvmName=pv;
+    UPDATE epics._pvmonitors SET pvmValueN=pvmValue::numeric WHERE pvmName=pv;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
 ALTER FUNCTION epics.updatePvmVar( text) OWNER TO lsadmin;
@@ -359,6 +362,7 @@ CREATE OR REPLACE FUNCTION epics.updatePvmVars( pv text) returns void as $$
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mRqsPos;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mActPos;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mInPos;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLl;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLl;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mHl;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLlHit;
@@ -448,6 +452,7 @@ CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
     RTN NUMERIC;
   BEGIN
     SELECT epics._caget( pvmMonitorIndex)::numeric INTO rtn FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    PERFORM epics.updatePvmVars( pv);
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
@@ -568,10 +573,10 @@ CREATE OR REPLACE FUNCTION epics._pvmonitorUpdate() RETURNS trigger AS $$
     IF NEW.pvmValue != OLD.pvmValue THEN
       NEW.pvmValueN := NEW.pvmValue::numeric;
       NEW.pvmTs     := now();
-      INSERT INTO epics._historyPvs (hpN, hpValue) VALUES (NEW.pvmHistoryKey, NEW.pvmValue);
-      FOR lnk IN SELECT DISTINCT * FROM epics._pv2motion WHERE pv2mPv = NEW.pvmKey LOOP
-        PERFORM 'NOTIFY ' || lnk.pv2mNotify;
-      END LOOP;
+      --      INSERT INTO epics._historyPvs (hpN, hpValue) VALUES (NEW.pvmHistoryKey, NEW.pvmValue);
+      --      FOR lnk IN SELECT DISTINCT * FROM epics._pv2motion WHERE pv2mPv = NEW.pvmKey LOOP
+      --        PERFORM 'NOTIFY ' || lnk.pv2mNotify;
+      --      END LOOP;
     END IF;
     RETURN NEW;
   END;
