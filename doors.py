@@ -58,7 +58,7 @@ class RemoteControl:
             qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
             self.detectorSaved = qr.dictresult()[0]["p"]
 
-            self.db.query( "select epics.moveit( '%s', 500)" % (self.detector))
+            self.db.query( "select epics.moveit( '%s', 700)" % (self.detector))
 
         self.lastDoor = pv.get()
 
@@ -74,7 +74,7 @@ class Doors:
     db = None
     pvN = [
         { 'station' : '21-ID-D', 'voice' : 'PA:21ID:OA_STA_D_VOICE_1',    'shutter' : 'PC:21ID:Rem_DshtrOpen',
-          'door' : 'PA:21ID:IA_STA_D_DR2_CLOS.VAL',    'detector' : '21:D1:DT:Z', 'readyA' : 'PA:21ID:STA_D_BEAM_READY', 'readyB' : 'PB:21ID:STA_D_BEAM_READY'},
+          'door' : 'PA:21ID:IA_STA_D_DR2_CLOS.VAL',    'detector' : '21:D1:DT:Z0', 'readyA' : 'PA:21ID:STA_D_BEAM_READY', 'readyB' : 'PB:21ID:STA_D_BEAM_READY'},
 
         { 'station' : '21-ID-F', 'voice' : 'PA:21ID:OA_STA_F_VOICE_1',    'shutter' : 'PC:21ID:Rem_FshtrOpen',
           'door' : 'PA:21ID:IA_STA_F_DR2_CLOS.VAL',    'detector' : '21:F1:DT:D', 'readyA' : 'PA:21ID:STA_F_BEAM_READY', 'readyB' : 'PB:21ID:STA_F_BEAM_READY'},

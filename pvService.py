@@ -1,6 +1,6 @@
 #! /usr/bin/python
 
-import EpicsCA, pg, mmap, select, sys, traceback, os
+import EpicsCA, pg, mmap, select, sys, traceback, os, time
 
 class PVServiceError( Exception):
     value = None
@@ -146,14 +146,17 @@ class PvService:
                     foundOne = True
                     nam = r["cappv"]
                     val = r["capval"]
+                    print "moving ",nam," to ",val
                     if self.pvList.has_key( nam):
                         self.pvList[nam]["pv"].put( val)
                     else:
                         if not self.putOnlyList.has_key( nam):
                             self.putOnlyList["nam"] = EpicsCA.PV( nam)
                         self.putOnlyList["nam"].put( val)
-                if not foundOne:
-                    tryAgain = True
+                    #
+                    # pause to keep commands from bumping into one another
+                    #
+                tryAgain = not foundOne
 
 if __name__ == "__main__":
     z = PvService()

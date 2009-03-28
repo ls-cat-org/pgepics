@@ -236,13 +236,13 @@ ALTER FUNCTION epics._openSesame( bigint, numeric) OWNER TO lsadmin;
 
 CREATE OR REPLACE FUNCTION epics._maybeKillMotor( pvmk bigint, value numeric) RETURNS void AS $$
   --
-  -- action function for when a motor is "in position": triggered by InPos going to 1 (reset by going to 0)
+  -- action function for when a motor is "in position": triggered by RunPrg going to 0 (reset by going to 1)
   --
   DECLARE
     motion record;	-- the entire epics._motions record for this motor
   BEGIN
     -- get the epics._motions record: TODO figure out if this could ever return more than one row and what to do then.
-    SELECT INTO  motion * FROM epics._motions WHERE mInPos=pvmk and mweareincontrol limit 1;
+    SELECT INTO  motion * FROM epics._motions WHERE mRunPrg=pvmk and mweareincontrol limit 1;
     IF FOUND THEN
       UPDATE epics._motions set mweareincontrol=false WHERE mkey=motion.mkey;
       IF motion.mKillPrefs = 'killafter' or (motion.mKillPrefs = 'restore' and motion.mPrevAmpEna=false) THEN
@@ -267,6 +267,7 @@ INSERT INTO epics._motionkillprefs (mkp) VALUES ( 'restore');
 
 CREATE TABLE epics._motions (
 	mKey serial primary key,		-- table key
+        mRequestTS timestamp with time zone default now(),
 	mMotorPvName text NOT NULL unique,		-- PV of this axis
 	mAssemblyPvName text NOT NULL,		-- for abort, kill, etc
 	mPrec  int default 0,			-- use this many decimal places
@@ -293,6 +294,9 @@ CREATE TABLE epics._motions (
 	mAmpEna bigint default NULL		-- amplifier enabled
 		references epics._pvmonitors (pvmKey),
 
+	mRunPrg bigint default NULL		-- run program
+		references epics._pvmonitors (pvmKey),
+
 	mKillPrefs text				-- how do we want to leave this after motion is done?
 		references epics._motionkillprefs (mkp),
 	mPrevAmpEna boolean default NULL,	-- previous amplifier enabled (for mkillprefs = 'restore')
@@ -300,32 +304,36 @@ CREATE TABLE epics._motions (
 );
 ALTER TABLE epics._motions OWNER TO lsadmin;
 
-CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, mRqsPos, mActPos, mInPos, mLl, mHl, mLlHit, mHlHit, mAbort, mKill, mAmpEna, mKillPrefs, mPrevAmpEna, mWeAreInControl) AS
-	SELECT mKey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, 
-		mRqsPosPv.pvmValueN as mRqsPos,
-		mActPosPv.pvmValueN as mActPos,
-		mInPosPv.pvmValueN  as mInPos,
-		mLlPv.pvmValueN     as mLl,
-		mHlPv.pvmValueN     as mHl,
-		mLlHitPv.pvmValueN  as mLlHit,
-		mHlHitPv.pvmValueN  as mHlHit,
-		mAbortPv.pvmValueN  as mAbort,
-		mKillPv.pvmValueN   as mKill,
-		mAmpEnaPv.pvmValueN as mAmpEna,
-		mKillPrefs,
-		mPrevAmpEna,
-		mWeAreInControl
-		FROM epics._motions AS m
-		LEFT JOIN epics._pvmonitors AS mRqsPosPv ON mRqsPosPv.pvmKey = m.mRqsPos
-		LEFT JOIN epics._pvmonitors AS mActPosPv ON mActPosPv.pvmKey = m.mActPos
-		LEFT JOIN epics._pvmonitors AS mInPosPv  ON mInPosPv.pvmKey  = m.mInPos
-		LEFT JOIN epics._pvmonitors AS mLlPv     ON mLlPv.pvmKey     = m.mLl
-		LEFT JOIN epics._pvmonitors AS mHlPv     ON mHlPv.pvmKey     = m.mHl
-		LEFT JOIN epics._pvmonitors AS mLlHitPv  ON mLlHitPv.pvmKey  = m.mLlHit
-		LEFT JOIN epics._pvmonitors AS mHlHitPv  ON mHlHitPv.pvmKey  = m.mHlHit
-		LEFT JOIN epics._pvmonitors AS mAbortPv  ON mAbortPv.pvmKey  = m.mAbort
-		LEFT JOIN epics._pvmonitors AS mKillPv   ON mKillPv.pvmKey   = m.mKill
-		LEFT JOIN epics._pvmonitors AS mAmpEnaPv ON mAmpEnaPv.pvmKey = m.mAmpEna;
+CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, mRqsPos, mActPos, mInPos, mLl, mHl, mLlHit, mHlHit, mAbort, mKill, mAmpEna, mKillPrefs, mPrevAmpEna, mWeAreInControl, mRunPrg, mRequestTS) AS
+        SELECT mKey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, 
+                mRqsPosPv.pvmValueN as mRqsPos,
+                mActPosPv.pvmValueN as mActPos,
+                mInPosPv.pvmValueN  as mInPos,
+                mLlPv.pvmValueN     as mLl,
+                mHlPv.pvmValueN     as mHl,
+                mLlHitPv.pvmValueN  as mLlHit,
+                mHlHitPv.pvmValueN  as mHlHit,
+                mAbortPv.pvmValueN  as mAbort,
+                mKillPv.pvmValueN   as mKill,
+                mAmpEnaPv.pvmValueN as mAmpEna,
+                mKillPrefs,
+                mPrevAmpEna,
+                mWeAreInControl,
+                mRunPrgPv.pvmValueN as mRunPrg,
+                mRequestTS
+                FROM epics._motions AS m
+                LEFT JOIN epics._pvmonitors AS mRqsPosPv ON mRqsPosPv.pvmKey = m.mRqsPos
+                LEFT JOIN epics._pvmonitors AS mActPosPv ON mActPosPv.pvmKey = m.mActPos
+                LEFT JOIN epics._pvmonitors AS mInPosPv  ON mInPosPv.pvmKey  = m.mInPos
+                LEFT JOIN epics._pvmonitors AS mLlPv     ON mLlPv.pvmKey     = m.mLl
+                LEFT JOIN epics._pvmonitors AS mHlPv     ON mHlPv.pvmKey     = m.mHl
+                LEFT JOIN epics._pvmonitors AS mLlHitPv  ON mLlHitPv.pvmKey  = m.mLlHit
+                LEFT JOIN epics._pvmonitors AS mHlHitPv  ON mHlHitPv.pvmKey  = m.mHlHit
+                LEFT JOIN epics._pvmonitors AS mAbortPv  ON mAbortPv.pvmKey  = m.mAbort
+                LEFT JOIN epics._pvmonitors AS mKillPv   ON mKillPv.pvmKey   = m.mKill
+                LEFT JOIN epics._pvmonitors AS mAmpEnaPv ON mAmpEnaPv.pvmKey = m.mAmpEna
+                LEFT JOIN epics._pvmonitors AS mRunPrgPv ON mRunPrgPv.pvmKey = m.mRunPrg;
+
 ALTER TABLE epics.motions OWNER TO lsadmin;
 GRANT SELECT ON epics.motions TO PUBLIC;
 
@@ -368,6 +376,7 @@ CREATE OR REPLACE FUNCTION epics.updatePvmVars( pv text) returns void as $$
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLlHit;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mHlHit;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mAmpEna;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mRunPrg;
     return;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
@@ -390,10 +399,9 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
       return;
     END IF;
 
-
     -- Don't move nothing until we need to
     --
-    IF (mrec.minpos=1) and abs(mrec.mactpos-reqpos)<=10^(-mrec.mprec) THEN
+    IF (mrec.mrunprg=0) and abs(mrec.mactpos-reqpos)<=10^(-mrec.mprec) THEN
       return;
     END IF;
 
@@ -442,6 +450,7 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
     --
     --    PERFORM epics.pushputqueue( usmrec.mrqspos::int, reqpos);
     PERFORM epics.caput( pvmName, reqpos) FROM epics._pvmonitors WHERE pvmKey=usmrec.mrqspos::bigint;
+    UPDATE epics._motions SET mrequestts = now() WHERE mkey=mrec.mkey;
     return;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -449,10 +458,13 @@ ALTER FUNCTION epics.moveit( text, numeric) OWNER TO lsadmin;
 
 CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
   DECLARE
-    RTN NUMERIC;
+    rtn numeric;
   BEGIN
     SELECT epics._caget( pvmMonitorIndex)::numeric INTO rtn FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
     PERFORM epics.updatePvmVars( pv);
+    IF abs(rtn) < 1e-20 THEN
+      rtn = 0;
+    END IF;
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
@@ -484,13 +496,26 @@ ALTER FUNCTION epics.isthere( text, numeric) OWNER TO lsadmin;
 
 CREATE OR REPLACE FUNCTION epics.isstopped( pv text) returns boolean as $$
   DECLARE
-    inpos boolean;
+    runprg boolean;
     ampena boolean;
     rtn boolean;
+    runprgkey bigint;
+    ampenakey bigint;
+    requestts timestamp with time zone;
   BEGIN
-    SELECT (epics.caget( pvmName)::text = '1') INTO inpos FROM epics._pvmonitors WHERE pvmKey IN (SELECT mInPos  FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
-    SELECT (epics.caget( pvmName)::text = '1') INTO ampena FROM epics._pvmonitors WHERE pvmKey IN (SELECT mAmpEna FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
-    rtn := not ampena or inpos;
+    SELECT mRunPrg,mAmpEna,mRequestTS INTO runprgkey,ampenakey,requestts FROM epics._motions WHERE mMotorPvName=pv;
+
+    --
+    -- If the last request was too recent then assume we haven't started to move yet
+    --
+    IF now() - requestts < '0.3 seconds'::interval THEN
+      return false;
+    END IF;
+
+    SELECT (substring(epics.caget( pvmName)::text,1,1) = '1') INTO runprg FROM epics._pvmonitors WHERE pvmKey=runprgkey;
+    SELECT (substring(epics.caget( pvmName)::text,1,1) = '1') INTO ampena FROM epics._pvmonitors WHERE pvmKey=ampenakey;
+
+    rtn := not ampena or not runprg;
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
