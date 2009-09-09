@@ -131,6 +131,7 @@ class PvService:
         self.q.query( qs)
         self.mms.seek( i)
         self.mms.write( tmp)
+        self.mms.write( "\0")
         self.mms.flush()
         self.q.query( "select pg_advisory_unlock( 14852, %d)" % (indx))
 

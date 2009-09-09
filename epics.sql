@@ -443,13 +443,13 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
     -- The same command does it all.
     --
     --    PERFORM epics.pushputqueue( usmrec.mabort, 1);
-    PERFORM epics.caput( pvmName, 1) FROM epics._pvmonitors WHERE pvmKey=usmrec.mabort::bigint;
+    PERFORM epics.caput( pvmName, 1::text) FROM epics._pvmonitors WHERE pvmKey=usmrec.mabort::bigint;
 
     --
     -- Send the motor on its way
     --
     --    PERFORM epics.pushputqueue( usmrec.mrqspos::int, reqpos);
-    PERFORM epics.caput( pvmName, reqpos) FROM epics._pvmonitors WHERE pvmKey=usmrec.mrqspos::bigint;
+    PERFORM epics.caput( pvmName, reqpos::text) FROM epics._pvmonitors WHERE pvmKey=usmrec.mrqspos::bigint;
     UPDATE epics._motions SET mrequestts = now() WHERE mkey=mrec.mkey;
     return;
   END;
@@ -503,17 +503,19 @@ CREATE OR REPLACE FUNCTION epics.isstopped( pv text) returns boolean as $$
     ampenakey bigint;
     requestts timestamp with time zone;
   BEGIN
+    PERFORM epics.updatePvmVars( pv);
+
     SELECT mRunPrg,mAmpEna,mRequestTS INTO runprgkey,ampenakey,requestts FROM epics._motions WHERE mMotorPvName=pv;
 
     --
     -- If the last request was too recent then assume we haven't started to move yet
     --
-    IF now() - requestts < '0.3 seconds'::interval THEN
+    IF now() - requestts < '1.1 seconds'::interval THEN
       return false;
     END IF;
 
-    SELECT (substring(epics.caget( pvmName)::text,1,1) = '1') INTO runprg FROM epics._pvmonitors WHERE pvmKey=runprgkey;
-    SELECT (substring(epics.caget( pvmName)::text,1,1) = '1') INTO ampena FROM epics._pvmonitors WHERE pvmKey=ampenakey;
+    SELECT (epics.caget( pvmName)::text like '%1%') INTO runprg FROM epics._pvmonitors WHERE pvmKey=runprgkey;
+    SELECT (epics.caget( pvmName)::text like '%1%') INTO ampena FROM epics._pvmonitors WHERE pvmKey=ampenakey;
 
     rtn := not ampena or not runprg;
     return rtn;
