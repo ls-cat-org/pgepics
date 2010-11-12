@@ -1,6 +1,7 @@
 #! /usr/bin/python
 import EpicsCA
 import pg
+import time
 
 class RemoteControl:
     pvd          = None
@@ -43,7 +44,7 @@ class RemoteControl:
         self.detectorSaved = qr.dictresult()[0]["p"]
 
     def voiceCB( self, pv=None, **kw):
-        print "voiceCB  voice: %d,  lastVoice: %d" % (pv.get(), self.lastVoice)
+        print "[%s] voiceCB  voice: %d,  lastVoice: %d" % (time.strftime('%Y-%m-%d %H:%M:%S'), pv.get(), self.lastVoice)
 
         v = int(pv.get())
         if v == 1 and self.lastVoice == 0:
