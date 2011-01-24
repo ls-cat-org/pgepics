@@ -456,14 +456,21 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ALTER FUNCTION epics.moveit( text, numeric) OWNER TO lsadmin;
 
+
 CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
   DECLARE
     rtn numeric;
+    tmp text;
   BEGIN
-    SELECT epics._caget( pvmMonitorIndex)::numeric INTO rtn FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
-    PERFORM epics.updatePvmVars( pv);
-    IF abs(rtn) < 1e-20 THEN
-      rtn = 0;
+    SELECT INTO tmp epics._caget( pvmMonitorIndex) FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    IF tmp = 'None' THEN
+      rtn := '99999.99999';
+    ELSE
+      SELECT INTO rtn tmp::numeric;
+      IF abs(rtn) < 1e-20 THEN
+        rtn = 0;
+      END IF;
+      PERFORM epics.updatePvmVars( pv);
     END IF;
     return rtn;
   END;
@@ -927,8 +934,10 @@ CREATE OR REPLACE FUNCTION epics._caget( pvi int) returns text as $$
     return None
 
   plpy.execute( "select pg_advisory_unlock( 14852, %d)" % (pvi))
-
+  if val==None or val=="None":
+    val=str("505.911")
   return val
 $$ LANGUAGE plpythonu SECURITY DEFINER;
 ALTER FUNCTION epics._caget( int) OWNER TO lsadmin;
+
 

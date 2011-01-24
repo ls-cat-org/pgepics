@@ -110,7 +110,11 @@ class PvService:
             try:
                 tmp = str(self.pvList[p]["pv"].get())
             except:
+                tmp = str("505.505")
                 pass
+            if tmp == None or len(tmp) == 0:
+                tmp = str("505.505")  # SOS in leet
+
             i = 256 * self.pvList[p]["index"]
             self.mms.seek( i)
             self.mms.write( tmp)
@@ -127,6 +131,9 @@ class PvService:
         indx = self.pvList[pv.pvname]["index"]
         i = 256*indx
         tmp  = str( pv.get())
+        if tmp == None or len(tmp) == 0:
+            tmp = str("505.505")   # SOS in leet
+
         qs = "select pg_advisory_lock( 14852, %d) as tal" % (indx)
         self.q.query( qs)
         self.mms.seek( i)
