@@ -1,6 +1,14 @@
 #! /usr/bin/python
 
-import EpicsCA, pg, mmap, select, sys, traceback, os, time
+import EpicsCA
+import pg
+import mmap
+import select
+import sys
+import traceback
+import os
+import time
+import signal
 
 class PVServiceError( Exception):
     value = None
@@ -73,21 +81,34 @@ class _Q:
 
 
 class PvService:
-    q = None
-    pid = None
-    pvList = {}
-    putOnlyList = {}
     mmfn = "/mnt/pvs/pvService"
-    mmf  = None
-    mms  = None
-    running = False
+
+
+    def intHandler( self, signum, frame):
+        print >> sys.stderr, "Caught signal, exiting"
+        self.okToRun = False
 
     def __init__( self):
+        self.mms  = None
+        self.running = False
+        self.q = None
+        self.pid = None
+        self.pvList = {}
+        self.putOnlyList = {}
+        self.okToRun = True
+
         self.q = _Q()
 
+        #
+        # Simple pid mechanism: only one process is allowed to run.
+        # Older processes are told to quit.
+        #
         qr = self.q.query( "select epics.iniCAMonitor() as pid")
         self.pid = int(qr.dictresult()[0]["pid"])
 
+        #
+        # get names and the index into the shared file
+        #
         qr = self.q.query( "select index, name from epics.getpvnames( %d) order by index" % (self.pid))
         maxIndex = 0
         for r in qr.dictresult():
@@ -95,26 +116,44 @@ class PvService:
             if int( r["index"]) > maxIndex:
                 maxIndex = int( r["index"])
 
-        #self.mmfn = "%s.%d" % (self.mmfn, self.pid)
+        #
+        # Initialize the file
+        #
         tmpF = open( self.mmfn, "w")
         for i in range( maxIndex+1):
             for j in range( 256):
                 tmpF.write( "\0")
         tmpF.close()
+        #
+        # We have to be sure that postgresql can read this.
+        # Probably these permissions are not strict enough
+        #
         os.chmod( self.mmfn, 0666)
 
+        #
+        # now we'll open the file with the correct mode
+        # and use the mmap module to treat the file like a string
+        #
         self.mmf = open( self.mmfn, "a+")
         self.mms = mmap.mmap( self.mmf.fileno(), (maxIndex+1)*256)
         
+        #
+        # Initialize the values
+        #
         for p in self.pvList.keys():
             try:
                 tmp = str(self.pvList[p]["pv"].get())
             except:
+                print >> sys.stderr, "Failed to get %s" % (self.pvList[p]["pv"].pvname)
                 tmp = str("505.505")
-                pass
+
             if tmp == None or len(tmp) == 0:
+                print >> sys.stderr, "Failed to get %s" % (self.pvList[p]["pv"].pvname)
                 tmp = str("505.505")  # SOS in leet
 
+            #
+            # Write the value onto the disk
+            #
             i = 256 * self.pvList[p]["index"]
             self.mms.seek( i)
             self.mms.write( tmp)
@@ -122,6 +161,9 @@ class PvService:
             
         self.mms.flush()
 
+        #
+        # Setup callback to monitor the variables
+        #
         for p in self.pvList.keys():
             self.pvList[p]["pv"].add_callback( callback=self.updateCB)
 
@@ -143,9 +185,14 @@ class PvService:
         self.q.query( "select pg_advisory_unlock( 14852, %d)" % (indx))
 
     def run( self):
+        # Set up to capture ^C and exit "gracefully"
+        #
+        signal.signal( signal.SIGINT, self.intHandler)
+
         self.running = True
+
         tryAgain = False
-        while True:
+        while self.okToRun:
             EpicsCA.pend_event( t=0.05)
             if tryAgain or self.q.getnotify() != None:
                 qr = self.q.query( "select cappv, capval from epics.caputpop()")
@@ -165,6 +212,11 @@ class PvService:
                     # pause to keep commands from bumping into one another
                     #
                 tryAgain = not foundOne
+        #
+        # Remove callbacks
+        #
+        for p in self.pvList.keys():
+            self.pvList[p]["pv"].clear_callbacks()
 
 if __name__ == "__main__":
     z = PvService()
