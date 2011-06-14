@@ -294,9 +294,10 @@ CREATE TABLE epics._motions (
 	mAmpEna bigint default NULL		-- amplifier enabled
 		references epics._pvmonitors (pvmKey),
 
+        mManMode bigint default NULL            -- manual mode
+                references epics._pvmonitors (pvmKey),
 	mRunPrg bigint default NULL		-- run program
 		references epics._pvmonitors (pvmKey),
-
 	mKillPrefs text				-- how do we want to leave this after motion is done?
 		references epics._motionkillprefs (mkp),
 	mPrevAmpEna boolean default NULL,	-- previous amplifier enabled (for mkillprefs = 'restore')
@@ -304,35 +305,37 @@ CREATE TABLE epics._motions (
 );
 ALTER TABLE epics._motions OWNER TO lsadmin;
 
-CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, mRqsPos, mActPos, mInPos, mLl, mHl, mLlHit, mHlHit, mAbort, mKill, mAmpEna, mKillPrefs, mPrevAmpEna, mWeAreInControl, mRunPrg, mRequestTS) AS
+CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, mRqsPos, mActPos, mInPos, mLl, mHl, mLlHit, mHlHit, mAbort, mKill, mAmpEna, mManMode, mKillPrefs, mPrevAmpEna, mWeAreInControl, mRunPrg, mRequestTS) AS
         SELECT mKey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, 
-                mRqsPosPv.pvmValueN as mRqsPos,
-                mActPosPv.pvmValueN as mActPos,
-                mInPosPv.pvmValueN  as mInPos,
-                mLlPv.pvmValueN     as mLl,
-                mHlPv.pvmValueN     as mHl,
-                mLlHitPv.pvmValueN  as mLlHit,
-                mHlHitPv.pvmValueN  as mHlHit,
-                mAbortPv.pvmValueN  as mAbort,
-                mKillPv.pvmValueN   as mKill,
-                mAmpEnaPv.pvmValueN as mAmpEna,
+                mRqsPosPv.pvmValueN   as mRqsPos,
+                mActPosPv.pvmValueN   as mActPos,
+                mInPosPv.pvmValueN    as mInPos,
+                mLlPv.pvmValueN       as mLl,
+                mHlPv.pvmValueN       as mHl,
+                mLlHitPv.pvmValueN    as mLlHit,
+                mHlHitPv.pvmValueN    as mHlHit,
+                mAbortPv.pvmValueN    as mAbort,
+                mKillPv.pvmValueN     as mKill,
+                mAmpEnaPv.pvmValueN   as mAmpEna,
+                mManModePv.pvmValueN  as mManMode,
                 mKillPrefs,
                 mPrevAmpEna,
                 mWeAreInControl,
                 mRunPrgPv.pvmValueN as mRunPrg,
                 mRequestTS
                 FROM epics._motions AS m
-                LEFT JOIN epics._pvmonitors AS mRqsPosPv ON mRqsPosPv.pvmKey = m.mRqsPos
-                LEFT JOIN epics._pvmonitors AS mActPosPv ON mActPosPv.pvmKey = m.mActPos
-                LEFT JOIN epics._pvmonitors AS mInPosPv  ON mInPosPv.pvmKey  = m.mInPos
-                LEFT JOIN epics._pvmonitors AS mLlPv     ON mLlPv.pvmKey     = m.mLl
-                LEFT JOIN epics._pvmonitors AS mHlPv     ON mHlPv.pvmKey     = m.mHl
-                LEFT JOIN epics._pvmonitors AS mLlHitPv  ON mLlHitPv.pvmKey  = m.mLlHit
-                LEFT JOIN epics._pvmonitors AS mHlHitPv  ON mHlHitPv.pvmKey  = m.mHlHit
-                LEFT JOIN epics._pvmonitors AS mAbortPv  ON mAbortPv.pvmKey  = m.mAbort
-                LEFT JOIN epics._pvmonitors AS mKillPv   ON mKillPv.pvmKey   = m.mKill
-                LEFT JOIN epics._pvmonitors AS mAmpEnaPv ON mAmpEnaPv.pvmKey = m.mAmpEna
-                LEFT JOIN epics._pvmonitors AS mRunPrgPv ON mRunPrgPv.pvmKey = m.mRunPrg;
+                LEFT JOIN epics._pvmonitors AS mRqsPosPv  ON mRqsPosPv.pvmKey = m.mRqsPos
+                LEFT JOIN epics._pvmonitors AS mActPosPv  ON mActPosPv.pvmKey = m.mActPos
+                LEFT JOIN epics._pvmonitors AS mInPosPv   ON mInPosPv.pvmKey  = m.mInPos
+                LEFT JOIN epics._pvmonitors AS mLlPv      ON mLlPv.pvmKey     = m.mLl
+                LEFT JOIN epics._pvmonitors AS mHlPv      ON mHlPv.pvmKey     = m.mHl
+                LEFT JOIN epics._pvmonitors AS mLlHitPv   ON mLlHitPv.pvmKey  = m.mLlHit
+                LEFT JOIN epics._pvmonitors AS mHlHitPv   ON mHlHitPv.pvmKey  = m.mHlHit
+                LEFT JOIN epics._pvmonitors AS mAbortPv   ON mAbortPv.pvmKey  = m.mAbort
+                LEFT JOIN epics._pvmonitors AS mKillPv    ON mKillPv.pvmKey   = m.mKill
+                LEFT JOIN epics._pvmonitors AS mAmpEnaPv  ON mAmpEnaPv.pvmKey = m.mAmpEna
+                LEFT JOIN epics._pvmonitors AS mManModePv ON mManModePv.pvmKey = m.mManMode
+                LEFT JOIN epics._pvmonitors AS mRunPrgPv  ON mRunPrgPv.pvmKey = m.mRunPrg;
 
 ALTER TABLE epics.motions OWNER TO lsadmin;
 GRANT SELECT ON epics.motions TO PUBLIC;
@@ -376,13 +379,18 @@ CREATE OR REPLACE FUNCTION epics.updatePvmVars( pv text) returns void as $$
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mLlHit;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mHlHit;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mAmpEna;
+    UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mManMode;
     UPDATE epics._pvmonitors SET pvmValue=epics.caget(pvmName) WHERE pvmKey=m.mRunPrg;
     return;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
 ALTER FUNCTION epics.updatePvmVars( text) OWNER TO lsadmin;
 
-CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns void AS $$
+CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns boolean AS $$
+  --
+  -- Return value: FALSE  check error table
+  --               TRUE   Command attempted
+  --
   DECLARE
     mrec   record;	-- motions record
     usmrec record;	-- Corresponding _motions record
@@ -396,38 +404,52 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
       -- Perhaps we should allow the case where the PV is not in "motions" but is legally changable in "_pvmonitors"
       -- Wait 'til we need it
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'PV name "'||pvname||'" Not found');
-      return;
+      return false;
     END IF;
 
     -- Don't move nothing until we need to
     --
     IF (mrec.mrunprg=0) and abs(mrec.mactpos-reqpos)<=10^(-mrec.mprec) THEN
-      return;
+      return true;
+    END IF;
+
+    --
+    -- Check that the motor is in automatic mode
+    --
+    IF mrec.mmanmode != 0 THEN
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'PV '||pvname||' is in manual mode: I cannot move it.');
+      return false;
     END IF;
 
     --
     -- Check Soft Limits
     --
+    IF mrec.mll = mrec.mhl THEN
+      INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'The high and low soft limits for motor '||pvname||' are both '||mrec.mll::text||'.  Please contact beamline staff.');
+      return false;
+    END IF;      
+
     IF mrec.mll > reqpos THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is less than lower limit of '|| mrec.mll::text);
-      return;
+      return false;
     END IF;
 
     IF mrec.mhl < reqpos THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is greater than upper limit of '|| mrec.mhl::text);
-      return;
+      return false;
     END IF;
+
     --
     -- Check Hard Limits
     --
     IF mrec.mactpos > reqpos and mrec.mllhit != 0 THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is not allowed as the lower hard limit has already been reached');
-      return;
+      return false;
     END IF;
 
     IF mrec.mactpos < reqpos and mrec.mhlhit != 0 THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is not allowed as the upper hard limit has already been reached');
-      return;
+      return false;
     END IF;
 
 
@@ -451,7 +473,7 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns vo
     --    PERFORM epics.pushputqueue( usmrec.mrqspos::int, reqpos);
     PERFORM epics.caput( pvmName, reqpos::text) FROM epics._pvmonitors WHERE pvmKey=usmrec.mrqspos::bigint;
     UPDATE epics._motions SET mrequestts = now() WHERE mkey=mrec.mkey;
-    return;
+    return true;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ALTER FUNCTION epics.moveit( text, numeric) OWNER TO lsadmin;
@@ -604,13 +626,9 @@ CREATE OR REPLACE FUNCTION epics._pvmonitorUpdate() RETURNS trigger AS $$
     -- When it is a new value then add it to the history values
     -- and send out the notifies
     --
-    IF NEW.pvmValue != OLD.pvmValue THEN
+    IF OLD.pvmValuen is null or NEW.pvmValue != OLD.pvmValue THEN
       NEW.pvmValueN := NEW.pvmValue::numeric;
       NEW.pvmTs     := now();
-      --      INSERT INTO epics._historyPvs (hpN, hpValue) VALUES (NEW.pvmHistoryKey, NEW.pvmValue);
-      --      FOR lnk IN SELECT DISTINCT * FROM epics._pv2motion WHERE pv2mPv = NEW.pvmKey LOOP
-      --        PERFORM 'NOTIFY ' || lnk.pv2mNotify;
-      --      END LOOP;
     END IF;
     RETURN NEW;
   END;
@@ -625,7 +643,7 @@ CREATE OR REPLACE FUNCTION epics.pvUpdateValue( thePid bigint, index int, value 
     IF NOT FOUND THEN
       RAISE EXCEPTION 'Updating PV Info with Illegal PID %: Please Kill Yourself', thePid;
     END IF;
-    UPDATE epics._pvmonitors SET pvmValue=value WHERE pvmMonitorIndex = index;      
+    UPDATE epics._pvmonitors SET pvmts=now(), pvmValue=value, pvmValuen=value::numeric WHERE pvmMonitorIndex = index;      
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ALTER FUNCTION epics.pvUpdateValue( bigint, int, text) OWNER TO lsadmin;
