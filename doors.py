@@ -4,19 +4,23 @@ import pg
 import time
 
 class RemoteControl:
-    pvd          = None
-    voicePv      = None
-    shutterPv    = None
-    doorPv       = None
-    readyAPv     = None
-    readyBPv     = None
-    detector     = None
-    lastVoice    = None
-    lastShutter  = None
-    lastDoor     = None
-    detectorSaved = None
+    MOVE_TO_DIST = 700.0  # move back to here
+    IGNORE_DIST  = 500.0  # don't move unless less than this
 
     def __init__( self, pvd, db):
+        self.pvd           = None
+        self.voicePv       = None
+        self.shutterPv     = None
+        self.doorPv        = None
+        self.readyAPv      = None
+        self.readyBPv      = None
+        self.detector      = None
+        self.lastVoice     = None
+        self.lastShutter   = None
+        self.lastDoor      = None
+        self.detectorSaved = None
+        self.armReturn     = False
+
         self.pvd = pvd
         self.db = db
         self.voicePv = EpicsCA.PV(pvd["voice"])
@@ -41,25 +45,36 @@ class RemoteControl:
         self.detector = pvd["detector"]
 
         qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
-        self.detectorSaved = qr.dictresult()[0]["p"]
+        self.detectorSaved = float(qr.dictresult()[0]["p"])
 
     def voiceCB( self, pv=None, **kw):
         print "[%s] voiceCB  voice: %d,  lastVoice: %d" % (time.strftime('%Y-%m-%d %H:%M:%S'), pv.get(), self.lastVoice)
 
         v = int(pv.get())
         if v == 1 and self.lastVoice == 0:
-            qs = "select epics.moveit( '%s', %s)" % (self.detector, self.detectorSaved)
-            print "    query: %s" % (qs)
-            self.db.query( qs)
+            self.armReturn = True
 
         self.lastVoice = int(pv.get())
 
     def doorCB( self, pv=None, **kw):
         if pv.get() == 0 and self.lastDoor == 1:
             qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
-            self.detectorSaved = qr.dictresult()[0]["p"]
+            self.detectorSaved = float(qr.dictresult()[0]["p"])
 
-            self.db.query( "select epics.moveit( '%s', 700)" % (self.detector))
+            if self.detectorSaved < self.IGNORE_DIST:
+                #
+                # Only move the detector back if it is close that some amount
+                #
+                self.db.query( "select epics.moveit( '%s', %f)" % (self.detector, self.MOVE_TO_DIST))
+
+        if self.armReturn and pv.get() == 1 and self.lastDoor == 0:
+            if self.detectorSaved < self.IGNORE_DIST:
+                qs = "select epics.moveit( '%s', %f)" % (self.detector, self.detectorSaved)
+                print "    query: %s" % (qs)
+                self.db.query( qs)
+
+            self.armReturn = False
+
 
         self.lastDoor = pv.get()
 
