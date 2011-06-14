@@ -112,6 +112,7 @@ class PvService:
         qr = self.q.query( "select index, name from epics.getpvnames( %d) order by index" % (self.pid))
         maxIndex = 0
         for r in qr.dictresult():
+            print r["index"], r["name"]
             self.pvList[r["name"]] = { "index" : int(r["index"]), "pv" : EpicsCA.PV( r["name"])}
             if int( r["index"]) > maxIndex:
                 maxIndex = int( r["index"])
