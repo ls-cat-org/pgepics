@@ -959,3 +959,15 @@ $$ LANGUAGE plpythonu SECURITY DEFINER;
 ALTER FUNCTION epics._caget( int) OWNER TO lsadmin;
 
 
+CREATE TABLE epics.blstatuspvs (
+  blspkey serial primary key,
+  blspstn int,
+  blsp_a_fe int
+
+CREATE TYPE epics.blstatustype AS (blsstn int, blsbeamon boolean, blstatusmsg text);
+CREATE OR REPLACE FUNCTION epics.blstatus() returns setof epics.blstatustype AS $$
+  DECLARE
+  BEGIN
+  END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+ALTER FUNCTION epics.blstatus() OWNER TO lsadmin;

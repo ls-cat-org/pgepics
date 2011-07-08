@@ -97,6 +97,8 @@ class PvService:
         self.putOnlyList = {}
         self.okToRun = True
 
+        print >> sys.stderr, "Initialization...\n"
+
         self.q = _Q()
 
         #
@@ -186,6 +188,8 @@ class PvService:
         self.q.query( "select pg_advisory_unlock( 14852, %d)" % (indx))
 
     def run( self):
+        print >> sys.stderr, "Running\n"
+
         # Set up to capture ^C and exit "gracefully"
         #
         signal.signal( signal.SIGINT, self.intHandler)
