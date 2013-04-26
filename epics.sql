@@ -2,7 +2,7 @@
 -- Support for epics process variables
 --
 --
-#DROP SCHEMA epics CASCADE;
+-- DROP SCHEMA IF EXISTS epics CASCADE;
 CREATE SCHEMA epics;
 GRANT USAGE ON SCHEMA epics TO PUBLIC;
 
