@@ -104,6 +104,7 @@ class Doors:
     def __init__( self):
         self.db       = pg.connect(dbname='ls',user='lsuser', host='contrabass.ls-cat.org')
         for pvs in self.pvN:
+            print pvs
             self.rcL[pvs["station"]] = RemoteControl( pvs, self.db)
             
     def run( self):
