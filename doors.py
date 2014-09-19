@@ -89,14 +89,14 @@ class RemoteControl:
 class Doors:
     db = None
     pvN = [
-        { 'station' : '21-ID-D', 'voice' : 'PA:21ID:OA_STA_D_VOICE_1',    'shutter' : 'PC:21ID:Rem_DshtrOpen',
-          'door' : 'PA:21ID:IA_STA_D_DR2_CLOS.VAL',    'detector' : '21:D1:DT:Z0', 'readyA' : 'PA:21ID:STA_D_BEAM_READY', 'readyB' : 'PB:21ID:STA_D_BEAM_READY'},
+        { 'station' : '21-ID-D', 'voice' : 'PA:21ID:D_VOICE_SEARCHING',    'shutter' : 'PC:21ID:SDS_OPEN_REQUEST',
+          'door' : 'PA:21ID:D_DOOR_2_CLOSED',    'detector' : '21:D1:DT:Z0', 'readyA' : 'PA:21ID:SDS_PERMIT', 'readyB' : 'PB:21ID:SDS_PERMIT'},
 
-        { 'station' : '21-ID-F', 'voice' : 'PA:21ID:OA_STA_F_VOICE_1',    'shutter' : 'PC:21ID:Rem_FshtrOpen',
-          'door' : 'PA:21ID:IA_STA_F_DR2_CLOS.VAL',    'detector' : '21:F1:DT:D', 'readyA' : 'PA:21ID:STA_F_BEAM_READY', 'readyB' : 'PB:21ID:STA_F_BEAM_READY'},
+        { 'station' : '21-ID-F', 'voice' : 'PA:21ID:F_VOICE_SEARCHING',    'shutter' : 'PC:21ID:SFS_OPEN_REQUEST',
+          'door' : 'PA:21ID:F_DOOR_2_CLOSED',    'detector' : '21:F1:DT:D', 'readyA' : 'PA:21ID:SFD_PERMIT', 'readyB' : 'PB:21ID:SFS_PERMIT'},
 
-        { 'station' : '21-ID-G', 'voice' : 'PA:21ID:OA_STA_FG_G_VOICE_1', 'shutter' : 'PC:21ID:Rem_GshtrOpen.VAL',
-          'door' : 'PA:21ID:IA_STA_FG_G_DR1_CLOS.VAL', 'detector' : '21:G1:DT:D', 'readyA' : 'PA:21ID:STA_G_BEAM_READY', 'readyB' : 'PB:21ID:STA_G_BEAM_READY'}
+        { 'station' : '21-ID-G', 'voice' : 'PA:21ID:G_VOICE_SEARCHING', 'shutter' : 'PC:21ID:SGS_OPEN_REQUEST',
+          'door' : 'PA:21ID:G_DOOR1_CLOSED', 'detector' : '21:G1:DT:D', 'readyA' : 'PA:21ID:SGS_PERMIT', 'readyB' : 'PB:21ID:SGS_PERMIT'}
            ]
 
     rcL = {}
