@@ -1,0 +1,8 @@
+export MY_EPICS_BASE=/usr/local/epics/base
+export MY_EPICS_EXTENSIONS=/usr/local/epics/extensions
+export MY_EPICS_SYNAPPS=/usr/local/epics/synApps_5_7
+
+export EPICS_CA_AUTO_ADDR_LIST=NO
+export EPICS_CA_ADDR_LIST=localhost
+export EPICS_BASE=/usr/local/epics/base
+export EPICS_EXTENSIONS=/usr/local/epics/extensions

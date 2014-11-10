@@ -1,0 +1,2127 @@
+# autosave R5.1	Automatically generated - DO NOT MODIFY - 141110-090044
+21:CAMS:cam29:DataType 0
+21:CAMS:cam29:ColorMode 2
+21:CAMS:cam29:BinX 1
+21:CAMS:cam29:BinY 1
+21:CAMS:cam29:MinX 0
+21:CAMS:cam29:MinY 0
+21:CAMS:cam29:SizeX 780
+21:CAMS:cam29:SizeY 580
+21:CAMS:cam29:ReverseX 0
+21:CAMS:cam29:ReverseY 0
+21:CAMS:cam29:AcquireTime 0.05
+21:CAMS:cam29:AcquirePeriod 0.1
+21:CAMS:cam29:Gain 0
+21:CAMS:cam29:FrameType 0
+21:CAMS:cam29:ImageMode 2
+21:CAMS:cam29:TriggerMode 5
+21:CAMS:cam29:NumExposures 1
+21:CAMS:cam29:NumImages 1
+21:CAMS:cam29:ArrayCallbacks 1
+21:CAMS:cam29:ShutterMode 0
+21:CAMS:cam29:ShutterOpenDelay 0
+21:CAMS:cam29:ShutterCloseDelay 0
+21:CAMS:cam29:ShutterOpenEPICS.OUT 
+21:CAMS:cam29:ShutterCloseEPICS.OUT 
+21:CAMS:cam29:ShutterOpenEPICS.OCAL 1
+21:CAMS:cam29:ShutterCloseEPICS.OCAL 0
+21:CAMS:cam29:ShutterStatusEPICS_RBV.INP test CP MS
+21:CAMS:cam29:ShutterStatusEPICS_RBV.ZRVL 0
+21:CAMS:cam29:ShutterStatusEPICS_RBV.ONVL 1
+21:CAMS:cam29:Temperature 25
+21:CAMS:cam29:ReadStatus.SCAN 0
+21:CAMS:cam29:NDAttributesFile 
+21:CAMS:cam29:PoolUsedMem.SCAN 6
+21:CAMS:cam29:BayerConvert 1
+21:CAMS:cam29:PSReadStatistics.SCAN 4
+21:CAMS:cam29:PSByteRate 115000000
+21:CAMS:cam29:SyncOut1Mode 3
+21:CAMS:cam29:SyncOut1Level 0
+21:CAMS:cam29:SyncOut1Invert 0
+21:CAMS:cam29:SyncOut2Mode 4
+21:CAMS:cam29:SyncOut2Level 0
+21:CAMS:cam29:SyncOut2Invert 0
+21:CAMS:cam29:SyncOut3Mode 0
+21:CAMS:cam29:SyncOut3Level 0
+21:CAMS:cam29:SyncOut3Invert 0
+21:CAMS:cam29:Strobe1Mode 2
+21:CAMS:cam29:Strobe1CtlDuration 0
+21:CAMS:cam29:Strobe1Delay 0
+21:CAMS:cam29:Strobe1Duration 0
+21:CAMS:cam29:TriggerEvent 0
+21:CAMS:cam29:TriggerOverlap 0
+21:CAMS:cam29:TriggerDelay 0
+21:CAMS:image1:NDArrayPort PS1
+21:CAMS:image1:NDArrayAddress 0
+21:CAMS:image1:EnableCallbacks 0
+21:CAMS:image1:MinCallbackTime 0
+21:CAMS:image1:BlockingCallbacks 0
+21:CAMS:image1:NDAttributesFile 
+21:CAMS:cam34:DataType 0
+21:CAMS:cam34:ColorMode 1
+21:CAMS:cam34:BinX 1
+21:CAMS:cam34:BinY 1
+21:CAMS:cam34:MinX 0
+21:CAMS:cam34:MinY 0
+21:CAMS:cam34:SizeX 1388
+21:CAMS:cam34:SizeY 1036
+21:CAMS:cam34:ReverseX 0
+21:CAMS:cam34:ReverseY 0
+21:CAMS:cam34:AcquireTime 0.1
+21:CAMS:cam34:AcquirePeriod 0.1
+21:CAMS:cam34:Gain 0
+21:CAMS:cam34:FrameType 0
+21:CAMS:cam34:ImageMode 2
+21:CAMS:cam34:TriggerMode 5
+21:CAMS:cam34:NumExposures 1
+21:CAMS:cam34:NumImages 1
+21:CAMS:cam34:ArrayCallbacks 1
+21:CAMS:cam34:ShutterMode 0
+21:CAMS:cam34:ShutterOpenDelay 0
+21:CAMS:cam34:ShutterCloseDelay 0
+21:CAMS:cam34:ShutterOpenEPICS.OUT 
+21:CAMS:cam34:ShutterCloseEPICS.OUT 
+21:CAMS:cam34:ShutterOpenEPICS.OCAL 1
+21:CAMS:cam34:ShutterCloseEPICS.OCAL 0
+21:CAMS:cam34:ShutterStatusEPICS_RBV.INP test CP MS
+21:CAMS:cam34:ShutterStatusEPICS_RBV.ZRVL 0
+21:CAMS:cam34:ShutterStatusEPICS_RBV.ONVL 1
+21:CAMS:cam34:Temperature 25
+21:CAMS:cam34:ReadStatus.SCAN 0
+21:CAMS:cam34:NDAttributesFile 
+21:CAMS:cam34:PoolUsedMem.SCAN 6
+21:CAMS:cam34:BayerConvert 1
+21:CAMS:cam34:PSReadStatistics.SCAN 4
+21:CAMS:cam34:PSByteRate 115000000
+21:CAMS:cam34:SyncOut1Mode 3
+21:CAMS:cam34:SyncOut1Level 0
+21:CAMS:cam34:SyncOut1Invert 0
+21:CAMS:cam34:SyncOut2Mode 4
+21:CAMS:cam34:SyncOut2Level 0
+21:CAMS:cam34:SyncOut2Invert 0
+21:CAMS:cam34:SyncOut3Mode 0
+21:CAMS:cam34:SyncOut3Level 0
+21:CAMS:cam34:SyncOut3Invert 0
+21:CAMS:cam34:Strobe1Mode 2
+21:CAMS:cam34:Strobe1CtlDuration 0
+21:CAMS:cam34:Strobe1Delay 0
+21:CAMS:cam34:Strobe1Duration 0
+21:CAMS:cam34:TriggerEvent 0
+21:CAMS:cam34:TriggerOverlap 0
+21:CAMS:cam34:TriggerDelay 0
+21:CAMS:image2:NDArrayPort PS2
+21:CAMS:image2:NDArrayAddress 0
+21:CAMS:image2:EnableCallbacks 0
+21:CAMS:image2:MinCallbackTime 0
+21:CAMS:image2:BlockingCallbacks 0
+21:CAMS:image2:NDAttributesFile 
+21:CAMS:netCDF1:NDArrayPort PS1
+21:CAMS:netCDF1:NDArrayAddress 0
+21:CAMS:netCDF1:EnableCallbacks 0
+21:CAMS:netCDF1:MinCallbackTime 0
+21:CAMS:netCDF1:BlockingCallbacks 0
+21:CAMS:netCDF1:NDAttributesFile 
+21:CAMS:netCDF1:FilePath 
+21:CAMS:netCDF1:FileName 
+21:CAMS:netCDF1:FileNumber 1
+21:CAMS:netCDF1:AutoIncrement 1
+21:CAMS:netCDF1:FileTemplate 
+21:CAMS:netCDF1:AutoSave 0
+21:CAMS:netCDF1:FileFormat 0
+21:CAMS:netCDF1:FileWriteMode 0
+21:CAMS:netCDF1:NumCapture 1
+21:CAMS:netCDF1:DeleteDriverFile 0
+21:CAMS:TIFF1:NDArrayPort PS1
+21:CAMS:TIFF1:NDArrayAddress 0
+21:CAMS:TIFF1:EnableCallbacks 0
+21:CAMS:TIFF1:MinCallbackTime 0
+21:CAMS:TIFF1:BlockingCallbacks 0
+21:CAMS:TIFF1:NDAttributesFile 
+21:CAMS:TIFF1:FilePath 
+21:CAMS:TIFF1:FileName 
+21:CAMS:TIFF1:FileNumber 1
+21:CAMS:TIFF1:AutoIncrement 1
+21:CAMS:TIFF1:FileTemplate 
+21:CAMS:TIFF1:AutoSave 0
+21:CAMS:TIFF1:FileFormat 0
+21:CAMS:TIFF1:FileWriteMode 0
+21:CAMS:TIFF1:NumCapture 1
+21:CAMS:TIFF1:DeleteDriverFile 0
+21:CAMS:JPEG1:NDArrayPort OVER1
+21:CAMS:JPEG1:NDArrayAddress 0
+21:CAMS:JPEG1:EnableCallbacks 1
+21:CAMS:JPEG1:MinCallbackTime 0
+21:CAMS:JPEG1:BlockingCallbacks 0
+21:CAMS:JPEG1:NDAttributesFile 
+21:CAMS:JPEG1:FilePath @array@ { "47" "99" "97" "109" "115" "47" "99" "97" "109" "50" "57" "47" "99" "97" "109" "50" "57" "45" "49" "0" }
+21:CAMS:JPEG1:FileName @array@ { "105" "109" "97" "103" "101" "0" }
+21:CAMS:JPEG1:FileNumber 16
+21:CAMS:JPEG1:AutoIncrement 1
+21:CAMS:JPEG1:FileTemplate @array@ { "37" "115" "37" "115" "37" "48" "53" "100" "46" "106" "112" "103" "0" }
+21:CAMS:JPEG1:AutoSave 1
+21:CAMS:JPEG1:FileFormat 0
+21:CAMS:JPEG1:FileWriteMode 2
+21:CAMS:JPEG1:NumCapture 0
+21:CAMS:JPEG1:DeleteDriverFile 0
+21:CAMS:JPEG1:JPEGQuality 100
+21:CAMS:Nexus1:NDArrayPort PS1
+21:CAMS:Nexus1:NDArrayAddress 0
+21:CAMS:Nexus1:EnableCallbacks 0
+21:CAMS:Nexus1:MinCallbackTime 0
+21:CAMS:Nexus1:BlockingCallbacks 0
+21:CAMS:Nexus1:NDAttributesFile 
+21:CAMS:Nexus1:FilePath 
+21:CAMS:Nexus1:FileName 
+21:CAMS:Nexus1:FileNumber 1
+21:CAMS:Nexus1:AutoIncrement 1
+21:CAMS:Nexus1:FileTemplate 
+21:CAMS:Nexus1:AutoSave 0
+21:CAMS:Nexus1:FileFormat 0
+21:CAMS:Nexus1:FileWriteMode 0
+21:CAMS:Nexus1:NumCapture 1
+21:CAMS:Nexus1:DeleteDriverFile 0
+21:CAMS:Nexus1:TemplateFilePath 
+21:CAMS:Nexus1:TemplateFileName 
+21:CAMS:Magick1:NDArrayPort PS1
+21:CAMS:Magick1:NDArrayAddress 0
+21:CAMS:Magick1:EnableCallbacks 0
+21:CAMS:Magick1:MinCallbackTime 0
+21:CAMS:Magick1:BlockingCallbacks 0
+21:CAMS:Magick1:NDAttributesFile 
+21:CAMS:Magick1:FilePath 
+21:CAMS:Magick1:FileName 
+21:CAMS:Magick1:FileNumber 1
+21:CAMS:Magick1:AutoIncrement 1
+21:CAMS:Magick1:FileTemplate 
+21:CAMS:Magick1:AutoSave 0
+21:CAMS:Magick1:FileFormat 0
+21:CAMS:Magick1:FileWriteMode 0
+21:CAMS:Magick1:NumCapture 1
+21:CAMS:Magick1:DeleteDriverFile 0
+21:CAMS:Magick1:Quality 100
+21:CAMS:Magick1:CompressType 0
+21:CAMS:Magick1:BitDepth 0
+21:CAMS:HDF1:NDArrayPort PS1
+21:CAMS:HDF1:NDArrayAddress 0
+21:CAMS:HDF1:EnableCallbacks 0
+21:CAMS:HDF1:MinCallbackTime 0
+21:CAMS:HDF1:BlockingCallbacks 0
+21:CAMS:HDF1:NDAttributesFile 
+21:CAMS:HDF1:FilePath 
+21:CAMS:HDF1:FileName 
+21:CAMS:HDF1:FileNumber 1
+21:CAMS:HDF1:AutoIncrement 1
+21:CAMS:HDF1:FileTemplate 
+21:CAMS:HDF1:AutoSave 0
+21:CAMS:HDF1:FileFormat 0
+21:CAMS:HDF1:FileWriteMode 0
+21:CAMS:HDF1:NumCapture 1
+21:CAMS:HDF1:DeleteDriverFile 0
+21:CAMS:HDF1:NumRowChunks 0
+21:CAMS:HDF1:NumColChunks 0
+21:CAMS:HDF1:NumFramesChunks 0
+21:CAMS:HDF1:BoundaryAlign 1
+21:CAMS:HDF1:BoundaryThreshold 1
+21:CAMS:HDF1:NumFramesFlush 0
+21:CAMS:HDF1:Compression 0
+21:CAMS:HDF1:NumDataBits 8
+21:CAMS:HDF1:DataBitsOffset 0
+21:CAMS:HDF1:SZipNumPixels 16
+21:CAMS:HDF1:ZLevel 6
+21:CAMS:HDF1:StorePerform 1
+21:CAMS:HDF1:StoreAttr 1
+21:CAMS:HDF1:NumExtraDims 0
+21:CAMS:HDF1:ExtraDimSizeN 1
+21:CAMS:HDF1:ExtraDimSizeX 1
+21:CAMS:HDF1:ExtraDimSizeY 1
+21:CAMS:ROI1:NDArrayPort PS1
+21:CAMS:ROI1:NDArrayAddress 0
+21:CAMS:ROI1:EnableCallbacks 0
+21:CAMS:ROI1:MinCallbackTime 0
+21:CAMS:ROI1:BlockingCallbacks 0
+21:CAMS:ROI1:NDAttributesFile 
+21:CAMS:ROI1:Name 
+21:CAMS:ROI1:DataTypeOut 8
+21:CAMS:ROI1:BinX 1
+21:CAMS:ROI1:BinY 1
+21:CAMS:ROI1:BinZ 1
+21:CAMS:ROI1:MinX 0
+21:CAMS:ROI1:MinY 0
+21:CAMS:ROI1:MinZ 0
+21:CAMS:ROI1:SizeX 1000000
+21:CAMS:ROI1:SizeY 1000000
+21:CAMS:ROI1:SizeZ 1000000
+21:CAMS:ROI1:ReverseX 0
+21:CAMS:ROI1:ReverseY 0
+21:CAMS:ROI1:ReverseZ 0
+21:CAMS:ROI1:AutoSizeX 0
+21:CAMS:ROI1:AutoSizeY 0
+21:CAMS:ROI1:AutoSizeZ 0
+21:CAMS:ROI1:EnableX 1
+21:CAMS:ROI1:EnableY 1
+21:CAMS:ROI1:EnableZ 1
+21:CAMS:ROI1:EnableScale 0
+21:CAMS:ROI1:Scale 1
+21:CAMS:ROI2:NDArrayPort PS1
+21:CAMS:ROI2:NDArrayAddress 0
+21:CAMS:ROI2:EnableCallbacks 0
+21:CAMS:ROI2:MinCallbackTime 0
+21:CAMS:ROI2:BlockingCallbacks 0
+21:CAMS:ROI2:NDAttributesFile 
+21:CAMS:ROI2:Name 
+21:CAMS:ROI2:DataTypeOut 8
+21:CAMS:ROI2:BinX 1
+21:CAMS:ROI2:BinY 1
+21:CAMS:ROI2:BinZ 1
+21:CAMS:ROI2:MinX 0
+21:CAMS:ROI2:MinY 0
+21:CAMS:ROI2:MinZ 0
+21:CAMS:ROI2:SizeX 1000000
+21:CAMS:ROI2:SizeY 1000000
+21:CAMS:ROI2:SizeZ 1000000
+21:CAMS:ROI2:ReverseX 0
+21:CAMS:ROI2:ReverseY 0
+21:CAMS:ROI2:ReverseZ 0
+21:CAMS:ROI2:AutoSizeX 0
+21:CAMS:ROI2:AutoSizeY 0
+21:CAMS:ROI2:AutoSizeZ 0
+21:CAMS:ROI2:EnableX 1
+21:CAMS:ROI2:EnableY 1
+21:CAMS:ROI2:EnableZ 1
+21:CAMS:ROI2:EnableScale 0
+21:CAMS:ROI2:Scale 1
+21:CAMS:ROI3:NDArrayPort PS1
+21:CAMS:ROI3:NDArrayAddress 0
+21:CAMS:ROI3:EnableCallbacks 0
+21:CAMS:ROI3:MinCallbackTime 0
+21:CAMS:ROI3:BlockingCallbacks 0
+21:CAMS:ROI3:NDAttributesFile 
+21:CAMS:ROI3:Name 
+21:CAMS:ROI3:DataTypeOut 8
+21:CAMS:ROI3:BinX 1
+21:CAMS:ROI3:BinY 1
+21:CAMS:ROI3:BinZ 1
+21:CAMS:ROI3:MinX 0
+21:CAMS:ROI3:MinY 0
+21:CAMS:ROI3:MinZ 0
+21:CAMS:ROI3:SizeX 1000000
+21:CAMS:ROI3:SizeY 1000000
+21:CAMS:ROI3:SizeZ 1000000
+21:CAMS:ROI3:ReverseX 0
+21:CAMS:ROI3:ReverseY 0
+21:CAMS:ROI3:ReverseZ 0
+21:CAMS:ROI3:AutoSizeX 0
+21:CAMS:ROI3:AutoSizeY 0
+21:CAMS:ROI3:AutoSizeZ 0
+21:CAMS:ROI3:EnableX 1
+21:CAMS:ROI3:EnableY 1
+21:CAMS:ROI3:EnableZ 1
+21:CAMS:ROI3:EnableScale 0
+21:CAMS:ROI3:Scale 1
+21:CAMS:ROI4:NDArrayPort PS1
+21:CAMS:ROI4:NDArrayAddress 0
+21:CAMS:ROI4:EnableCallbacks 0
+21:CAMS:ROI4:MinCallbackTime 0
+21:CAMS:ROI4:BlockingCallbacks 0
+21:CAMS:ROI4:NDAttributesFile 
+21:CAMS:ROI4:Name 
+21:CAMS:ROI4:DataTypeOut 8
+21:CAMS:ROI4:BinX 1
+21:CAMS:ROI4:BinY 1
+21:CAMS:ROI4:BinZ 1
+21:CAMS:ROI4:MinX 0
+21:CAMS:ROI4:MinY 0
+21:CAMS:ROI4:MinZ 0
+21:CAMS:ROI4:SizeX 1000000
+21:CAMS:ROI4:SizeY 1000000
+21:CAMS:ROI4:SizeZ 1000000
+21:CAMS:ROI4:ReverseX 0
+21:CAMS:ROI4:ReverseY 0
+21:CAMS:ROI4:ReverseZ 0
+21:CAMS:ROI4:AutoSizeX 0
+21:CAMS:ROI4:AutoSizeY 0
+21:CAMS:ROI4:AutoSizeZ 0
+21:CAMS:ROI4:EnableX 1
+21:CAMS:ROI4:EnableY 1
+21:CAMS:ROI4:EnableZ 1
+21:CAMS:ROI4:EnableScale 0
+21:CAMS:ROI4:Scale 1
+21:CAMS:Proc1:NDArrayPort PS1
+21:CAMS:Proc1:NDArrayAddress 0
+21:CAMS:Proc1:EnableCallbacks 0
+21:CAMS:Proc1:MinCallbackTime 0
+21:CAMS:Proc1:BlockingCallbacks 0
+21:CAMS:Proc1:NDAttributesFile 
+21:CAMS:Proc1:DataTypeOut 8
+21:CAMS:Proc1:EnableBackground 0
+21:CAMS:Proc1:EnableFlatField 0
+21:CAMS:Proc1:ScaleFlatField 255
+21:CAMS:Proc1:EnableOffsetScale 0
+21:CAMS:Proc1:Offset 0
+21:CAMS:Proc1:Scale 1
+21:CAMS:Proc1:EnableLowClip 0
+21:CAMS:Proc1:LowClip 0
+21:CAMS:Proc1:EnableHighClip 0
+21:CAMS:Proc1:HighClip 100
+21:CAMS:Proc1:EnableFilter 0
+21:CAMS:Proc1:AutoResetFilter 0
+21:CAMS:Proc1:FilterCallbacks 0
+21:CAMS:Proc1:NumFilter 1
+21:CAMS:Proc1:FilterType 0
+21:CAMS:Proc1:OOffset 0
+21:CAMS:Proc1:OScale 1
+21:CAMS:Proc1:OC1 1
+21:CAMS:Proc1:OC2 -1
+21:CAMS:Proc1:OC3 0
+21:CAMS:Proc1:OC4 1
+21:CAMS:Proc1:FOffset 0
+21:CAMS:Proc1:FScale 1
+21:CAMS:Proc1:FC1 1
+21:CAMS:Proc1:FC2 -1
+21:CAMS:Proc1:FC3 0
+21:CAMS:Proc1:FC4 1
+21:CAMS:Proc1:ROffset 0
+21:CAMS:Proc1:RC1 0
+21:CAMS:Proc1:RC2 1
+21:CAMS:Stats1:NDArrayPort ROI1
+21:CAMS:Stats1:NDArrayAddress 0
+21:CAMS:Stats1:EnableCallbacks 0
+21:CAMS:Stats1:MinCallbackTime 0
+21:CAMS:Stats1:BlockingCallbacks 0
+21:CAMS:Stats1:NDAttributesFile 
+21:CAMS:Stats1:BgdWidth 1
+21:CAMS:Stats1:ComputeStatistics 1
+21:CAMS:Stats1:ComputeCentroid 0
+21:CAMS:Stats1:CentroidThreshold 1
+21:CAMS:Stats1:ComputeProfiles 0
+21:CAMS:Stats1:CursorX 256
+21:CAMS:Stats1:CursorY 256
+21:CAMS:Stats1:ComputeHistogram 0
+21:CAMS:Stats1:HistSize 256
+21:CAMS:Stats1:HistMin 0
+21:CAMS:Stats1:HistMax 255
+21:CAMS:Stats1:TSNumPoints 2048
+21:CAMS:Stats1:TSRead.SCAN 6
+21:CAMS:Stats2:NDArrayPort ROI2
+21:CAMS:Stats2:NDArrayAddress 0
+21:CAMS:Stats2:EnableCallbacks 0
+21:CAMS:Stats2:MinCallbackTime 0
+21:CAMS:Stats2:BlockingCallbacks 0
+21:CAMS:Stats2:NDAttributesFile 
+21:CAMS:Stats2:BgdWidth 1
+21:CAMS:Stats2:ComputeStatistics 1
+21:CAMS:Stats2:ComputeCentroid 0
+21:CAMS:Stats2:CentroidThreshold 1
+21:CAMS:Stats2:ComputeProfiles 0
+21:CAMS:Stats2:CursorX 256
+21:CAMS:Stats2:CursorY 256
+21:CAMS:Stats2:ComputeHistogram 0
+21:CAMS:Stats2:HistSize 256
+21:CAMS:Stats2:HistMin 0
+21:CAMS:Stats2:HistMax 255
+21:CAMS:Stats2:TSNumPoints 2048
+21:CAMS:Stats2:TSRead.SCAN 6
+21:CAMS:Stats3:NDArrayPort ROI3
+21:CAMS:Stats3:NDArrayAddress 0
+21:CAMS:Stats3:EnableCallbacks 0
+21:CAMS:Stats3:MinCallbackTime 0
+21:CAMS:Stats3:BlockingCallbacks 0
+21:CAMS:Stats3:NDAttributesFile 
+21:CAMS:Stats3:BgdWidth 1
+21:CAMS:Stats3:ComputeStatistics 1
+21:CAMS:Stats3:ComputeCentroid 0
+21:CAMS:Stats3:CentroidThreshold 1
+21:CAMS:Stats3:ComputeProfiles 0
+21:CAMS:Stats3:CursorX 256
+21:CAMS:Stats3:CursorY 256
+21:CAMS:Stats3:ComputeHistogram 0
+21:CAMS:Stats3:HistSize 256
+21:CAMS:Stats3:HistMin 0
+21:CAMS:Stats3:HistMax 255
+21:CAMS:Stats3:TSNumPoints 2048
+21:CAMS:Stats3:TSRead.SCAN 6
+21:CAMS:Stats4:NDArrayPort ROI4
+21:CAMS:Stats4:NDArrayAddress 0
+21:CAMS:Stats4:EnableCallbacks 0
+21:CAMS:Stats4:MinCallbackTime 0
+21:CAMS:Stats4:BlockingCallbacks 0
+21:CAMS:Stats4:NDAttributesFile 
+21:CAMS:Stats4:BgdWidth 1
+21:CAMS:Stats4:ComputeStatistics 1
+21:CAMS:Stats4:ComputeCentroid 0
+21:CAMS:Stats4:CentroidThreshold 1
+21:CAMS:Stats4:ComputeProfiles 0
+21:CAMS:Stats4:CursorX 256
+21:CAMS:Stats4:CursorY 256
+21:CAMS:Stats4:ComputeHistogram 0
+21:CAMS:Stats4:HistSize 256
+21:CAMS:Stats4:HistMin 0
+21:CAMS:Stats4:HistMax 255
+21:CAMS:Stats4:TSNumPoints 2048
+21:CAMS:Stats4:TSRead.SCAN 6
+21:CAMS:Stats5:NDArrayPort PS1
+21:CAMS:Stats5:NDArrayAddress 0
+21:CAMS:Stats5:EnableCallbacks 0
+21:CAMS:Stats5:MinCallbackTime 0
+21:CAMS:Stats5:BlockingCallbacks 0
+21:CAMS:Stats5:NDAttributesFile 
+21:CAMS:Stats5:BgdWidth 1
+21:CAMS:Stats5:ComputeStatistics 1
+21:CAMS:Stats5:ComputeCentroid 0
+21:CAMS:Stats5:CentroidThreshold 1
+21:CAMS:Stats5:ComputeProfiles 0
+21:CAMS:Stats5:CursorX 256
+21:CAMS:Stats5:CursorY 256
+21:CAMS:Stats5:ComputeHistogram 0
+21:CAMS:Stats5:HistSize 256
+21:CAMS:Stats5:HistMin 0
+21:CAMS:Stats5:HistMax 255
+21:CAMS:Stats5:TSNumPoints 2048
+21:CAMS:Stats5:TSRead.SCAN 6
+21:CAMS:Trans1:NDArrayPort PS1
+21:CAMS:Trans1:NDArrayAddress 0
+21:CAMS:Trans1:EnableCallbacks 0
+21:CAMS:Trans1:MinCallbackTime 0
+21:CAMS:Trans1:BlockingCallbacks 0
+21:CAMS:Trans1:NDAttributesFile 
+21:CAMS:Trans1:Name 
+21:CAMS:Trans1:Type1 0
+21:CAMS:Over1:NDArrayPort PS1
+21:CAMS:Over1:NDArrayAddress 0
+21:CAMS:Over1:EnableCallbacks 1
+21:CAMS:Over1:MinCallbackTime 0
+21:CAMS:Over1:BlockingCallbacks 0
+21:CAMS:Over1:NDAttributesFile 
+21:CAMS:Over1:1:Name Timestamp
+21:CAMS:Over1:1:Use 1
+21:CAMS:Over1:1:PositionXLink.DOL 21:CAMS:ROI1:MinX_RBV CP MS
+21:CAMS:Over1:1:PositionX 0
+21:CAMS:Over1:1:PositionYLink.DOL 21:CAMS:ROI1:MinY_RBV CP MS
+21:CAMS:Over1:1:PositionY 0
+21:CAMS:Over1:1:SizeXLink.DOL 21:CAMS:ROI1:SizeX_RBV CP MS
+21:CAMS:Over1:1:SizeX 1000000
+21:CAMS:Over1:1:SizeYLink.DOL 21:CAMS:ROI1:SizeY_RBV CP MS
+21:CAMS:Over1:1:SizeY 1000000
+21:CAMS:Over1:1:DrawMode 1
+21:CAMS:Over1:1:Shape 2
+21:CAMS:Over1:1:Red 255
+21:CAMS:Over1:1:Green 255
+21:CAMS:Over1:1:Blue 255
+21:CAMS:Over1:1:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:1:Font 3
+21:CAMS:Over1:1:DisplayText @array@ { "76" "83" "45" "67" "65" "84" "32" "50" "49" "45" "73" "68" "45" "68" "32" "83" "112" "105" "110" "100" "108" "101" "32" "0" }
+21:CAMS:Over1:2:Name ROI2
+21:CAMS:Over1:2:Use 0
+21:CAMS:Over1:2:PositionXLink.DOL 21:CAMS:ROI2:MinX_RBV CP MS
+21:CAMS:Over1:2:PositionX 0
+21:CAMS:Over1:2:PositionYLink.DOL 21:CAMS:ROI2:MinY_RBV CP MS
+21:CAMS:Over1:2:PositionY 0
+21:CAMS:Over1:2:SizeXLink.DOL 21:CAMS:ROI2:SizeX_RBV CP MS
+21:CAMS:Over1:2:SizeX 1000000
+21:CAMS:Over1:2:SizeYLink.DOL 21:CAMS:ROI2:SizeY_RBV CP MS
+21:CAMS:Over1:2:SizeY 1000000
+21:CAMS:Over1:2:DrawMode 0
+21:CAMS:Over1:2:Shape 1
+21:CAMS:Over1:2:Red 1
+21:CAMS:Over1:2:Green 1
+21:CAMS:Over1:2:Blue 1
+21:CAMS:Over1:2:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:2:Font 0
+21:CAMS:Over1:2:DisplayText 
+21:CAMS:Over1:3:Name ROI3
+21:CAMS:Over1:3:Use 0
+21:CAMS:Over1:3:PositionXLink.DOL 21:CAMS:ROI3:MinX_RBV CP MS
+21:CAMS:Over1:3:PositionX 0
+21:CAMS:Over1:3:PositionYLink.DOL 21:CAMS:ROI3:MinY_RBV CP MS
+21:CAMS:Over1:3:PositionY 0
+21:CAMS:Over1:3:SizeXLink.DOL 21:CAMS:ROI3:SizeX_RBV CP MS
+21:CAMS:Over1:3:SizeX 1000000
+21:CAMS:Over1:3:SizeYLink.DOL 21:CAMS:ROI3:SizeY_RBV CP MS
+21:CAMS:Over1:3:SizeY 1000000
+21:CAMS:Over1:3:DrawMode 0
+21:CAMS:Over1:3:Shape 1
+21:CAMS:Over1:3:Red 1
+21:CAMS:Over1:3:Green 1
+21:CAMS:Over1:3:Blue 1
+21:CAMS:Over1:3:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:3:Font 0
+21:CAMS:Over1:3:DisplayText 
+21:CAMS:Over1:4:Name ROI4
+21:CAMS:Over1:4:Use 0
+21:CAMS:Over1:4:PositionXLink.DOL 21:CAMS:ROI4:MinX_RBV CP MS
+21:CAMS:Over1:4:PositionX 0
+21:CAMS:Over1:4:PositionYLink.DOL 21:CAMS:ROI4:MinY_RBV CP MS
+21:CAMS:Over1:4:PositionY 0
+21:CAMS:Over1:4:SizeXLink.DOL 21:CAMS:ROI4:SizeX_RBV CP MS
+21:CAMS:Over1:4:SizeX 1000000
+21:CAMS:Over1:4:SizeYLink.DOL 21:CAMS:ROI4:SizeY_RBV CP MS
+21:CAMS:Over1:4:SizeY 1000000
+21:CAMS:Over1:4:DrawMode 0
+21:CAMS:Over1:4:Shape 1
+21:CAMS:Over1:4:Red 1
+21:CAMS:Over1:4:Green 1
+21:CAMS:Over1:4:Blue 1
+21:CAMS:Over1:4:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:4:Font 0
+21:CAMS:Over1:4:DisplayText 
+21:CAMS:Over1:5:Name Cursor1
+21:CAMS:Over1:5:Use 0
+21:CAMS:Over1:5:PositionXLink.DOL junk CP MS
+21:CAMS:Over1:5:PositionX 1
+21:CAMS:Over1:5:PositionYLink.DOL junk CP MS
+21:CAMS:Over1:5:PositionY 1
+21:CAMS:Over1:5:SizeXLink.DOL junk CP MS
+21:CAMS:Over1:5:SizeX 1
+21:CAMS:Over1:5:SizeYLink.DOL junk CP MS
+21:CAMS:Over1:5:SizeY 1
+21:CAMS:Over1:5:DrawMode 0
+21:CAMS:Over1:5:Shape 1
+21:CAMS:Over1:5:Red 1
+21:CAMS:Over1:5:Green 1
+21:CAMS:Over1:5:Blue 1
+21:CAMS:Over1:5:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:5:Font 0
+21:CAMS:Over1:5:DisplayText 
+21:CAMS:Over1:6:Name Cursor2
+21:CAMS:Over1:6:Use 0
+21:CAMS:Over1:6:PositionXLink.DOL junk CP MS
+21:CAMS:Over1:6:PositionX 1
+21:CAMS:Over1:6:PositionYLink.DOL junk CP MS
+21:CAMS:Over1:6:PositionY 1
+21:CAMS:Over1:6:SizeXLink.DOL junk CP MS
+21:CAMS:Over1:6:SizeX 1
+21:CAMS:Over1:6:SizeYLink.DOL junk CP MS
+21:CAMS:Over1:6:SizeY 1
+21:CAMS:Over1:6:DrawMode 0
+21:CAMS:Over1:6:Shape 1
+21:CAMS:Over1:6:Red 1
+21:CAMS:Over1:6:Green 1
+21:CAMS:Over1:6:Blue 1
+21:CAMS:Over1:6:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:6:Font 0
+21:CAMS:Over1:6:DisplayText 
+21:CAMS:Over1:7:Name Box1
+21:CAMS:Over1:7:Use 0
+21:CAMS:Over1:7:PositionXLink.DOL junk CP MS
+21:CAMS:Over1:7:PositionX 1
+21:CAMS:Over1:7:PositionYLink.DOL junk CP MS
+21:CAMS:Over1:7:PositionY 1
+21:CAMS:Over1:7:SizeXLink.DOL junk CP MS
+21:CAMS:Over1:7:SizeX 1
+21:CAMS:Over1:7:SizeYLink.DOL junk CP MS
+21:CAMS:Over1:7:SizeY 1
+21:CAMS:Over1:7:DrawMode 0
+21:CAMS:Over1:7:Shape 1
+21:CAMS:Over1:7:Red 1
+21:CAMS:Over1:7:Green 1
+21:CAMS:Over1:7:Blue 1
+21:CAMS:Over1:7:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:7:Font 0
+21:CAMS:Over1:7:DisplayText 
+21:CAMS:Over1:8:Name Box2
+21:CAMS:Over1:8:Use 0
+21:CAMS:Over1:8:PositionXLink.DOL junk CP MS
+21:CAMS:Over1:8:PositionX 1
+21:CAMS:Over1:8:PositionYLink.DOL junk CP MS
+21:CAMS:Over1:8:PositionY 1
+21:CAMS:Over1:8:SizeXLink.DOL junk CP MS
+21:CAMS:Over1:8:SizeX 1
+21:CAMS:Over1:8:SizeYLink.DOL junk CP MS
+21:CAMS:Over1:8:SizeY 1
+21:CAMS:Over1:8:DrawMode 0
+21:CAMS:Over1:8:Shape 1
+21:CAMS:Over1:8:Red 1
+21:CAMS:Over1:8:Green 1
+21:CAMS:Over1:8:Blue 1
+21:CAMS:Over1:8:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over1:8:Font 0
+21:CAMS:Over1:8:DisplayText 
+21:CAMS:CC1:NDArrayPort PS1
+21:CAMS:CC1:NDArrayAddress 0
+21:CAMS:CC1:EnableCallbacks 0
+21:CAMS:CC1:MinCallbackTime 0
+21:CAMS:CC1:BlockingCallbacks 0
+21:CAMS:CC1:NDAttributesFile 
+21:CAMS:CC1:ColorModeOut 0
+21:CAMS:CC2:NDArrayPort PS1
+21:CAMS:CC2:NDArrayAddress 0
+21:CAMS:CC2:EnableCallbacks 0
+21:CAMS:CC2:MinCallbackTime 0
+21:CAMS:CC2:BlockingCallbacks 0
+21:CAMS:CC2:NDAttributesFile 
+21:CAMS:CC2:ColorModeOut 0
+21:CAMS:scan1.ATIME 0
+21:CAMS:scan1.COPYTO 0
+21:CAMS:scan1.FLNK 0
+21:CAMS:scan1.NPTS 10
+21:CAMS:scan1.ACQT 0
+21:CAMS:scan1.ACQM 0
+21:CAMS:scan1.PASM 0
+21:CAMS:scan1.BSPV 
+21:CAMS:scan1.BSCD 1
+21:CAMS:scan1.BSWAIT 0
+21:CAMS:scan1.ASPV 
+21:CAMS:scan1.ASCD 1
+21:CAMS:scan1.ASWAIT 0
+21:CAMS:scan1.T1PV 
+21:CAMS:scan1.T1CD 1
+21:CAMS:scan1.T2PV 
+21:CAMS:scan1.T2CD 1
+21:CAMS:scan1.T3PV 
+21:CAMS:scan1.T3CD 1
+21:CAMS:scan1.T4PV 
+21:CAMS:scan1.T4CD 1
+21:CAMS:scan1.P1PV 
+21:CAMS:scan1.R1PV 
+21:CAMS:scan1.P1SM 0
+21:CAMS:scan1.P1SP 0
+21:CAMS:scan1.P1EP 0
+21:CAMS:scan1.P1AR 0
+21:CAMS:scan1.P2PV 
+21:CAMS:scan1.R2PV 
+21:CAMS:scan1.P2SM 0
+21:CAMS:scan1.P2SP 0
+21:CAMS:scan1.P2EP 0
+21:CAMS:scan1.P2AR 0
+21:CAMS:scan1.P3PV 
+21:CAMS:scan1.R3PV 
+21:CAMS:scan1.P3SM 0
+21:CAMS:scan1.P3SP 0
+21:CAMS:scan1.P3EP 0
+21:CAMS:scan1.P3AR 0
+21:CAMS:scan1.P4PV 
+21:CAMS:scan1.R4PV 
+21:CAMS:scan1.P4SM 0
+21:CAMS:scan1.P4SP 0
+21:CAMS:scan1.P4EP 0
+21:CAMS:scan1.P4AR 0
+21:CAMS:scan1.PDLY 0
+21:CAMS:scan1.DDLY 0
+21:CAMS:scan1.REFD 1
+21:CAMS:scan1.AWCT 0
+21:CAMS:scan1.A1PV 
+21:CAMS:scan1.A1CD 1
+21:CAMS:scan1.D01PV 
+21:CAMS:scan1.D02PV 
+21:CAMS:scan1.D03PV 
+21:CAMS:scan1.D04PV 
+21:CAMS:scan1.D05PV 
+21:CAMS:scan1.D06PV 
+21:CAMS:scan1.D07PV 
+21:CAMS:scan1.D08PV 
+21:CAMS:scan1.D09PV 
+21:CAMS:scan1.D10PV 
+21:CAMS:scan1.D11PV 
+21:CAMS:scan1.D12PV 
+21:CAMS:scan1.D13PV 
+21:CAMS:scan1.D14PV 
+21:CAMS:scan1.D15PV 
+21:CAMS:scan1.D16PV 
+21:CAMS:scan1.D17PV 
+21:CAMS:scan1.D18PV 
+21:CAMS:scan1.D19PV 
+21:CAMS:scan1.D20PV 
+21:CAMS:scan1.D21PV 
+21:CAMS:scan1.D22PV 
+21:CAMS:scan1.D23PV 
+21:CAMS:scan1.D24PV 
+21:CAMS:scan1.D25PV 
+21:CAMS:scan1.D26PV 
+21:CAMS:scan1.D27PV 
+21:CAMS:scan1.D28PV 
+21:CAMS:scan1.D29PV 
+21:CAMS:scan1.D30PV 
+21:CAMS:scan1.D31PV 
+21:CAMS:scan1.D32PV 
+21:CAMS:scan1.D33PV 
+21:CAMS:scan1.D34PV 
+21:CAMS:scan1.D35PV 
+21:CAMS:scan1.D36PV 
+21:CAMS:scan1.D37PV 
+21:CAMS:scan1.D38PV 
+21:CAMS:scan1.D39PV 
+21:CAMS:scan1.D40PV 
+21:CAMS:scan1.D41PV 
+21:CAMS:scan1.D42PV 
+21:CAMS:scan1.D43PV 
+21:CAMS:scan1.D44PV 
+21:CAMS:scan1.D45PV 
+21:CAMS:scan1.D46PV 
+21:CAMS:scan1.D47PV 
+21:CAMS:scan1.D48PV 
+21:CAMS:scan1.D49PV 
+21:CAMS:scan1.D50PV 
+21:CAMS:scan1.D51PV 
+21:CAMS:scan1.D52PV 
+21:CAMS:scan1.D53PV 
+21:CAMS:scan1.D54PV 
+21:CAMS:scan1.D55PV 
+21:CAMS:scan1.D56PV 
+21:CAMS:scan1.D57PV 
+21:CAMS:scan1.D58PV 
+21:CAMS:scan1.D59PV 
+21:CAMS:scan1.D60PV 
+21:CAMS:scan1.D61PV 
+21:CAMS:scan1.D62PV 
+21:CAMS:scan1.D63PV 
+21:CAMS:scan1.D64PV 
+21:CAMS:scan1.D65PV 
+21:CAMS:scan1.D66PV 
+21:CAMS:scan1.D67PV 
+21:CAMS:scan1.D68PV 
+21:CAMS:scan1.D69PV 
+21:CAMS:scan1.D70PV 
+21:CAMS:scan2.ATIME 0
+21:CAMS:scan2.COPYTO 0
+21:CAMS:scan2.FLNK 0
+21:CAMS:scan2.NPTS 10
+21:CAMS:scan2.ACQT 0
+21:CAMS:scan2.ACQM 0
+21:CAMS:scan2.PASM 0
+21:CAMS:scan2.BSPV 
+21:CAMS:scan2.BSCD 1
+21:CAMS:scan2.BSWAIT 0
+21:CAMS:scan2.ASPV 
+21:CAMS:scan2.ASCD 1
+21:CAMS:scan2.ASWAIT 0
+21:CAMS:scan2.T1PV 21:CAMS:scan1.EXSC
+21:CAMS:scan2.T1CD 1
+21:CAMS:scan2.T2PV 
+21:CAMS:scan2.T2CD 1
+21:CAMS:scan2.T3PV 
+21:CAMS:scan2.T3CD 1
+21:CAMS:scan2.T4PV 
+21:CAMS:scan2.T4CD 1
+21:CAMS:scan2.P1PV 
+21:CAMS:scan2.R1PV 
+21:CAMS:scan2.P1SM 0
+21:CAMS:scan2.P1SP 0
+21:CAMS:scan2.P1EP 0
+21:CAMS:scan2.P1AR 0
+21:CAMS:scan2.P2PV 
+21:CAMS:scan2.R2PV 
+21:CAMS:scan2.P2SM 0
+21:CAMS:scan2.P2SP 0
+21:CAMS:scan2.P2EP 0
+21:CAMS:scan2.P2AR 0
+21:CAMS:scan2.P3PV 
+21:CAMS:scan2.R3PV 
+21:CAMS:scan2.P3SM 0
+21:CAMS:scan2.P3SP 0
+21:CAMS:scan2.P3EP 0
+21:CAMS:scan2.P3AR 0
+21:CAMS:scan2.P4PV 
+21:CAMS:scan2.R4PV 
+21:CAMS:scan2.P4SM 0
+21:CAMS:scan2.P4SP 0
+21:CAMS:scan2.P4EP 0
+21:CAMS:scan2.P4AR 0
+21:CAMS:scan2.PDLY 0
+21:CAMS:scan2.DDLY 0
+21:CAMS:scan2.REFD 1
+21:CAMS:scan2.AWCT 0
+21:CAMS:scan2.A1PV 
+21:CAMS:scan2.A1CD 1
+21:CAMS:scan2.D01PV 
+21:CAMS:scan2.D02PV 
+21:CAMS:scan2.D03PV 
+21:CAMS:scan2.D04PV 
+21:CAMS:scan2.D05PV 
+21:CAMS:scan2.D06PV 
+21:CAMS:scan2.D07PV 
+21:CAMS:scan2.D08PV 
+21:CAMS:scan2.D09PV 
+21:CAMS:scan2.D10PV 
+21:CAMS:scan2.D11PV 
+21:CAMS:scan2.D12PV 
+21:CAMS:scan2.D13PV 
+21:CAMS:scan2.D14PV 
+21:CAMS:scan2.D15PV 
+21:CAMS:scan2.D16PV 
+21:CAMS:scan2.D17PV 
+21:CAMS:scan2.D18PV 
+21:CAMS:scan2.D19PV 
+21:CAMS:scan2.D20PV 
+21:CAMS:scan2.D21PV 
+21:CAMS:scan2.D22PV 
+21:CAMS:scan2.D23PV 
+21:CAMS:scan2.D24PV 
+21:CAMS:scan2.D25PV 
+21:CAMS:scan2.D26PV 
+21:CAMS:scan2.D27PV 
+21:CAMS:scan2.D28PV 
+21:CAMS:scan2.D29PV 
+21:CAMS:scan2.D30PV 
+21:CAMS:scan2.D31PV 
+21:CAMS:scan2.D32PV 
+21:CAMS:scan2.D33PV 
+21:CAMS:scan2.D34PV 
+21:CAMS:scan2.D35PV 
+21:CAMS:scan2.D36PV 
+21:CAMS:scan2.D37PV 
+21:CAMS:scan2.D38PV 
+21:CAMS:scan2.D39PV 
+21:CAMS:scan2.D40PV 
+21:CAMS:scan2.D41PV 
+21:CAMS:scan2.D42PV 
+21:CAMS:scan2.D43PV 
+21:CAMS:scan2.D44PV 
+21:CAMS:scan2.D45PV 
+21:CAMS:scan2.D46PV 
+21:CAMS:scan2.D47PV 
+21:CAMS:scan2.D48PV 
+21:CAMS:scan2.D49PV 
+21:CAMS:scan2.D50PV 
+21:CAMS:scan2.D51PV 
+21:CAMS:scan2.D52PV 
+21:CAMS:scan2.D53PV 
+21:CAMS:scan2.D54PV 
+21:CAMS:scan2.D55PV 
+21:CAMS:scan2.D56PV 
+21:CAMS:scan2.D57PV 
+21:CAMS:scan2.D58PV 
+21:CAMS:scan2.D59PV 
+21:CAMS:scan2.D60PV 
+21:CAMS:scan2.D61PV 
+21:CAMS:scan2.D62PV 
+21:CAMS:scan2.D63PV 
+21:CAMS:scan2.D64PV 
+21:CAMS:scan2.D65PV 
+21:CAMS:scan2.D66PV 
+21:CAMS:scan2.D67PV 
+21:CAMS:scan2.D68PV 
+21:CAMS:scan2.D69PV 
+21:CAMS:scan2.D70PV 
+21:CAMS:scan3.ATIME 0
+21:CAMS:scan3.COPYTO 0
+21:CAMS:scan3.FLNK 0
+21:CAMS:scan3.NPTS 10
+21:CAMS:scan3.ACQT 0
+21:CAMS:scan3.ACQM 0
+21:CAMS:scan3.PASM 0
+21:CAMS:scan3.BSPV 
+21:CAMS:scan3.BSCD 1
+21:CAMS:scan3.BSWAIT 0
+21:CAMS:scan3.ASPV 
+21:CAMS:scan3.ASCD 1
+21:CAMS:scan3.ASWAIT 0
+21:CAMS:scan3.T1PV 21:CAMS:scan2.EXSC
+21:CAMS:scan3.T1CD 1
+21:CAMS:scan3.T2PV 
+21:CAMS:scan3.T2CD 1
+21:CAMS:scan3.T3PV 
+21:CAMS:scan3.T3CD 1
+21:CAMS:scan3.T4PV 
+21:CAMS:scan3.T4CD 1
+21:CAMS:scan3.P1PV 
+21:CAMS:scan3.R1PV 
+21:CAMS:scan3.P1SM 0
+21:CAMS:scan3.P1SP 0
+21:CAMS:scan3.P1EP 0
+21:CAMS:scan3.P1AR 0
+21:CAMS:scan3.P2PV 
+21:CAMS:scan3.R2PV 
+21:CAMS:scan3.P2SM 0
+21:CAMS:scan3.P2SP 0
+21:CAMS:scan3.P2EP 0
+21:CAMS:scan3.P2AR 0
+21:CAMS:scan3.P3PV 
+21:CAMS:scan3.R3PV 
+21:CAMS:scan3.P3SM 0
+21:CAMS:scan3.P3SP 0
+21:CAMS:scan3.P3EP 0
+21:CAMS:scan3.P3AR 0
+21:CAMS:scan3.P4PV 
+21:CAMS:scan3.R4PV 
+21:CAMS:scan3.P4SM 0
+21:CAMS:scan3.P4SP 0
+21:CAMS:scan3.P4EP 0
+21:CAMS:scan3.P4AR 0
+21:CAMS:scan3.PDLY 0
+21:CAMS:scan3.DDLY 0
+21:CAMS:scan3.REFD 1
+21:CAMS:scan3.AWCT 0
+21:CAMS:scan3.A1PV 
+21:CAMS:scan3.A1CD 1
+21:CAMS:scan3.D01PV 
+21:CAMS:scan3.D02PV 
+21:CAMS:scan3.D03PV 
+21:CAMS:scan3.D04PV 
+21:CAMS:scan3.D05PV 
+21:CAMS:scan3.D06PV 
+21:CAMS:scan3.D07PV 
+21:CAMS:scan3.D08PV 
+21:CAMS:scan3.D09PV 
+21:CAMS:scan3.D10PV 
+21:CAMS:scan3.D11PV 
+21:CAMS:scan3.D12PV 
+21:CAMS:scan3.D13PV 
+21:CAMS:scan3.D14PV 
+21:CAMS:scan3.D15PV 
+21:CAMS:scan3.D16PV 
+21:CAMS:scan3.D17PV 
+21:CAMS:scan3.D18PV 
+21:CAMS:scan3.D19PV 
+21:CAMS:scan3.D20PV 
+21:CAMS:scan3.D21PV 
+21:CAMS:scan3.D22PV 
+21:CAMS:scan3.D23PV 
+21:CAMS:scan3.D24PV 
+21:CAMS:scan3.D25PV 
+21:CAMS:scan3.D26PV 
+21:CAMS:scan3.D27PV 
+21:CAMS:scan3.D28PV 
+21:CAMS:scan3.D29PV 
+21:CAMS:scan3.D30PV 
+21:CAMS:scan3.D31PV 
+21:CAMS:scan3.D32PV 
+21:CAMS:scan3.D33PV 
+21:CAMS:scan3.D34PV 
+21:CAMS:scan3.D35PV 
+21:CAMS:scan3.D36PV 
+21:CAMS:scan3.D37PV 
+21:CAMS:scan3.D38PV 
+21:CAMS:scan3.D39PV 
+21:CAMS:scan3.D40PV 
+21:CAMS:scan3.D41PV 
+21:CAMS:scan3.D42PV 
+21:CAMS:scan3.D43PV 
+21:CAMS:scan3.D44PV 
+21:CAMS:scan3.D45PV 
+21:CAMS:scan3.D46PV 
+21:CAMS:scan3.D47PV 
+21:CAMS:scan3.D48PV 
+21:CAMS:scan3.D49PV 
+21:CAMS:scan3.D50PV 
+21:CAMS:scan3.D51PV 
+21:CAMS:scan3.D52PV 
+21:CAMS:scan3.D53PV 
+21:CAMS:scan3.D54PV 
+21:CAMS:scan3.D55PV 
+21:CAMS:scan3.D56PV 
+21:CAMS:scan3.D57PV 
+21:CAMS:scan3.D58PV 
+21:CAMS:scan3.D59PV 
+21:CAMS:scan3.D60PV 
+21:CAMS:scan3.D61PV 
+21:CAMS:scan3.D62PV 
+21:CAMS:scan3.D63PV 
+21:CAMS:scan3.D64PV 
+21:CAMS:scan3.D65PV 
+21:CAMS:scan3.D66PV 
+21:CAMS:scan3.D67PV 
+21:CAMS:scan3.D68PV 
+21:CAMS:scan3.D69PV 
+21:CAMS:scan3.D70PV 
+21:CAMS:scan4.ATIME 0
+21:CAMS:scan4.COPYTO 0
+21:CAMS:scan4.FLNK 0
+21:CAMS:scan4.NPTS 10
+21:CAMS:scan4.ACQT 0
+21:CAMS:scan4.ACQM 0
+21:CAMS:scan4.PASM 0
+21:CAMS:scan4.BSPV 
+21:CAMS:scan4.BSCD 1
+21:CAMS:scan4.BSWAIT 0
+21:CAMS:scan4.ASPV 
+21:CAMS:scan4.ASCD 1
+21:CAMS:scan4.ASWAIT 0
+21:CAMS:scan4.T1PV 21:CAMS:scan3.EXSC
+21:CAMS:scan4.T1CD 1
+21:CAMS:scan4.T2PV 
+21:CAMS:scan4.T2CD 1
+21:CAMS:scan4.T3PV 
+21:CAMS:scan4.T3CD 1
+21:CAMS:scan4.T4PV 
+21:CAMS:scan4.T4CD 1
+21:CAMS:scan4.P1PV 
+21:CAMS:scan4.R1PV 
+21:CAMS:scan4.P1SM 0
+21:CAMS:scan4.P1SP 0
+21:CAMS:scan4.P1EP 0
+21:CAMS:scan4.P1AR 0
+21:CAMS:scan4.P2PV 
+21:CAMS:scan4.R2PV 
+21:CAMS:scan4.P2SM 0
+21:CAMS:scan4.P2SP 0
+21:CAMS:scan4.P2EP 0
+21:CAMS:scan4.P2AR 0
+21:CAMS:scan4.P3PV 
+21:CAMS:scan4.R3PV 
+21:CAMS:scan4.P3SM 0
+21:CAMS:scan4.P3SP 0
+21:CAMS:scan4.P3EP 0
+21:CAMS:scan4.P3AR 0
+21:CAMS:scan4.P4PV 
+21:CAMS:scan4.R4PV 
+21:CAMS:scan4.P4SM 0
+21:CAMS:scan4.P4SP 0
+21:CAMS:scan4.P4EP 0
+21:CAMS:scan4.P4AR 0
+21:CAMS:scan4.PDLY 0
+21:CAMS:scan4.DDLY 0
+21:CAMS:scan4.REFD 1
+21:CAMS:scan4.AWCT 0
+21:CAMS:scan4.A1PV 
+21:CAMS:scan4.A1CD 1
+21:CAMS:scan4.D01PV 
+21:CAMS:scan4.D02PV 
+21:CAMS:scan4.D03PV 
+21:CAMS:scan4.D04PV 
+21:CAMS:scan4.D05PV 
+21:CAMS:scan4.D06PV 
+21:CAMS:scan4.D07PV 
+21:CAMS:scan4.D08PV 
+21:CAMS:scan4.D09PV 
+21:CAMS:scan4.D10PV 
+21:CAMS:scan4.D11PV 
+21:CAMS:scan4.D12PV 
+21:CAMS:scan4.D13PV 
+21:CAMS:scan4.D14PV 
+21:CAMS:scan4.D15PV 
+21:CAMS:scan4.D16PV 
+21:CAMS:scan4.D17PV 
+21:CAMS:scan4.D18PV 
+21:CAMS:scan4.D19PV 
+21:CAMS:scan4.D20PV 
+21:CAMS:scan4.D21PV 
+21:CAMS:scan4.D22PV 
+21:CAMS:scan4.D23PV 
+21:CAMS:scan4.D24PV 
+21:CAMS:scan4.D25PV 
+21:CAMS:scan4.D26PV 
+21:CAMS:scan4.D27PV 
+21:CAMS:scan4.D28PV 
+21:CAMS:scan4.D29PV 
+21:CAMS:scan4.D30PV 
+21:CAMS:scan4.D31PV 
+21:CAMS:scan4.D32PV 
+21:CAMS:scan4.D33PV 
+21:CAMS:scan4.D34PV 
+21:CAMS:scan4.D35PV 
+21:CAMS:scan4.D36PV 
+21:CAMS:scan4.D37PV 
+21:CAMS:scan4.D38PV 
+21:CAMS:scan4.D39PV 
+21:CAMS:scan4.D40PV 
+21:CAMS:scan4.D41PV 
+21:CAMS:scan4.D42PV 
+21:CAMS:scan4.D43PV 
+21:CAMS:scan4.D44PV 
+21:CAMS:scan4.D45PV 
+21:CAMS:scan4.D46PV 
+21:CAMS:scan4.D47PV 
+21:CAMS:scan4.D48PV 
+21:CAMS:scan4.D49PV 
+21:CAMS:scan4.D50PV 
+21:CAMS:scan4.D51PV 
+21:CAMS:scan4.D52PV 
+21:CAMS:scan4.D53PV 
+21:CAMS:scan4.D54PV 
+21:CAMS:scan4.D55PV 
+21:CAMS:scan4.D56PV 
+21:CAMS:scan4.D57PV 
+21:CAMS:scan4.D58PV 
+21:CAMS:scan4.D59PV 
+21:CAMS:scan4.D60PV 
+21:CAMS:scan4.D61PV 
+21:CAMS:scan4.D62PV 
+21:CAMS:scan4.D63PV 
+21:CAMS:scan4.D64PV 
+21:CAMS:scan4.D65PV 
+21:CAMS:scan4.D66PV 
+21:CAMS:scan4.D67PV 
+21:CAMS:scan4.D68PV 
+21:CAMS:scan4.D69PV 
+21:CAMS:scan4.D70PV 
+21:CAMS:AcquireSequence.SCAN 0
+21:CAMS:AcquireSequence.DESC 
+21:CAMS:AcquireSequence.PREC 0
+21:CAMS:AcquireSequence.DLY1 0
+21:CAMS:AcquireSequence.DOL1 
+21:CAMS:AcquireSequence.STR1 0
+21:CAMS:AcquireSequence.DO1 0
+21:CAMS:AcquireSequence.LNK1 
+21:CAMS:AcquireSequence.WAIT1 0
+21:CAMS:AcquireSequence.DLY2 0
+21:CAMS:AcquireSequence.DOL2 
+21:CAMS:AcquireSequence.STR2 0
+21:CAMS:AcquireSequence.DO2 0
+21:CAMS:AcquireSequence.LNK2 
+21:CAMS:AcquireSequence.WAIT2 0
+21:CAMS:AcquireSequence.DLY3 0
+21:CAMS:AcquireSequence.DOL3 
+21:CAMS:AcquireSequence.STR3 0
+21:CAMS:AcquireSequence.DO3 0
+21:CAMS:AcquireSequence.LNK3 
+21:CAMS:AcquireSequence.WAIT3 0
+21:CAMS:AcquireSequence.DLY4 0
+21:CAMS:AcquireSequence.DOL4 
+21:CAMS:AcquireSequence.STR4 0
+21:CAMS:AcquireSequence.DO4 0
+21:CAMS:AcquireSequence.LNK4 
+21:CAMS:AcquireSequence.WAIT4 0
+21:CAMS:AcquireSequence.DLY5 0
+21:CAMS:AcquireSequence.DOL5 
+21:CAMS:AcquireSequence.STR5 0
+21:CAMS:AcquireSequence.DO5 0
+21:CAMS:AcquireSequence.LNK5 
+21:CAMS:AcquireSequence.WAIT5 0
+21:CAMS:AcquireSequence.DLY6 0
+21:CAMS:AcquireSequence.DOL6 
+21:CAMS:AcquireSequence.STR6 0
+21:CAMS:AcquireSequence.DO6 0
+21:CAMS:AcquireSequence.LNK6 
+21:CAMS:AcquireSequence.WAIT6 0
+21:CAMS:AcquireSequence.DLY7 0
+21:CAMS:AcquireSequence.DOL7 
+21:CAMS:AcquireSequence.STR7 0
+21:CAMS:AcquireSequence.DO7 0
+21:CAMS:AcquireSequence.LNK7 
+21:CAMS:AcquireSequence.WAIT7 0
+21:CAMS:AcquireSequence.DLY8 0
+21:CAMS:AcquireSequence.DOL8 
+21:CAMS:AcquireSequence.STR8 0
+21:CAMS:AcquireSequence.DO8 0
+21:CAMS:AcquireSequence.LNK8 
+21:CAMS:AcquireSequence.WAIT8 0
+21:CAMS:AcquireSequence.DLY9 0
+21:CAMS:AcquireSequence.DOL9 
+21:CAMS:AcquireSequence.STR9 0
+21:CAMS:AcquireSequence.DO9 0
+21:CAMS:AcquireSequence.LNK9 
+21:CAMS:AcquireSequence.WAIT9 0
+21:CAMS:AcquireSequence.DLYA 0
+21:CAMS:AcquireSequence.DOLA 
+21:CAMS:AcquireSequence.STRA 0
+21:CAMS:AcquireSequence.DOA 0
+21:CAMS:AcquireSequence.LNKA 
+21:CAMS:AcquireSequence.WAITA 0
+21:CAMS:AcquireSequence.FLNK 0
+21:CAMS:netCDF2:NDArrayPort PS2
+21:CAMS:netCDF2:NDArrayAddress 0
+21:CAMS:netCDF2:EnableCallbacks 0
+21:CAMS:netCDF2:MinCallbackTime 0
+21:CAMS:netCDF2:BlockingCallbacks 0
+21:CAMS:netCDF2:NDAttributesFile 
+21:CAMS:netCDF2:FilePath 
+21:CAMS:netCDF2:FileName 
+21:CAMS:netCDF2:FileNumber 1
+21:CAMS:netCDF2:AutoIncrement 1
+21:CAMS:netCDF2:FileTemplate 
+21:CAMS:netCDF2:AutoSave 0
+21:CAMS:netCDF2:FileFormat 0
+21:CAMS:netCDF2:FileWriteMode 0
+21:CAMS:netCDF2:NumCapture 1
+21:CAMS:netCDF2:DeleteDriverFile 0
+21:CAMS:TIFF2:NDArrayPort PS2
+21:CAMS:TIFF2:NDArrayAddress 0
+21:CAMS:TIFF2:EnableCallbacks 0
+21:CAMS:TIFF2:MinCallbackTime 0
+21:CAMS:TIFF2:BlockingCallbacks 0
+21:CAMS:TIFF2:NDAttributesFile 
+21:CAMS:TIFF2:FilePath 
+21:CAMS:TIFF2:FileName 
+21:CAMS:TIFF2:FileNumber 1
+21:CAMS:TIFF2:AutoIncrement 1
+21:CAMS:TIFF2:FileTemplate 
+21:CAMS:TIFF2:AutoSave 0
+21:CAMS:TIFF2:FileFormat 0
+21:CAMS:TIFF2:FileWriteMode 0
+21:CAMS:TIFF2:NumCapture 1
+21:CAMS:TIFF2:DeleteDriverFile 0
+21:CAMS:JPEG2:NDArrayPort OVER2
+21:CAMS:JPEG2:NDArrayAddress 0
+21:CAMS:JPEG2:EnableCallbacks 1
+21:CAMS:JPEG2:MinCallbackTime 0
+21:CAMS:JPEG2:BlockingCallbacks 0
+21:CAMS:JPEG2:NDAttributesFile 
+21:CAMS:JPEG2:FilePath @array@ { "47" "99" "97" "109" "115" "47" "99" "97" "109" "51" "52" "47" "99" "97" "109" "51" "52" "45" "49" "0" }
+21:CAMS:JPEG2:FileName @array@ { "105" "109" "97" "103" "101" "0" }
+21:CAMS:JPEG2:FileNumber 6
+21:CAMS:JPEG2:AutoIncrement 1
+21:CAMS:JPEG2:FileTemplate @array@ { "37" "115" "37" "115" "37" "48" "53" "100" "46" "106" "112" "103" "0" }
+21:CAMS:JPEG2:AutoSave 0
+21:CAMS:JPEG2:FileFormat 0
+21:CAMS:JPEG2:FileWriteMode 2
+21:CAMS:JPEG2:NumCapture 0
+21:CAMS:JPEG2:DeleteDriverFile 0
+21:CAMS:JPEG2:JPEGQuality 100
+21:CAMS:Nexus2:NDArrayPort PS2
+21:CAMS:Nexus2:NDArrayAddress 0
+21:CAMS:Nexus2:EnableCallbacks 0
+21:CAMS:Nexus2:MinCallbackTime 0
+21:CAMS:Nexus2:BlockingCallbacks 0
+21:CAMS:Nexus2:NDAttributesFile 
+21:CAMS:Nexus2:FilePath 
+21:CAMS:Nexus2:FileName 
+21:CAMS:Nexus2:FileNumber 1
+21:CAMS:Nexus2:AutoIncrement 1
+21:CAMS:Nexus2:FileTemplate 
+21:CAMS:Nexus2:AutoSave 0
+21:CAMS:Nexus2:FileFormat 0
+21:CAMS:Nexus2:FileWriteMode 0
+21:CAMS:Nexus2:NumCapture 1
+21:CAMS:Nexus2:DeleteDriverFile 0
+21:CAMS:Nexus2:TemplateFilePath 
+21:CAMS:Nexus2:TemplateFileName 
+21:CAMS:Magick2:NDArrayPort PS2
+21:CAMS:Magick2:NDArrayAddress 0
+21:CAMS:Magick2:EnableCallbacks 0
+21:CAMS:Magick2:MinCallbackTime 0
+21:CAMS:Magick2:BlockingCallbacks 0
+21:CAMS:Magick2:NDAttributesFile 
+21:CAMS:Magick2:FilePath 
+21:CAMS:Magick2:FileName 
+21:CAMS:Magick2:FileNumber 1
+21:CAMS:Magick2:AutoIncrement 1
+21:CAMS:Magick2:FileTemplate 
+21:CAMS:Magick2:AutoSave 0
+21:CAMS:Magick2:FileFormat 0
+21:CAMS:Magick2:FileWriteMode 0
+21:CAMS:Magick2:NumCapture 1
+21:CAMS:Magick2:DeleteDriverFile 0
+21:CAMS:Magick2:Quality 100
+21:CAMS:Magick2:CompressType 0
+21:CAMS:Magick2:BitDepth 0
+21:CAMS:HDF2:NDArrayPort PS2
+21:CAMS:HDF2:NDArrayAddress 0
+21:CAMS:HDF2:EnableCallbacks 0
+21:CAMS:HDF2:MinCallbackTime 0
+21:CAMS:HDF2:BlockingCallbacks 0
+21:CAMS:HDF2:NDAttributesFile 
+21:CAMS:HDF2:FilePath 
+21:CAMS:HDF2:FileName 
+21:CAMS:HDF2:FileNumber 1
+21:CAMS:HDF2:AutoIncrement 1
+21:CAMS:HDF2:FileTemplate 
+21:CAMS:HDF2:AutoSave 0
+21:CAMS:HDF2:FileFormat 0
+21:CAMS:HDF2:FileWriteMode 0
+21:CAMS:HDF2:NumCapture 1
+21:CAMS:HDF2:DeleteDriverFile 0
+21:CAMS:HDF2:NumRowChunks 0
+21:CAMS:HDF2:NumColChunks 0
+21:CAMS:HDF2:NumFramesChunks 0
+21:CAMS:HDF2:BoundaryAlign 1
+21:CAMS:HDF2:BoundaryThreshold 1
+21:CAMS:HDF2:NumFramesFlush 0
+21:CAMS:HDF2:Compression 0
+21:CAMS:HDF2:NumDataBits 8
+21:CAMS:HDF2:DataBitsOffset 0
+21:CAMS:HDF2:SZipNumPixels 16
+21:CAMS:HDF2:ZLevel 6
+21:CAMS:HDF2:StorePerform 1
+21:CAMS:HDF2:StoreAttr 1
+21:CAMS:HDF2:NumExtraDims 0
+21:CAMS:HDF2:ExtraDimSizeN 1
+21:CAMS:HDF2:ExtraDimSizeX 1
+21:CAMS:HDF2:ExtraDimSizeY 1
+21:CAMS:ROI21:NDArrayPort PS2
+21:CAMS:ROI21:NDArrayAddress 0
+21:CAMS:ROI21:EnableCallbacks 0
+21:CAMS:ROI21:MinCallbackTime 0
+21:CAMS:ROI21:BlockingCallbacks 0
+21:CAMS:ROI21:NDAttributesFile 
+21:CAMS:ROI21:Name 
+21:CAMS:ROI21:DataTypeOut 8
+21:CAMS:ROI21:BinX 1
+21:CAMS:ROI21:BinY 1
+21:CAMS:ROI21:BinZ 1
+21:CAMS:ROI21:MinX 0
+21:CAMS:ROI21:MinY 0
+21:CAMS:ROI21:MinZ 0
+21:CAMS:ROI21:SizeX 1000000
+21:CAMS:ROI21:SizeY 1000000
+21:CAMS:ROI21:SizeZ 1000000
+21:CAMS:ROI21:ReverseX 0
+21:CAMS:ROI21:ReverseY 0
+21:CAMS:ROI21:ReverseZ 0
+21:CAMS:ROI21:AutoSizeX 0
+21:CAMS:ROI21:AutoSizeY 0
+21:CAMS:ROI21:AutoSizeZ 0
+21:CAMS:ROI21:EnableX 1
+21:CAMS:ROI21:EnableY 1
+21:CAMS:ROI21:EnableZ 1
+21:CAMS:ROI21:EnableScale 0
+21:CAMS:ROI21:Scale 1
+21:CAMS:ROI22:NDArrayPort PS2
+21:CAMS:ROI22:NDArrayAddress 0
+21:CAMS:ROI22:EnableCallbacks 0
+21:CAMS:ROI22:MinCallbackTime 0
+21:CAMS:ROI22:BlockingCallbacks 0
+21:CAMS:ROI22:NDAttributesFile 
+21:CAMS:ROI22:Name 
+21:CAMS:ROI22:DataTypeOut 8
+21:CAMS:ROI22:BinX 1
+21:CAMS:ROI22:BinY 1
+21:CAMS:ROI22:BinZ 1
+21:CAMS:ROI22:MinX 0
+21:CAMS:ROI22:MinY 0
+21:CAMS:ROI22:MinZ 0
+21:CAMS:ROI22:SizeX 1000000
+21:CAMS:ROI22:SizeY 1000000
+21:CAMS:ROI22:SizeZ 1000000
+21:CAMS:ROI22:ReverseX 0
+21:CAMS:ROI22:ReverseY 0
+21:CAMS:ROI22:ReverseZ 0
+21:CAMS:ROI22:AutoSizeX 0
+21:CAMS:ROI22:AutoSizeY 0
+21:CAMS:ROI22:AutoSizeZ 0
+21:CAMS:ROI22:EnableX 1
+21:CAMS:ROI22:EnableY 1
+21:CAMS:ROI22:EnableZ 1
+21:CAMS:ROI22:EnableScale 0
+21:CAMS:ROI22:Scale 1
+21:CAMS:ROI23:NDArrayPort PS2
+21:CAMS:ROI23:NDArrayAddress 0
+21:CAMS:ROI23:EnableCallbacks 0
+21:CAMS:ROI23:MinCallbackTime 0
+21:CAMS:ROI23:BlockingCallbacks 0
+21:CAMS:ROI23:NDAttributesFile 
+21:CAMS:ROI23:Name 
+21:CAMS:ROI23:DataTypeOut 8
+21:CAMS:ROI23:BinX 1
+21:CAMS:ROI23:BinY 1
+21:CAMS:ROI23:BinZ 1
+21:CAMS:ROI23:MinX 0
+21:CAMS:ROI23:MinY 0
+21:CAMS:ROI23:MinZ 0
+21:CAMS:ROI23:SizeX 1000000
+21:CAMS:ROI23:SizeY 1000000
+21:CAMS:ROI23:SizeZ 1000000
+21:CAMS:ROI23:ReverseX 0
+21:CAMS:ROI23:ReverseY 0
+21:CAMS:ROI23:ReverseZ 0
+21:CAMS:ROI23:AutoSizeX 0
+21:CAMS:ROI23:AutoSizeY 0
+21:CAMS:ROI23:AutoSizeZ 0
+21:CAMS:ROI23:EnableX 1
+21:CAMS:ROI23:EnableY 1
+21:CAMS:ROI23:EnableZ 1
+21:CAMS:ROI23:EnableScale 0
+21:CAMS:ROI23:Scale 1
+21:CAMS:ROI24:NDArrayPort PS2
+21:CAMS:ROI24:NDArrayAddress 0
+21:CAMS:ROI24:EnableCallbacks 0
+21:CAMS:ROI24:MinCallbackTime 0
+21:CAMS:ROI24:BlockingCallbacks 0
+21:CAMS:ROI24:NDAttributesFile 
+21:CAMS:ROI24:Name 
+21:CAMS:ROI24:DataTypeOut 8
+21:CAMS:ROI24:BinX 1
+21:CAMS:ROI24:BinY 1
+21:CAMS:ROI24:BinZ 1
+21:CAMS:ROI24:MinX 0
+21:CAMS:ROI24:MinY 0
+21:CAMS:ROI24:MinZ 0
+21:CAMS:ROI24:SizeX 1000000
+21:CAMS:ROI24:SizeY 1000000
+21:CAMS:ROI24:SizeZ 1000000
+21:CAMS:ROI24:ReverseX 0
+21:CAMS:ROI24:ReverseY 0
+21:CAMS:ROI24:ReverseZ 0
+21:CAMS:ROI24:AutoSizeX 0
+21:CAMS:ROI24:AutoSizeY 0
+21:CAMS:ROI24:AutoSizeZ 0
+21:CAMS:ROI24:EnableX 1
+21:CAMS:ROI24:EnableY 1
+21:CAMS:ROI24:EnableZ 1
+21:CAMS:ROI24:EnableScale 0
+21:CAMS:ROI24:Scale 1
+21:CAMS:Proc2:NDArrayPort PS2
+21:CAMS:Proc2:NDArrayAddress 0
+21:CAMS:Proc2:EnableCallbacks 0
+21:CAMS:Proc2:MinCallbackTime 0
+21:CAMS:Proc2:BlockingCallbacks 0
+21:CAMS:Proc2:NDAttributesFile 
+21:CAMS:Proc2:DataTypeOut 8
+21:CAMS:Proc2:EnableBackground 0
+21:CAMS:Proc2:EnableFlatField 0
+21:CAMS:Proc2:ScaleFlatField 255
+21:CAMS:Proc2:EnableOffsetScale 0
+21:CAMS:Proc2:Offset 0
+21:CAMS:Proc2:Scale 1
+21:CAMS:Proc2:EnableLowClip 0
+21:CAMS:Proc2:LowClip 0
+21:CAMS:Proc2:EnableHighClip 0
+21:CAMS:Proc2:HighClip 100
+21:CAMS:Proc2:EnableFilter 0
+21:CAMS:Proc2:AutoResetFilter 0
+21:CAMS:Proc2:FilterCallbacks 0
+21:CAMS:Proc2:NumFilter 1
+21:CAMS:Proc2:FilterType 0
+21:CAMS:Proc2:OOffset 0
+21:CAMS:Proc2:OScale 1
+21:CAMS:Proc2:OC1 1
+21:CAMS:Proc2:OC2 -1
+21:CAMS:Proc2:OC3 0
+21:CAMS:Proc2:OC4 1
+21:CAMS:Proc2:FOffset 0
+21:CAMS:Proc2:FScale 1
+21:CAMS:Proc2:FC1 1
+21:CAMS:Proc2:FC2 -1
+21:CAMS:Proc2:FC3 0
+21:CAMS:Proc2:FC4 1
+21:CAMS:Proc2:ROffset 0
+21:CAMS:Proc2:RC1 0
+21:CAMS:Proc2:RC2 1
+21:CAMS:Stats21:NDArrayPort ROI1
+21:CAMS:Stats21:NDArrayAddress 0
+21:CAMS:Stats21:EnableCallbacks 0
+21:CAMS:Stats21:MinCallbackTime 0
+21:CAMS:Stats21:BlockingCallbacks 0
+21:CAMS:Stats21:NDAttributesFile 
+21:CAMS:Stats21:BgdWidth 1
+21:CAMS:Stats21:ComputeStatistics 1
+21:CAMS:Stats21:ComputeCentroid 0
+21:CAMS:Stats21:CentroidThreshold 1
+21:CAMS:Stats21:ComputeProfiles 0
+21:CAMS:Stats21:CursorX 256
+21:CAMS:Stats21:CursorY 256
+21:CAMS:Stats21:ComputeHistogram 0
+21:CAMS:Stats21:HistSize 256
+21:CAMS:Stats21:HistMin 0
+21:CAMS:Stats21:HistMax 255
+21:CAMS:Stats21:TSNumPoints 2048
+21:CAMS:Stats21:TSRead.SCAN 6
+21:CAMS:Stats22:NDArrayPort ROI2
+21:CAMS:Stats22:NDArrayAddress 0
+21:CAMS:Stats22:EnableCallbacks 0
+21:CAMS:Stats22:MinCallbackTime 0
+21:CAMS:Stats22:BlockingCallbacks 0
+21:CAMS:Stats22:NDAttributesFile 
+21:CAMS:Stats22:BgdWidth 1
+21:CAMS:Stats22:ComputeStatistics 1
+21:CAMS:Stats22:ComputeCentroid 0
+21:CAMS:Stats22:CentroidThreshold 1
+21:CAMS:Stats22:ComputeProfiles 0
+21:CAMS:Stats22:CursorX 256
+21:CAMS:Stats22:CursorY 256
+21:CAMS:Stats22:ComputeHistogram 0
+21:CAMS:Stats22:HistSize 256
+21:CAMS:Stats22:HistMin 0
+21:CAMS:Stats22:HistMax 255
+21:CAMS:Stats22:TSNumPoints 2048
+21:CAMS:Stats22:TSRead.SCAN 6
+21:CAMS:Stats23:NDArrayPort ROI3
+21:CAMS:Stats23:NDArrayAddress 0
+21:CAMS:Stats23:EnableCallbacks 0
+21:CAMS:Stats23:MinCallbackTime 0
+21:CAMS:Stats23:BlockingCallbacks 0
+21:CAMS:Stats23:NDAttributesFile 
+21:CAMS:Stats23:BgdWidth 1
+21:CAMS:Stats23:ComputeStatistics 1
+21:CAMS:Stats23:ComputeCentroid 0
+21:CAMS:Stats23:CentroidThreshold 1
+21:CAMS:Stats23:ComputeProfiles 0
+21:CAMS:Stats23:CursorX 256
+21:CAMS:Stats23:CursorY 256
+21:CAMS:Stats23:ComputeHistogram 0
+21:CAMS:Stats23:HistSize 256
+21:CAMS:Stats23:HistMin 0
+21:CAMS:Stats23:HistMax 255
+21:CAMS:Stats23:TSNumPoints 2048
+21:CAMS:Stats23:TSRead.SCAN 6
+21:CAMS:Stats24:NDArrayPort ROI4
+21:CAMS:Stats24:NDArrayAddress 0
+21:CAMS:Stats24:EnableCallbacks 0
+21:CAMS:Stats24:MinCallbackTime 0
+21:CAMS:Stats24:BlockingCallbacks 0
+21:CAMS:Stats24:NDAttributesFile 
+21:CAMS:Stats24:BgdWidth 1
+21:CAMS:Stats24:ComputeStatistics 1
+21:CAMS:Stats24:ComputeCentroid 0
+21:CAMS:Stats24:CentroidThreshold 1
+21:CAMS:Stats24:ComputeProfiles 0
+21:CAMS:Stats24:CursorX 256
+21:CAMS:Stats24:CursorY 256
+21:CAMS:Stats24:ComputeHistogram 0
+21:CAMS:Stats24:HistSize 256
+21:CAMS:Stats24:HistMin 0
+21:CAMS:Stats24:HistMax 255
+21:CAMS:Stats24:TSNumPoints 2048
+21:CAMS:Stats24:TSRead.SCAN 6
+21:CAMS:Stats25:NDArrayPort PS2
+21:CAMS:Stats25:NDArrayAddress 0
+21:CAMS:Stats25:EnableCallbacks 0
+21:CAMS:Stats25:MinCallbackTime 0
+21:CAMS:Stats25:BlockingCallbacks 0
+21:CAMS:Stats25:NDAttributesFile 
+21:CAMS:Stats25:BgdWidth 1
+21:CAMS:Stats25:ComputeStatistics 1
+21:CAMS:Stats25:ComputeCentroid 0
+21:CAMS:Stats25:CentroidThreshold 1
+21:CAMS:Stats25:ComputeProfiles 0
+21:CAMS:Stats25:CursorX 256
+21:CAMS:Stats25:CursorY 256
+21:CAMS:Stats25:ComputeHistogram 0
+21:CAMS:Stats25:HistSize 256
+21:CAMS:Stats25:HistMin 0
+21:CAMS:Stats25:HistMax 255
+21:CAMS:Stats25:TSNumPoints 2048
+21:CAMS:Stats25:TSRead.SCAN 6
+21:CAMS:Trans2:NDArrayPort PS2
+21:CAMS:Trans2:NDArrayAddress 0
+21:CAMS:Trans2:EnableCallbacks 0
+21:CAMS:Trans2:MinCallbackTime 0
+21:CAMS:Trans2:BlockingCallbacks 0
+21:CAMS:Trans2:NDAttributesFile 
+21:CAMS:Trans2:Name 
+21:CAMS:Trans2:Type1 0
+21:CAMS:Over2:NDArrayPort PS2
+21:CAMS:Over2:NDArrayAddress 0
+21:CAMS:Over2:EnableCallbacks 1
+21:CAMS:Over2:MinCallbackTime 0
+21:CAMS:Over2:BlockingCallbacks 0
+21:CAMS:Over2:NDAttributesFile 
+21:CAMS:Over2:1:Name ROI21
+21:CAMS:Over2:1:Use 1
+21:CAMS:Over2:1:PositionXLink.DOL 21:CAMS:ROI21:MinX_RBV CP MS
+21:CAMS:Over2:1:PositionX 0
+21:CAMS:Over2:1:PositionYLink.DOL 21:CAMS:ROI21:MinY_RBV CP MS
+21:CAMS:Over2:1:PositionY 0
+21:CAMS:Over2:1:SizeXLink.DOL 21:CAMS:ROI21:SizeX_RBV CP MS
+21:CAMS:Over2:1:SizeX 1000000
+21:CAMS:Over2:1:SizeYLink.DOL 21:CAMS:ROI21:SizeY_RBV CP MS
+21:CAMS:Over2:1:SizeY 1000000
+21:CAMS:Over2:1:DrawMode 1
+21:CAMS:Over2:1:Shape 2
+21:CAMS:Over2:1:Red 255
+21:CAMS:Over2:1:Green 255
+21:CAMS:Over2:1:Blue 255
+21:CAMS:Over2:1:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:1:Font 3
+21:CAMS:Over2:1:DisplayText @array@ { "76" "83" "45" "67" "65" "84" "32" "50" "49" "45" "73" "68" "45" "69" "32" "83" "112" "105" "110" "100" "108" "101" "32" "0" }
+21:CAMS:Over2:2:Name ROI22
+21:CAMS:Over2:2:Use 0
+21:CAMS:Over2:2:PositionXLink.DOL 21:CAMS:ROI22:MinX_RBV CP MS
+21:CAMS:Over2:2:PositionX 0
+21:CAMS:Over2:2:PositionYLink.DOL 21:CAMS:ROI22:MinY_RBV CP MS
+21:CAMS:Over2:2:PositionY 0
+21:CAMS:Over2:2:SizeXLink.DOL 21:CAMS:ROI22:SizeX_RBV CP MS
+21:CAMS:Over2:2:SizeX 1000000
+21:CAMS:Over2:2:SizeYLink.DOL 21:CAMS:ROI22:SizeY_RBV CP MS
+21:CAMS:Over2:2:SizeY 1000000
+21:CAMS:Over2:2:DrawMode 0
+21:CAMS:Over2:2:Shape 1
+21:CAMS:Over2:2:Red 1
+21:CAMS:Over2:2:Green 1
+21:CAMS:Over2:2:Blue 1
+21:CAMS:Over2:2:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:2:Font 0
+21:CAMS:Over2:2:DisplayText 
+21:CAMS:Over2:3:Name ROI23
+21:CAMS:Over2:3:Use 0
+21:CAMS:Over2:3:PositionXLink.DOL 21:CAMS:ROI23:MinX_RBV CP MS
+21:CAMS:Over2:3:PositionX 0
+21:CAMS:Over2:3:PositionYLink.DOL 21:CAMS:ROI23:MinY_RBV CP MS
+21:CAMS:Over2:3:PositionY 0
+21:CAMS:Over2:3:SizeXLink.DOL 21:CAMS:ROI23:SizeX_RBV CP MS
+21:CAMS:Over2:3:SizeX 1000000
+21:CAMS:Over2:3:SizeYLink.DOL 21:CAMS:ROI23:SizeY_RBV CP MS
+21:CAMS:Over2:3:SizeY 1000000
+21:CAMS:Over2:3:DrawMode 0
+21:CAMS:Over2:3:Shape 1
+21:CAMS:Over2:3:Red 1
+21:CAMS:Over2:3:Green 1
+21:CAMS:Over2:3:Blue 1
+21:CAMS:Over2:3:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:3:Font 0
+21:CAMS:Over2:3:DisplayText 
+21:CAMS:Over2:4:Name ROI24
+21:CAMS:Over2:4:Use 0
+21:CAMS:Over2:4:PositionXLink.DOL 21:CAMS:ROI24:MinX_RBV CP MS
+21:CAMS:Over2:4:PositionX 0
+21:CAMS:Over2:4:PositionYLink.DOL 21:CAMS:ROI24:MinY_RBV CP MS
+21:CAMS:Over2:4:PositionY 0
+21:CAMS:Over2:4:SizeXLink.DOL 21:CAMS:ROI24:SizeX_RBV CP MS
+21:CAMS:Over2:4:SizeX 1000000
+21:CAMS:Over2:4:SizeYLink.DOL 21:CAMS:ROI24:SizeY_RBV CP MS
+21:CAMS:Over2:4:SizeY 1000000
+21:CAMS:Over2:4:DrawMode 0
+21:CAMS:Over2:4:Shape 1
+21:CAMS:Over2:4:Red 1
+21:CAMS:Over2:4:Green 1
+21:CAMS:Over2:4:Blue 1
+21:CAMS:Over2:4:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:4:Font 0
+21:CAMS:Over2:4:DisplayText 
+21:CAMS:Over2:5:Name Cursor21
+21:CAMS:Over2:5:Use 0
+21:CAMS:Over2:5:PositionXLink.DOL junk CP MS
+21:CAMS:Over2:5:PositionX 1
+21:CAMS:Over2:5:PositionYLink.DOL junk CP MS
+21:CAMS:Over2:5:PositionY 1
+21:CAMS:Over2:5:SizeXLink.DOL junk CP MS
+21:CAMS:Over2:5:SizeX 1
+21:CAMS:Over2:5:SizeYLink.DOL junk CP MS
+21:CAMS:Over2:5:SizeY 1
+21:CAMS:Over2:5:DrawMode 0
+21:CAMS:Over2:5:Shape 1
+21:CAMS:Over2:5:Red 1
+21:CAMS:Over2:5:Green 1
+21:CAMS:Over2:5:Blue 1
+21:CAMS:Over2:5:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:5:Font 0
+21:CAMS:Over2:5:DisplayText 
+21:CAMS:Over2:6:Name Cursor22
+21:CAMS:Over2:6:Use 0
+21:CAMS:Over2:6:PositionXLink.DOL junk CP MS
+21:CAMS:Over2:6:PositionX 1
+21:CAMS:Over2:6:PositionYLink.DOL junk CP MS
+21:CAMS:Over2:6:PositionY 1
+21:CAMS:Over2:6:SizeXLink.DOL junk CP MS
+21:CAMS:Over2:6:SizeX 1
+21:CAMS:Over2:6:SizeYLink.DOL junk CP MS
+21:CAMS:Over2:6:SizeY 1
+21:CAMS:Over2:6:DrawMode 0
+21:CAMS:Over2:6:Shape 1
+21:CAMS:Over2:6:Red 1
+21:CAMS:Over2:6:Green 1
+21:CAMS:Over2:6:Blue 1
+21:CAMS:Over2:6:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:6:Font 0
+21:CAMS:Over2:6:DisplayText 
+21:CAMS:Over2:7:Name Box21
+21:CAMS:Over2:7:Use 0
+21:CAMS:Over2:7:PositionXLink.DOL junk CP MS
+21:CAMS:Over2:7:PositionX 1
+21:CAMS:Over2:7:PositionYLink.DOL junk CP MS
+21:CAMS:Over2:7:PositionY 1
+21:CAMS:Over2:7:SizeXLink.DOL junk CP MS
+21:CAMS:Over2:7:SizeX 1
+21:CAMS:Over2:7:SizeYLink.DOL junk CP MS
+21:CAMS:Over2:7:SizeY 1
+21:CAMS:Over2:7:DrawMode 0
+21:CAMS:Over2:7:Shape 1
+21:CAMS:Over2:7:Red 1
+21:CAMS:Over2:7:Green 1
+21:CAMS:Over2:7:Blue 1
+21:CAMS:Over2:7:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:7:Font 0
+21:CAMS:Over2:7:DisplayText 
+21:CAMS:Over2:8:Name Box22
+21:CAMS:Over2:8:Use 0
+21:CAMS:Over2:8:PositionXLink.DOL junk CP MS
+21:CAMS:Over2:8:PositionX 1
+21:CAMS:Over2:8:PositionYLink.DOL junk CP MS
+21:CAMS:Over2:8:PositionY 1
+21:CAMS:Over2:8:SizeXLink.DOL junk CP MS
+21:CAMS:Over2:8:SizeX 1
+21:CAMS:Over2:8:SizeYLink.DOL junk CP MS
+21:CAMS:Over2:8:SizeY 1
+21:CAMS:Over2:8:DrawMode 0
+21:CAMS:Over2:8:Shape 1
+21:CAMS:Over2:8:Red 1
+21:CAMS:Over2:8:Green 1
+21:CAMS:Over2:8:Blue 1
+21:CAMS:Over2:8:TimeStampFormat %Y-%m-%d %H:%M:%S.%03f
+21:CAMS:Over2:8:Font 0
+21:CAMS:Over2:8:DisplayText 
+21:CAMS:CC21:NDArrayPort PS2
+21:CAMS:CC21:NDArrayAddress 0
+21:CAMS:CC21:EnableCallbacks 0
+21:CAMS:CC21:MinCallbackTime 0
+21:CAMS:CC21:BlockingCallbacks 0
+21:CAMS:CC21:NDAttributesFile 
+21:CAMS:CC21:ColorModeOut 0
+21:CAMS:CC22:NDArrayPort PS2
+21:CAMS:CC22:NDArrayAddress 0
+21:CAMS:CC22:EnableCallbacks 0
+21:CAMS:CC22:MinCallbackTime 0
+21:CAMS:CC22:BlockingCallbacks 0
+21:CAMS:CC22:NDAttributesFile 
+21:CAMS:CC22:ColorModeOut 0
+21:CAMS:userCalcOutEnable 1
+21:CAMS:userCalcOut1.A 16
+21:CAMS:userCalcOut1.B 0
+21:CAMS:userCalcOut1.C 0
+21:CAMS:userCalcOut1.D 0
+21:CAMS:userCalcOut1.E 0
+21:CAMS:userCalcOut1.F 0
+21:CAMS:userCalcOut1.G 0
+21:CAMS:userCalcOut1.H 0
+21:CAMS:userCalcOut1.I 0
+21:CAMS:userCalcOut1.J 0
+21:CAMS:userCalcOut1.K 0
+21:CAMS:userCalcOut1.L 0
+21:CAMS:userCalcOut1.INPA 21:CAMS:JPEG1:FileNumber_RBV CP NMS
+21:CAMS:userCalcOut1.INPB 
+21:CAMS:userCalcOut1.INPC 
+21:CAMS:userCalcOut1.INPD 
+21:CAMS:userCalcOut1.INPE 
+21:CAMS:userCalcOut1.INPF 
+21:CAMS:userCalcOut1.INPG 
+21:CAMS:userCalcOut1.INPH 
+21:CAMS:userCalcOut1.INPI 
+21:CAMS:userCalcOut1.INPJ 
+21:CAMS:userCalcOut1.INPK 
+21:CAMS:userCalcOut1.INPL 
+21:CAMS:userCalcOut1.CALC$ a > 32
+21:CAMS:userCalcOut1.OCAL$ 1
+21:CAMS:userCalcOut1.SCAN 0
+21:CAMS:userCalcOut1.PREC 0
+21:CAMS:userCalcOut1.ODLY 0
+21:CAMS:userCalcOut1.OEVT 0
+21:CAMS:userCalcOut1.OOPT 3
+21:CAMS:userCalcOut1.DOPT 1
+21:CAMS:userCalcOut1.IVOA 0
+21:CAMS:userCalcOut1.IVOV 0
+21:CAMS:userCalcOut1.OUT 21:CAMS:JPEG1:FileNumber CA NMS
+21:CAMS:userCalcOut1.FLNK 0
+21:CAMS:userCalcOut1.DESC Cam29 JPEG Filename Reset
+21:CAMS:userCalcOut1.EVNT 0
+21:CAMS:userCalcOut1.EGU 
+21:CAMS:userCalcOut2.A 6
+21:CAMS:userCalcOut2.B 0
+21:CAMS:userCalcOut2.C 0
+21:CAMS:userCalcOut2.D 0
+21:CAMS:userCalcOut2.E 0
+21:CAMS:userCalcOut2.F 0
+21:CAMS:userCalcOut2.G 0
+21:CAMS:userCalcOut2.H 0
+21:CAMS:userCalcOut2.I 0
+21:CAMS:userCalcOut2.J 0
+21:CAMS:userCalcOut2.K 0
+21:CAMS:userCalcOut2.L 0
+21:CAMS:userCalcOut2.INPA 21:CAMS:JPEG2:FileNumber_RBV CP NMS
+21:CAMS:userCalcOut2.INPB 
+21:CAMS:userCalcOut2.INPC 
+21:CAMS:userCalcOut2.INPD 
+21:CAMS:userCalcOut2.INPE 
+21:CAMS:userCalcOut2.INPF 
+21:CAMS:userCalcOut2.INPG 
+21:CAMS:userCalcOut2.INPH 
+21:CAMS:userCalcOut2.INPI 
+21:CAMS:userCalcOut2.INPJ 
+21:CAMS:userCalcOut2.INPK 
+21:CAMS:userCalcOut2.INPL 
+21:CAMS:userCalcOut2.CALC$ a>32
+21:CAMS:userCalcOut2.OCAL$ 1
+21:CAMS:userCalcOut2.SCAN 0
+21:CAMS:userCalcOut2.PREC 0
+21:CAMS:userCalcOut2.ODLY 0
+21:CAMS:userCalcOut2.OEVT 0
+21:CAMS:userCalcOut2.OOPT 3
+21:CAMS:userCalcOut2.DOPT 1
+21:CAMS:userCalcOut2.IVOA 0
+21:CAMS:userCalcOut2.IVOV 0
+21:CAMS:userCalcOut2.OUT 21:CAMS:JPEG2:FileNumber CA NMS
+21:CAMS:userCalcOut2.FLNK 0
+21:CAMS:userCalcOut2.DESC Cam34 JPEG Filename Reset
+21:CAMS:userCalcOut2.EVNT 0
+21:CAMS:userCalcOut2.EGU 
+21:CAMS:userCalcOut3.A 0
+21:CAMS:userCalcOut3.B 0
+21:CAMS:userCalcOut3.C 0
+21:CAMS:userCalcOut3.D 0
+21:CAMS:userCalcOut3.E 0
+21:CAMS:userCalcOut3.F 0
+21:CAMS:userCalcOut3.G 0
+21:CAMS:userCalcOut3.H 0
+21:CAMS:userCalcOut3.I 0
+21:CAMS:userCalcOut3.J 0
+21:CAMS:userCalcOut3.K 0
+21:CAMS:userCalcOut3.L 0
+21:CAMS:userCalcOut3.INPA 
+21:CAMS:userCalcOut3.INPB 
+21:CAMS:userCalcOut3.INPC 
+21:CAMS:userCalcOut3.INPD 
+21:CAMS:userCalcOut3.INPE 
+21:CAMS:userCalcOut3.INPF 
+21:CAMS:userCalcOut3.INPG 
+21:CAMS:userCalcOut3.INPH 
+21:CAMS:userCalcOut3.INPI 
+21:CAMS:userCalcOut3.INPJ 
+21:CAMS:userCalcOut3.INPK 
+21:CAMS:userCalcOut3.INPL 
+21:CAMS:userCalcOut3.CALC$ 0
+21:CAMS:userCalcOut3.OCAL$ 0
+21:CAMS:userCalcOut3.SCAN 0
+21:CAMS:userCalcOut3.PREC 5
+21:CAMS:userCalcOut3.ODLY 0
+21:CAMS:userCalcOut3.OEVT 0
+21:CAMS:userCalcOut3.OOPT 0
+21:CAMS:userCalcOut3.DOPT 0
+21:CAMS:userCalcOut3.IVOA 0
+21:CAMS:userCalcOut3.IVOV 0
+21:CAMS:userCalcOut3.OUT 
+21:CAMS:userCalcOut3.FLNK 0
+21:CAMS:userCalcOut3.DESC userCalcOut3
+21:CAMS:userCalcOut3.EVNT 0
+21:CAMS:userCalcOut3.EGU 
+21:CAMS:userCalcOut4.A 0
+21:CAMS:userCalcOut4.B 0
+21:CAMS:userCalcOut4.C 0
+21:CAMS:userCalcOut4.D 0
+21:CAMS:userCalcOut4.E 0
+21:CAMS:userCalcOut4.F 0
+21:CAMS:userCalcOut4.G 0
+21:CAMS:userCalcOut4.H 0
+21:CAMS:userCalcOut4.I 0
+21:CAMS:userCalcOut4.J 0
+21:CAMS:userCalcOut4.K 0
+21:CAMS:userCalcOut4.L 0
+21:CAMS:userCalcOut4.INPA 
+21:CAMS:userCalcOut4.INPB 
+21:CAMS:userCalcOut4.INPC 
+21:CAMS:userCalcOut4.INPD 
+21:CAMS:userCalcOut4.INPE 
+21:CAMS:userCalcOut4.INPF 
+21:CAMS:userCalcOut4.INPG 
+21:CAMS:userCalcOut4.INPH 
+21:CAMS:userCalcOut4.INPI 
+21:CAMS:userCalcOut4.INPJ 
+21:CAMS:userCalcOut4.INPK 
+21:CAMS:userCalcOut4.INPL 
+21:CAMS:userCalcOut4.CALC$ 0
+21:CAMS:userCalcOut4.OCAL$ 0
+21:CAMS:userCalcOut4.SCAN 0
+21:CAMS:userCalcOut4.PREC 5
+21:CAMS:userCalcOut4.ODLY 0
+21:CAMS:userCalcOut4.OEVT 0
+21:CAMS:userCalcOut4.OOPT 0
+21:CAMS:userCalcOut4.DOPT 0
+21:CAMS:userCalcOut4.IVOA 0
+21:CAMS:userCalcOut4.IVOV 0
+21:CAMS:userCalcOut4.OUT 
+21:CAMS:userCalcOut4.FLNK 0
+21:CAMS:userCalcOut4.DESC userCalcOut4
+21:CAMS:userCalcOut4.EVNT 0
+21:CAMS:userCalcOut4.EGU 
+21:CAMS:userCalcOut5.A 0
+21:CAMS:userCalcOut5.B 0
+21:CAMS:userCalcOut5.C 0
+21:CAMS:userCalcOut5.D 0
+21:CAMS:userCalcOut5.E 0
+21:CAMS:userCalcOut5.F 0
+21:CAMS:userCalcOut5.G 0
+21:CAMS:userCalcOut5.H 0
+21:CAMS:userCalcOut5.I 0
+21:CAMS:userCalcOut5.J 0
+21:CAMS:userCalcOut5.K 0
+21:CAMS:userCalcOut5.L 0
+21:CAMS:userCalcOut5.INPA 
+21:CAMS:userCalcOut5.INPB 
+21:CAMS:userCalcOut5.INPC 
+21:CAMS:userCalcOut5.INPD 
+21:CAMS:userCalcOut5.INPE 
+21:CAMS:userCalcOut5.INPF 
+21:CAMS:userCalcOut5.INPG 
+21:CAMS:userCalcOut5.INPH 
+21:CAMS:userCalcOut5.INPI 
+21:CAMS:userCalcOut5.INPJ 
+21:CAMS:userCalcOut5.INPK 
+21:CAMS:userCalcOut5.INPL 
+21:CAMS:userCalcOut5.CALC$ 0
+21:CAMS:userCalcOut5.OCAL$ 0
+21:CAMS:userCalcOut5.SCAN 0
+21:CAMS:userCalcOut5.PREC 5
+21:CAMS:userCalcOut5.ODLY 0
+21:CAMS:userCalcOut5.OEVT 0
+21:CAMS:userCalcOut5.OOPT 0
+21:CAMS:userCalcOut5.DOPT 0
+21:CAMS:userCalcOut5.IVOA 0
+21:CAMS:userCalcOut5.IVOV 0
+21:CAMS:userCalcOut5.OUT 
+21:CAMS:userCalcOut5.FLNK 0
+21:CAMS:userCalcOut5.DESC userCalcOut5
+21:CAMS:userCalcOut5.EVNT 0
+21:CAMS:userCalcOut5.EGU 
+21:CAMS:userCalcOut6.A 0
+21:CAMS:userCalcOut6.B 0
+21:CAMS:userCalcOut6.C 0
+21:CAMS:userCalcOut6.D 0
+21:CAMS:userCalcOut6.E 0
+21:CAMS:userCalcOut6.F 0
+21:CAMS:userCalcOut6.G 0
+21:CAMS:userCalcOut6.H 0
+21:CAMS:userCalcOut6.I 0
+21:CAMS:userCalcOut6.J 0
+21:CAMS:userCalcOut6.K 0
+21:CAMS:userCalcOut6.L 0
+21:CAMS:userCalcOut6.INPA 
+21:CAMS:userCalcOut6.INPB 
+21:CAMS:userCalcOut6.INPC 
+21:CAMS:userCalcOut6.INPD 
+21:CAMS:userCalcOut6.INPE 
+21:CAMS:userCalcOut6.INPF 
+21:CAMS:userCalcOut6.INPG 
+21:CAMS:userCalcOut6.INPH 
+21:CAMS:userCalcOut6.INPI 
+21:CAMS:userCalcOut6.INPJ 
+21:CAMS:userCalcOut6.INPK 
+21:CAMS:userCalcOut6.INPL 
+21:CAMS:userCalcOut6.CALC$ 0
+21:CAMS:userCalcOut6.OCAL$ 0
+21:CAMS:userCalcOut6.SCAN 0
+21:CAMS:userCalcOut6.PREC 5
+21:CAMS:userCalcOut6.ODLY 0
+21:CAMS:userCalcOut6.OEVT 0
+21:CAMS:userCalcOut6.OOPT 0
+21:CAMS:userCalcOut6.DOPT 0
+21:CAMS:userCalcOut6.IVOA 0
+21:CAMS:userCalcOut6.IVOV 0
+21:CAMS:userCalcOut6.OUT 
+21:CAMS:userCalcOut6.FLNK 0
+21:CAMS:userCalcOut6.DESC userCalcOut6
+21:CAMS:userCalcOut6.EVNT 0
+21:CAMS:userCalcOut6.EGU 
+21:CAMS:userCalcOut7.A 0
+21:CAMS:userCalcOut7.B 0
+21:CAMS:userCalcOut7.C 0
+21:CAMS:userCalcOut7.D 0
+21:CAMS:userCalcOut7.E 0
+21:CAMS:userCalcOut7.F 0
+21:CAMS:userCalcOut7.G 0
+21:CAMS:userCalcOut7.H 0
+21:CAMS:userCalcOut7.I 0
+21:CAMS:userCalcOut7.J 0
+21:CAMS:userCalcOut7.K 0
+21:CAMS:userCalcOut7.L 0
+21:CAMS:userCalcOut7.INPA 
+21:CAMS:userCalcOut7.INPB 
+21:CAMS:userCalcOut7.INPC 
+21:CAMS:userCalcOut7.INPD 
+21:CAMS:userCalcOut7.INPE 
+21:CAMS:userCalcOut7.INPF 
+21:CAMS:userCalcOut7.INPG 
+21:CAMS:userCalcOut7.INPH 
+21:CAMS:userCalcOut7.INPI 
+21:CAMS:userCalcOut7.INPJ 
+21:CAMS:userCalcOut7.INPK 
+21:CAMS:userCalcOut7.INPL 
+21:CAMS:userCalcOut7.CALC$ 0
+21:CAMS:userCalcOut7.OCAL$ 0
+21:CAMS:userCalcOut7.SCAN 0
+21:CAMS:userCalcOut7.PREC 5
+21:CAMS:userCalcOut7.ODLY 0
+21:CAMS:userCalcOut7.OEVT 0
+21:CAMS:userCalcOut7.OOPT 0
+21:CAMS:userCalcOut7.DOPT 0
+21:CAMS:userCalcOut7.IVOA 0
+21:CAMS:userCalcOut7.IVOV 0
+21:CAMS:userCalcOut7.OUT 
+21:CAMS:userCalcOut7.FLNK 0
+21:CAMS:userCalcOut7.DESC userCalcOut7
+21:CAMS:userCalcOut7.EVNT 0
+21:CAMS:userCalcOut7.EGU 
+21:CAMS:userCalcOut8.A 0
+21:CAMS:userCalcOut8.B 0
+21:CAMS:userCalcOut8.C 0
+21:CAMS:userCalcOut8.D 0
+21:CAMS:userCalcOut8.E 0
+21:CAMS:userCalcOut8.F 0
+21:CAMS:userCalcOut8.G 0
+21:CAMS:userCalcOut8.H 0
+21:CAMS:userCalcOut8.I 0
+21:CAMS:userCalcOut8.J 0
+21:CAMS:userCalcOut8.K 0
+21:CAMS:userCalcOut8.L 0
+21:CAMS:userCalcOut8.INPA 
+21:CAMS:userCalcOut8.INPB 
+21:CAMS:userCalcOut8.INPC 
+21:CAMS:userCalcOut8.INPD 
+21:CAMS:userCalcOut8.INPE 
+21:CAMS:userCalcOut8.INPF 
+21:CAMS:userCalcOut8.INPG 
+21:CAMS:userCalcOut8.INPH 
+21:CAMS:userCalcOut8.INPI 
+21:CAMS:userCalcOut8.INPJ 
+21:CAMS:userCalcOut8.INPK 
+21:CAMS:userCalcOut8.INPL 
+21:CAMS:userCalcOut8.CALC$ 0
+21:CAMS:userCalcOut8.OCAL$ 0
+21:CAMS:userCalcOut8.SCAN 0
+21:CAMS:userCalcOut8.PREC 5
+21:CAMS:userCalcOut8.ODLY 0
+21:CAMS:userCalcOut8.OEVT 0
+21:CAMS:userCalcOut8.OOPT 0
+21:CAMS:userCalcOut8.DOPT 0
+21:CAMS:userCalcOut8.IVOA 0
+21:CAMS:userCalcOut8.IVOV 0
+21:CAMS:userCalcOut8.OUT 
+21:CAMS:userCalcOut8.FLNK 0
+21:CAMS:userCalcOut8.DESC userCalcOut8
+21:CAMS:userCalcOut8.EVNT 0
+21:CAMS:userCalcOut8.EGU 
+21:CAMS:userCalcOut9.A 0
+21:CAMS:userCalcOut9.B 0
+21:CAMS:userCalcOut9.C 0
+21:CAMS:userCalcOut9.D 0
+21:CAMS:userCalcOut9.E 0
+21:CAMS:userCalcOut9.F 0
+21:CAMS:userCalcOut9.G 0
+21:CAMS:userCalcOut9.H 0
+21:CAMS:userCalcOut9.I 0
+21:CAMS:userCalcOut9.J 0
+21:CAMS:userCalcOut9.K 0
+21:CAMS:userCalcOut9.L 0
+21:CAMS:userCalcOut9.INPA 
+21:CAMS:userCalcOut9.INPB 
+21:CAMS:userCalcOut9.INPC 
+21:CAMS:userCalcOut9.INPD 
+21:CAMS:userCalcOut9.INPE 
+21:CAMS:userCalcOut9.INPF 
+21:CAMS:userCalcOut9.INPG 
+21:CAMS:userCalcOut9.INPH 
+21:CAMS:userCalcOut9.INPI 
+21:CAMS:userCalcOut9.INPJ 
+21:CAMS:userCalcOut9.INPK 
+21:CAMS:userCalcOut9.INPL 
+21:CAMS:userCalcOut9.CALC$ 0
+21:CAMS:userCalcOut9.OCAL$ 0
+21:CAMS:userCalcOut9.SCAN 0
+21:CAMS:userCalcOut9.PREC 5
+21:CAMS:userCalcOut9.ODLY 0
+21:CAMS:userCalcOut9.OEVT 0
+21:CAMS:userCalcOut9.OOPT 0
+21:CAMS:userCalcOut9.DOPT 0
+21:CAMS:userCalcOut9.IVOA 0
+21:CAMS:userCalcOut9.IVOV 0
+21:CAMS:userCalcOut9.OUT 
+21:CAMS:userCalcOut9.FLNK 0
+21:CAMS:userCalcOut9.DESC userCalcOut9
+21:CAMS:userCalcOut9.EVNT 0
+21:CAMS:userCalcOut9.EGU 
+21:CAMS:userCalcOut10.A 0
+21:CAMS:userCalcOut10.B 0
+21:CAMS:userCalcOut10.C 0
+21:CAMS:userCalcOut10.D 0
+21:CAMS:userCalcOut10.E 0
+21:CAMS:userCalcOut10.F 0
+21:CAMS:userCalcOut10.G 0
+21:CAMS:userCalcOut10.H 0
+21:CAMS:userCalcOut10.I 0
+21:CAMS:userCalcOut10.J 0
+21:CAMS:userCalcOut10.K 0
+21:CAMS:userCalcOut10.L 0
+21:CAMS:userCalcOut10.INPA 
+21:CAMS:userCalcOut10.INPB 
+21:CAMS:userCalcOut10.INPC 
+21:CAMS:userCalcOut10.INPD 
+21:CAMS:userCalcOut10.INPE 
+21:CAMS:userCalcOut10.INPF 
+21:CAMS:userCalcOut10.INPG 
+21:CAMS:userCalcOut10.INPH 
+21:CAMS:userCalcOut10.INPI 
+21:CAMS:userCalcOut10.INPJ 
+21:CAMS:userCalcOut10.INPK 
+21:CAMS:userCalcOut10.INPL 
+21:CAMS:userCalcOut10.CALC$ 0
+21:CAMS:userCalcOut10.OCAL$ 0
+21:CAMS:userCalcOut10.SCAN 0
+21:CAMS:userCalcOut10.PREC 5
+21:CAMS:userCalcOut10.ODLY 0
+21:CAMS:userCalcOut10.OEVT 0
+21:CAMS:userCalcOut10.OOPT 0
+21:CAMS:userCalcOut10.DOPT 0
+21:CAMS:userCalcOut10.IVOA 0
+21:CAMS:userCalcOut10.IVOV 0
+21:CAMS:userCalcOut10.OUT 
+21:CAMS:userCalcOut10.FLNK 0
+21:CAMS:userCalcOut10.DESC userCalcOut10
+21:CAMS:userCalcOut10.EVNT 0
+21:CAMS:userCalcOut10.EGU 
+<END>
