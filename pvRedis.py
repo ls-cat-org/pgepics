@@ -17,6 +17,8 @@ configList = [
         "rpvs": [
             { "epics": "S:SRcurrentAI",      "redis": "stns.1.current",       "prec": 0},
             { "epics": "21:D1:DT:Z0:ActPos", "redis": "stns.1.detector.dist", "prec": 0},
+            { "epics": "21:DCAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.1.capDetected"},
+
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.1.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.1.pss.bleps_fe_vacuum_permit"},
             { "epics": "PC:21ID:SDS_BLEPS_PERMIT",   "prec": 0, "redis": "stns.1.pss.bleps_station_permit"},
@@ -89,6 +91,8 @@ configList = [
         "rpvs": [
             { "epics": "S:SRcurrentAI",      "redis": "stns.2.current",       "prec": 0},
             { "epics": "21:E1:DT:Z0:ActPos", "redis": "stns.2.detector.dist", "prec": 0},
+            { "epics": "21:ECAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.2.capDetected"},
+
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.2.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.2.pss.bleps_fe_vacuum_permit"},
             { "epics": "PC:21ID:SES_BLEPS_PERMIT",   "prec": 0, "redis": "stns.2.pss.bleps_station_permit"},
@@ -160,6 +164,8 @@ configList = [
         "rpvs": [
             { "epics": "S:SRcurrentAI",      "redis": "stns.3.current",       "prec": 0},
             { "epics": "21:F1:DT:D:ActPos", "redis": "stns.3.detector.dist", "prec": 0},
+            { "epics": "21:FCAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.3.capDetected"},
+
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.3.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.3.pss.bleps_fe_vacuum_permit"},
             { "epics": "PC:21ID:SFS_BLEPS_PERMIT",   "prec": 0, "redis": "stns.3.pss.bleps_station_permit"},
@@ -232,6 +238,8 @@ configList = [
         "rpvs": [
             { "epics": "S:SRcurrentAI",      "redis": "stns.4.current",       "prec": 0},
             { "epics": "21:G1:DT:D:ActPos", "redis": "stns.4.detector.dist", "prec": 0},
+            { "epics": "21:GCAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.4.capDetected"},
+
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.4.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.4.pss.bleps_fe_vacuum_permit"},
             { "epics": "PC:21ID:SGS_BLEPS_PERMIT",   "prec": 0, "redis": "stns.4.pss.bleps_station_permit"},
