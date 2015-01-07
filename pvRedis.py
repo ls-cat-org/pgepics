@@ -3,11 +3,11 @@
 import EpicsCA
 import redis
 import sys
+import socket
+import os
 
-print "1"
-
-configList = [
-    {
+configList = {
+    "stns.1" : {
         "stn": 1,
         "rconnect": {
             "host": "vidalia.ls-cat.org",
@@ -81,7 +81,7 @@ configList = [
             { "epics": "PA:21ID:D_CRASH_BUTTON_3",   "prec": 0, "redis": "stns.1.pss.crash_button_3"},
             { "epics": "PA:21ID:D_CRASH_BUTTON_4",   "prec": 0, "redis": "stns.1.pss.crash_button_4"}            ]
         },
-    {
+    "stns.2" : {
         "stn": 2,
         "rconnect": {
             "host": "venison.ls-cat.org",
@@ -154,7 +154,7 @@ configList = [
             { "default": "1",                                   "redis": "stns.2.pss.crash_button_4"}
             ]
         },
-    {
+    "stns.3" : {
         "stn": 3,
         "rconnect": {
             "host": "vanilla.ls-cat.org",
@@ -228,7 +228,7 @@ configList = [
 
             ]
         },
-    {
+    "stns.4" : {
         "stns": 4,
         "rconnect": {
             "host": "vinegar.ls-cat.org",
@@ -302,9 +302,7 @@ configList = [
 
             ]
         }
-    ]
-
-print "2"
+    }
 
 class PvRedis:
     def updateCB( self, pv=None, **kw):
@@ -329,8 +327,20 @@ class PvRedis:
             self.r.publish( "REDIS_PV_CONNECTOR", k)
             self.pvList[pv.pvname]["lastValue"] = tmp;
 
-    def __init__( self, rconnect, rpvs):
-        self.r = redis.Redis( host=rconnect["host"], port=rconnect["port"], db=rconnect["db"])
+    def __init__( self):
+        os.environ['EPICS_CA_ADDR_LIST']      = '10.1.255.255 164.54.252.2'
+        os.environ['EPICS_CA_AUTO_ADDR_LIST'] = 'NO'
+        
+
+        self.r = redis.Redis()
+        hn     = socket.gethostname()
+        try:
+            head   = self.r.hget( 'config.%s' % (hn), 'HEAD')
+        except:
+            print >> sys.stderr, "Failed to get configuration for host name '%s'", (hn)
+            sys.exit(-1)
+
+        rpvs = configList[head]["rpvs"]
 
         self.pvList = {}
         for rpv in rpvs:
@@ -380,11 +390,12 @@ class PvRedis:
         while True:
             EpicsCA.pend_event( t=0.05)
 
-print "3"
 
 if __name__ == "__main__":
-    print "4"
-    z = PvRedis( configList[0]["rconnect"], configList[0]["rpvs"])
+    
+
+    #z = PvRedis( configList[3]["rconnect"], configList[3]["rpvs"])
+    z = PvRedis()
     z.run()
 
 
