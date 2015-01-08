@@ -335,7 +335,7 @@ class PvRedis:
         self.r = redis.Redis()
         hn     = socket.gethostname()
         try:
-            head   = self.r.hget( 'config.%s' % (hn), 'HEAD')
+            head   = self.r.hget( 'config.%s' % (hn.lower()), 'HEAD')
         except:
             print >> sys.stderr, "Failed to get configuration for host name '%s'", (hn)
             sys.exit(-1)
