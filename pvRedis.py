@@ -171,6 +171,8 @@ configList = {
             { "epics": "21:FCAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.3.capDetected"},
             { "epics": "21:F1:TB:H:ActPos",  "redis": "stns.3.table.y.position", "prec": 3},
             { "epics": "21:F1:TB:L:ActPos",  "redis": "stns.3.table.x.position", "prec": 3},
+            { "epics": "21:F1:DM:QB:ActPos",  "redis": "stns.3.mono.horz.position", "prec": 3},
+            { "epics": "21:F1:DM:R:ActPos",  "redis": "stns.3.mono.vert.position", "prec": 3},
 
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.3.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.3.pss.bleps_fe_vacuum_permit"},
@@ -247,6 +249,8 @@ configList = {
             { "epics": "21:GCAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.4.capDetected"},
             { "epics": "21:G1:TB:H:ActPos",  "redis": "stns.4.table.y.position", "prec": 3},
             { "epics": "21:G1:TB:L:ActPos",  "redis": "stns.4.table.x.position", "prec": 3},
+            { "epics": "21:G1:DM:QB:ActPos",  "redis": "stns.4.mono.horz.position", "prec": 3},
+            { "epics": "21:G1:DM:R:ActPos",  "redis": "stns.4.mono.vert.position", "prec": 3},
 
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.4.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.4.pss.bleps_fe_vacuum_permit"},
