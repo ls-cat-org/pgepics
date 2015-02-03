@@ -20,6 +20,8 @@ configList = {
             { "epics": "21:DCAMS:Edge1:VerticalFound", "prec": 0, "redis" : "stns.1.capDetected"},
             { "epics": "21:D1:TB:H:ActPos",  "redis": "stns.1.table.y.position", "prec": 3},
             { "epics": "21:D1:TB:L:ActPos",  "redis": "stns.1.table.x.position", "prec": 3},
+            { "epics": "21:C1:MO:R2:ActPos", "redis": "stns.1.mono.horz.position", "prec": 6},
+            { "epics": "c3ioc:rmm01:ana01:ao01", "redis": "stns.1.mono.vert.position", "prec": 2},
 
             { "epics": "EPS:21:ID:BLEPS:SPER",       "prec": 0, "redis": "stns.1.pss.bleps_fe_shutter_permit"},
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.1.pss.bleps_fe_vacuum_permit"},
