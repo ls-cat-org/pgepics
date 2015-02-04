@@ -500,6 +500,10 @@ CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
     tmp text;
   BEGIN
     SELECT INTO tmp epics._caget( pvmMonitorIndex) FROM epics._pvmonitors WHERE pvmKey IN (SELECT mActPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    IF NOT FOUND THEN
+      SELECT INTO tmp epics._caget( pv);
+    END IF;
+
     IF tmp = 'None' THEN
       rtn := '99999.99999';
     ELSE
