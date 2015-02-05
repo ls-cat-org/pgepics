@@ -180,7 +180,7 @@ configList = {
             { "epics": "EPS:21:ID:BLEPS:VACPER",     "prec": 0, "redis": "stns.3.pss.bleps_fe_vacuum_permit"},
             { "epics": "PC:21ID:SFS_BLEPS_PERMIT",   "prec": 0, "redis": "stns.3.pss.bleps_station_permit"},
             { "epics": "PA:21ID:ACIS_FES_PERMIT",    "prec": 0, "redis": "stns.3.pss.acis_permit"},
-            { "epics": "PA:21ID:ACIS_GLOBAL_ONLINE", "prec": 0, "redis": "stns.3.pss.global_onlin"},
+            { "epics": "PA:21ID:ACIS_GLOBAL_ONLINE", "prec": 0, "redis": "stns.3.pss.global_online"},
             { "epics": "PA:21ID:A_APS_KEY",          "prec": 0, "redis": "stns.3.pss.a_enabled"},
             { "epics": "PA:21ID:A_DOOR_1_CLOSED",    "prec": 0, "redis": "stns.3.pss.a_door_1_a"},
             { "epics": "PA:21ID:A_DOOR_2_CLOSED",    "prec": 0, "redis": "stns.3.pss.a_door_2_a"},
