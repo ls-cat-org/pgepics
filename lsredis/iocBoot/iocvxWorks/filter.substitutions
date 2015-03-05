@@ -1,0 +1,26 @@
+# filter.substitutions
+
+file "$(OPTICS)/opticsApp/Db/filterBladeNoSensor.db" {
+  pattern
+  {P,      R,        N,   DESC,           OUT                  OUT_STRING,  IN_STRING}
+  {lsredis:,   filter:,  1,   "Filter 1",     "lsredis:userTran1.A",   "Out",       "In"}
+  {lsredis:,   filter:,  2,   "Filter 2",     "lsredis:userTran1.B",   "Out",       "In"}
+  {lsredis:,   filter:,  3,   "Filter 3",     "lsredis:userTran1.C",   "Out",       "In"}
+  {lsredis:,   filter:,  4,   "Filter 4",     "lsredis:userTran1.D",   "Out",       "In"}
+  {lsredis:,   filter:,  5,   "Filter 5",     "lsredis:userTran1.E",   "Out",       "In"}
+  {lsredis:,   filter:,  6,   "Filter 6",     "lsredis:userTran1.F",   "Out",       "In"}
+  {lsredis:,   filter:,  7,   "Filter 7",     "lsredis:userTran1.G",   "Out",       "In"}
+  {lsredis:,   filter:,  8,   "Filter 8",     "lsredis:userTran1.H",   "Out",       "In"}
+  {lsredis:,   filter:,  9,   "Filter 9",     "lsredis:userTran1.I",   "Out",       "In"}
+  {lsredis:,   filter:,  10,  "Filter 10",    "lsredis:userTran1.J",   "Out",       "In"}
+  {lsredis:,   filter:,  11,  "Filter 11",    "lsredis:userTran1.K",   "Out",       "In"}
+  {lsredis:,   filter:,  12,  "Filter 12",    "lsredis:userTran1.L",   "Out",       "In"}
+  {lsredis:,   filter:,  13,  "Filter 13",    "lsredis:userTran1.M",   "Out",       "In"}
+  {lsredis:,   filter:,  14,  "Filter 14",    "lsredis:userTran1.N",   "Out",       "In"}
+  {lsredis:,   filter:,  15,  "Filter 15",    "lsredis:userTran1.O",   "Out",       "In"}
+  {lsredis:,   filter:,  16,  "Filter 16",    "lsredis:userTran1.P",   "Out",       "In"}
+}
+
+file "$(OPTICS)/opticsApp/Db/filterDrive.db" {
+  {P="lsredis:", R="filter:", DESC="Filters", KEV="lsredis:userCalc1.A"}
+}
