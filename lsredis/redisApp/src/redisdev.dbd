@@ -1,0 +1,3 @@
+device(ai,CONSTANT,devAiRedis,"Random")
+device(ai,CONSTANT,devAiRedisAsync,"Random Async")
+device(ai,CONSTANT,devAiRedisIntr,"Random Intr")
