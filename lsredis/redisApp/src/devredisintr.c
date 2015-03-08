@@ -14,6 +14,8 @@
 #include <hiredis/async.h>
 #include <poll.h>
 #include <aiRecord.h>
+#include <dbStaticLib.h>
+#include <string.h>
 
 static ELLLIST allredis = ELLLIST_INIT;
 
@@ -32,13 +34,38 @@ struct redisState {
   struct pollfd     scfd;
 };
 
+struct redisPollFDData {
+  struct redisState *prs;
+  struct pollfd     *ppfd;
+};
+
 static void start_workers(initHookState state);
 
-static long init(int phase)
-{
+static long init(int phase) {
   if(phase==0)
     initHookRegister(&start_workers);
   return 0;
+}
+
+static void findOurRecords( struct redisState *rs) {
+  int status;
+  DBENTRY dbentry;
+  DBENTRY *pdbentry = &dbentry;
+  if (!pdbbase) {
+    printf("No database loaded\n");
+    return;
+  }
+  status = 0;
+  dbInitEntry(pdbbase, pdbentry);
+  status = dbFindRecordType(pdbentry, "ai");
+  while (!status) {
+    status=dbFirstRecord(pdbentry);
+    while (!status) {
+      fprintf( stderr, "record name: %s\n", dbGetRecordName( pdbentry));
+      status = dbNextRecord(pdbentry);
+    }
+  }
+  dbFinishEntry(pdbentry);
 }
 
 
@@ -47,7 +74,10 @@ static long init(int phase)
  */
 void devRedis_addRead( void *data) {
   struct pollfd *pfd;
-  pfd = (struct pollfd *)data;
+  struct redisPollFDData *prsfd;
+  
+  prsfd = (struct redisPollFDData *)data;
+  pfd = prsfd->ppfd;
 
   if( (pfd->events & POLLIN) == 0) {
     pfd->events |= POLLIN;
@@ -58,7 +88,10 @@ void devRedis_addRead( void *data) {
  */
 void devRedis_delRead( void *data) {
   struct pollfd *pfd;
-  pfd = (struct pollfd *)data;
+  struct redisPollFDData *prsfd;
+  
+  prsfd = (struct redisPollFDData *)data;
+  pfd = prsfd->ppfd;
 
   if( (pfd->events & POLLIN) != 0) {
     pfd->events &= ~POLLIN;
@@ -69,7 +102,10 @@ void devRedis_delRead( void *data) {
  */
 void devRedis_addWrite( void *data) {
   struct pollfd *pfd;
-  pfd = (struct pollfd *)data;
+  struct redisPollFDData *prsfd;
+  
+  prsfd = (struct redisPollFDData *)data;
+  pfd = prsfd->ppfd;
 
   if( (pfd->events & POLLOUT) == 0) {
     pfd->events |= POLLOUT;
@@ -80,7 +116,10 @@ void devRedis_addWrite( void *data) {
  */
 void devRedis_delWrite( void *data) {
   struct pollfd *pfd;
-  pfd = (struct pollfd *)data;
+  struct redisPollFDData *prsfd;
+  
+  prsfd = (struct redisPollFDData *)data;
+  pfd = prsfd->ppfd;
 
   if( (pfd->events & POLLOUT) != 0) {
     pfd->events &= ~POLLOUT;
@@ -92,33 +131,16 @@ void devRedis_delWrite( void *data) {
  */
 void devRedis_cleanup( void *data) {
   struct pollfd *pfd;
-  pfd = (struct pollfd *)data;
+  struct redisPollFDData *prsfd;
+  
+  prsfd = (struct redisPollFDData *)data;
+  pfd = prsfd->ppfd;
 
   pfd->fd = -1;
 
   if( (pfd->events & (POLLOUT | POLLIN)) != 0) {
     pfd->events &= ~(POLLOUT | POLLIN);
   }
-}
-
-
-static long init_record(aiRecord *prec)
-{
-  struct redisState *rs;
-  unsigned long start;
-
-  rs = callocMustSucceed( 1, sizeof( *rs), "redisintr");
-
-  recGblInitConstantLink(&prec->inp,DBF_ULONG,&start);
-
-  rs->seed      = start;
-  scanIoInit( &rs->scan);
-  rs->lock      = epicsMutexMustCreate();
-  rs->generator = NULL;
-  ellAdd( &allredis, &rs->node);
-  prec->dpvt    = rs;
-
-  return 0;
 }
 
 static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privdata) {
@@ -133,6 +155,71 @@ static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privda
     //
   }
 }
+
+
+static int connectToRedis( redisAsyncContext **c, struct redisState *rs, struct pollfd *fdp, const char *host, const int port, const int db) {
+  int err;
+  struct redisPollFDData *prsfd;
+
+  *c = redisAsyncConnect( host, port);
+  if( !(*c) || (*c)->err) {
+    fprintf( stderr, "Unsuccessful attempt at creating redis context.\n");
+    return 1;
+  }
+  prsfd = callocMustSucceed( 1, sizeof( *prsfd), "connectToRedis");
+  prsfd->prs  = rs;
+  prsfd->ppfd = fdp;
+
+  fdp->fd           = (*c)->c.fd;
+  fdp->events       = 0;
+  (*c)->ev.data     = prsfd;			// this is all so self referal
+  (*c)->ev.addRead  = devRedis_addRead;
+  (*c)->ev.delRead  = devRedis_delRead;
+  (*c)->ev.addWrite = devRedis_addWrite;
+  (*c)->ev.delWrite = devRedis_delWrite;
+  (*c)->ev.cleanup  = devRedis_cleanup;
+
+  if( db != 0) {
+    err = redisAsyncCommand( *c, devRedisDBChangedCB, NULL, "SELECT %d", db);
+    return err;
+  }
+
+  return 0;
+}
+
+static long init_record(aiRecord *prec) {
+  struct redisState *rs;
+  unsigned long start;
+
+  rs = callocMustSucceed( 1, sizeof( *rs), "redisintr");
+  
+  recGblInitConstantLink( &prec->inp, DBF_ULONG, &start);
+
+  rs->seed      = start;
+  scanIoInit( &rs->scan);
+  rs->lock      = epicsMutexMustCreate();
+  rs->generator = NULL;
+  ellAdd( &allredis, &rs->node);
+  prec->dpvt    = rs;
+
+
+  //
+  // Initialize contexts
+  //
+  if( connectToRedis( &(rs->rc), rs, &(rs->rcfd), "10.1.253.14", 6379, 0) ||
+      connectToRedis( &(rs->wc), rs, &(rs->wcfd), "10.1.253.14", 6379, 0) ||
+      connectToRedis( &(rs->sc), rs, &(rs->scfd), "10.1.253.14", 6379, 0)) {
+
+    fprintf( stderr, "Record Init Failed: redis connection initialization failed\n");
+    return 1;
+  }
+
+
+  findOurRecords( rs);
+
+  return 0;
+}
+
 
 void devRedis_debugCB( redisAsyncContext *ac, void *reply, void *privdata) {
   static int indentlevel = 0;
@@ -181,35 +268,72 @@ void devRedis_debugCB( redisAsyncContext *ac, void *reply, void *privdata) {
   }
 }
 
+static struct dbAddr *redisKeyToPV( const char *key) {
+  struct dbAddr *paddr;
+  char tmp[128];
+  int i, j;
 
-static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privdata) {
-  devRedis_debugCB( c, reply, privdata);
+  if( strlen( key) < 7) {
+    return NULL;
+  }
+
+  paddr = callocMustSucceed( 1, sizeof( *paddr), "redisKeyToPv");
+  strncpy( tmp, "21:orange:", sizeof( tmp)-1);
+  tmp[sizeof(tmp)-1] = 0;
+
+  for( i=strlen(tmp), j=7; key[j] && j<sizeof(tmp)-1; i++, j++) {
+    if( key[j] == '.') {
+      tmp[i] = ':';
+    } else {
+      tmp[i] = key[j];
+    }
+  }
+  if( i < sizeof( tmp))
+    tmp[i] = 0;
+
+  if( dbNameToAddr( tmp, paddr)) {
+    free( paddr);
+    paddr = NULL;
+  }
+  return paddr;
 }
 
 
-static int connectToRedis( redisAsyncContext **c, struct pollfd *fdp, const char *host, const int port, const int db) {
-  int err;
+static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata) {
+  struct dbAddr *paddr;
+  redisReply *r;
+  struct redisState *rs;
+  struct redisPollFDData *prsfd;
+  r = reply;
 
-  *c = redisAsyncConnect( host, port);
-  if( !(*c) || (*c)->err) {
-    fprintf( stderr, "Unsuccessful attempt at creating redis context.\n");
-    return 1;
-  }
-  fdp->fd           = (*c)->c.fd;
-  fdp->events       = 0;
-  (*c)->ev.data     = fdp;
-  (*c)->ev.addRead  = devRedis_addRead;
-  (*c)->ev.delRead  = devRedis_delRead;
-  (*c)->ev.addWrite = devRedis_addWrite;
-  (*c)->ev.delWrite = devRedis_delWrite;
-  (*c)->ev.cleanup  = devRedis_cleanup;
+  paddr = (struct dbAddr *)privdata;
+  prsfd = (struct redisPollFDData *)c->ev.data;
+  rs    = prsfd->prs;
 
-  if( db != 0) {
-    err = redisAsyncCommand( *c, devRedisDBChangedCB, NULL, "SELECT %d", db);
-    return err;
-  }
+  epicsMutexMustLock( rs->lock);
+  dbPutField( paddr, DBR_STRING, r->str, 1);
+  epicsMutexUnlock( rs->lock);
+  free( paddr);
+}
 
-  return 0;
+static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privdata) {
+  redisReply *r;
+  char *key;
+  struct redisState *rs;
+  struct dbAddr *paddr;
+
+  r  = reply;
+  rs = privdata;
+
+  if( r->type != REDIS_REPLY_ARRAY || r->elements != 4)
+    return;
+  
+  key = r->element[3]->str;
+
+  paddr = redisKeyToPV( key);
+
+  if( paddr)
+    redisAsyncCommand( rs->rc, devRedis_setPVCB, paddr, "HGET %s VALUE", key);
 }
 
 
@@ -221,20 +345,6 @@ static void worker(void *raw) {
   int pollReturn;
   int i;
 
-  epicsMutexMustLock(rs->lock);
-
-  //
-  // Initialize contexts
-  //
-  if( connectToRedis( &(rs->rc), &(rs->rcfd), "127.0.0.1", 6379, 2) ||
-      connectToRedis( &(rs->wc), &(rs->wcfd), "127.0.0.1", 6379, 2) ||
-      connectToRedis( &(rs->sc), &(rs->scfd), "127.0.0.1", 6379, 2)) {
-
-    fprintf( stderr, "worker failed\n");
-    epicsMutexUnlock( rs->lock);
-    return;
-  }
-
   //
   // Start up the subscriber
   //
@@ -243,12 +353,9 @@ static void worker(void *raw) {
     return;
   }
   
-
-
   //
   // set up array of contexts to simplify things after poll
   //
-
   racs[0] = rs->rc;
   racs[1] = rs->wc;
   racs[2] = rs->sc;
@@ -270,13 +377,13 @@ static void worker(void *raw) {
     fds[2].events  = rs->scfd.events;
     fds[2].revents = 0;
 
-    epicsMutexUnlock( rs->lock);
+    //    epicsMutexUnlock( rs->lock);
     //
     // Wait for as long as it takes
     //
     pollReturn = poll( fds, 3, -1);
 
-    epicsMutexMustLock( rs->lock);
+    //    epicsMutexMustLock( rs->lock);
     //
     // pollReturn == number of fds with an event ready
     //            or  -1 on error
@@ -337,6 +444,13 @@ static long read_ai(aiRecord *prec)
   return 0;
 }
 
+
+
+static long value_read_ai( aiRecord *prec) {
+  return 0;
+}
+
+
 struct {
   long num;
   DEVSUPFUN  report;
@@ -356,3 +470,24 @@ struct {
 };
 
 epicsExportAddress(dset,devAiRedisIntr);
+
+struct {
+  long num;
+  DEVSUPFUN  report;
+  DEVSUPFUN  init;
+  DEVSUPFUN  init_record;
+  DEVSUPFUN  get_ioint_info;
+  DEVSUPFUN  read_ai;
+  DEVSUPFUN  special_linconv;
+} devAiRedisValue = {
+  6, /* space for 6 functions */
+  NULL,
+  NULL,
+  NULL,
+  NULL,
+  value_read_ai,
+  NULL
+};
+
+epicsExportAddress(dset,devAiRedisValue);
+

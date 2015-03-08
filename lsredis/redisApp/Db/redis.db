@@ -7,3 +7,15 @@ record(ai,"$(P)"){
   field(ESLO,1e-9)
   field(EOFF,-1)
 }
+record(ai,"$(P):omega:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"Passive")
+  field(INP,"NaN")
+}
+record(ai,"$(P):align:x:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"Passive")
+  field(INP,"NaN")
+}

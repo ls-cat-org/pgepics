@@ -23,8 +23,6 @@ redis_DBD += redisdev.dbd
 
 # redis_registerRecordDeviceDriver.cpp derives from redis.dbd
 redis_SRCS += redis_registerRecordDeviceDriver.cpp
-redis_SRCS += devredis.c
-redis_SRCS += devredisasync.c
 redis_SRCS += devredisintr.c
 
 # Build the main IOC entry point on workstation OSs.
