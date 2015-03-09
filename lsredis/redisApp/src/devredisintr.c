@@ -14,6 +14,7 @@
 #include <hiredis/async.h>
 #include <poll.h>
 #include <aiRecord.h>
+#include <stringinRecord.h>
 #include <dbStaticLib.h>
 #include <string.h>
 
@@ -21,11 +22,20 @@ static ELLLIST allredis = ELLLIST_INIT;
 
 struct redisState {
   ELLNODE node;
-  unsigned int seed;
-  unsigned int lastnum;
+  char *basePVName;
+  char *redisKeyBase;
   epicsMutexId lock;
   IOSCANPVT scan;
   epicsThreadId generator;
+  char *readHost;		// redis host for read requests
+  int   readPort;		// redis port on redis host for read requests
+  int   readDb;			// redis database number for read requests
+  char *writeHost;		// redis host for write requests
+  int   writePort;		// redis port on redis host for write requests
+  int   writeDb;		// redis database number for write requests
+  char *subHost;		// redis host for subscriptions (normally the same as the read host)
+  int   subPort;		// redis port on redis host for write requests
+  int   subDb;			// redis database number for write requests
   redisAsyncContext *rc;	// our read context
   struct pollfd     rcfd;
   redisAsyncContext *wc;	// our write context
@@ -40,10 +50,12 @@ struct redisPollFDData {
 };
 
 struct redisValueAIState {
-  double       nextValue;
-  epicsMutexId lock;
-  IOSCANPVT    scan;
-  char *magic;
+  double       nextValue;	// supplied by the redis file service thread
+  epicsMutexId lock;		// Keep things thread safe
+  IOSCANPVT    scan;		// So we can request that our record get processed
+  char *epicsPVBase;
+  char *redisKeyBase;
+  char *redisKey;		// What we are called in the redis world
 };
 
 
@@ -55,6 +67,7 @@ static long init(int phase) {
   return 0;
 }
 
+/*
 static void findOurRecords( struct redisState *rs) {
   int status;
   DBENTRY dbentry;
@@ -65,17 +78,18 @@ static void findOurRecords( struct redisState *rs) {
   }
   status = 0;
   dbInitEntry(pdbbase, pdbentry);
-  status = dbFindRecordType(pdbentry, "ai");
-  while (!status) {
-    status=dbFirstRecord(pdbentry);
-    while (!status) {
-      fprintf( stderr, "record name: %s\n", dbGetRecordName( pdbentry));
-      status = dbNextRecord(pdbentry);
+
+  for( status = dbFirstRecordType(pdbentry); !status; status = dbNextRecordType(pdbentry)) {
+    for( status = dbFirstRecord( pdbentry); !status; status = dbNextRecord( pdbentry)) {
+      dbFindField( pdbentry, "DTYP");
+      if( dbFoundField( pdbentry) && strcmp(dbGetString( pdbentry),"Redis Value")==0)
+	fprintf( stderr, "      record name: %s\n", dbGetRecordName( pdbentry));
     }
   }
+
   dbFinishEntry(pdbentry);
 }
-
+*/
 
 
 /** hook to mange read events                                                                                                                                                                                                                                                 
@@ -155,7 +169,7 @@ static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privda
   redisReply *r;
   
   r = reply;
-  fprintf( stderr, "DB Changed with type %d: '%s'\n", r->type, r->str);
+  //fprintf( stderr, "DB Changed with type %d: '%s'\n", r->type, r->str);
 
   if( r->type == REDIS_REPLY_ERROR) {
     //
@@ -165,65 +179,121 @@ static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privda
 }
 
 
-static int connectToRedis( redisAsyncContext **c, struct redisState *rs, struct pollfd *fdp, const char *host, const int port, const int db) {
+static int connectToRedis( struct redisState *rs) {
   int err;
   struct redisPollFDData *prsfd;
+  struct redisAsyncContext **c;
+  struct pollfd *fdp;
+  char *host;
+  int   port;
+  int   db;
+  int i;
+  
+  for( i=0; i<3; i++) {
+    switch( i) {
+    case 0:
+      c    = &(rs->wc);
+      host = rs->writeHost;
+      port = rs->writePort;
+      db   = rs->writeDb;
+      fdp  = &(rs->wcfd);
+      break;
+      
+    case 1:
+      c    = &(rs->sc);
+      host = rs->subHost;
+      port = rs->subPort;
+      db   = rs->subDb;
+      fdp  = &(rs->scfd);
+      break;
+      
+    case 2:
+    default:			// default to keep gcc from whining about uninitialize variables.
+      c    = &(rs->rc);
+      host = rs->readHost;
+      port = rs->readPort;
+      db   = rs->readDb;
+      fdp  = &(rs->rcfd);
+      break;
+    }
+    
+    //fprintf( stderr, "connectToRedis: host='%s'  port=%d  db=%d\n", host, port, db);
 
-  *c = redisAsyncConnect( host, port);
-  if( !(*c) || (*c)->err) {
-    fprintf( stderr, "Unsuccessful attempt at creating redis context.\n");
-    return 1;
-  }
-  prsfd = callocMustSucceed( 1, sizeof( *prsfd), "connectToRedis");
-  prsfd->prs  = rs;
-  prsfd->ppfd = fdp;
-
-  fdp->fd           = (*c)->c.fd;
-  fdp->events       = 0;
-  (*c)->ev.data     = prsfd;			// this is all so self referal
-  (*c)->ev.addRead  = devRedis_addRead;
-  (*c)->ev.delRead  = devRedis_delRead;
-  (*c)->ev.addWrite = devRedis_addWrite;
-  (*c)->ev.delWrite = devRedis_delWrite;
-  (*c)->ev.cleanup  = devRedis_cleanup;
-
-  if( db != 0) {
-    err = redisAsyncCommand( *c, devRedisDBChangedCB, NULL, "SELECT %d", db);
-    return err;
+    *c = redisAsyncConnect( host, port);
+    if( !(*c) || (*c)->err) {
+      fprintf( stderr, "Unsuccessful attempt at creating redis context.\n");
+      return 1;
+    }
+    prsfd = callocMustSucceed( 1, sizeof( *prsfd), "connectToRedis");
+    prsfd->prs  = rs;
+    prsfd->ppfd = fdp;
+    
+    fdp->fd           = (*c)->c.fd;
+    fdp->events       = 0;
+    (*c)->ev.data     = prsfd;			// this is all so self referal
+    (*c)->ev.addRead  = devRedis_addRead;
+    (*c)->ev.delRead  = devRedis_delRead;
+    (*c)->ev.addWrite = devRedis_addWrite;
+    (*c)->ev.delWrite = devRedis_delWrite;
+    (*c)->ev.cleanup  = devRedis_cleanup;
+    
+    if( db != 0) {
+      err = redisAsyncCommand( *c, devRedisDBChangedCB, NULL, "SELECT %d", db);
+      return err;
+    }
   }
 
   return 0;
 }
 
-static long init_record(aiRecord *prec) {
+static long init_record( stringinRecord *prec) {
   struct redisState *rs;
-  unsigned long start;
+  DBENTRY dbentry;
+  DBENTRY *pdbentry = &dbentry;
+  int status;
 
-  rs = callocMustSucceed( 1, sizeof( *rs), "redisintr");
-  
-  recGblInitConstantLink( &prec->inp, DBF_ULONG, &start);
+  rs = callocMustSucceed( 1, sizeof( *rs), "Redis Connector Init Recorod");
 
-  rs->seed      = start;
   scanIoInit( &rs->scan);
-  rs->lock      = epicsMutexMustCreate();
-  rs->generator = NULL;
+  rs->basePVName = strdup( prec->name);
+  rs->lock       = epicsMutexMustCreate();
+  rs->generator  = NULL;
   ellAdd( &allredis, &rs->node);
-  prec->dpvt    = rs;
+  prec->dpvt     = rs;
 
+  //
+  // Get the extra strings we should have attached through the info mechanism
+  //
+  status = 0;
+  dbInitEntry( pdbbase, pdbentry);
+  status = dbFindRecord( pdbentry, prec->name);
+  if( status) {
+    fprintf( stderr, "Redis Connector Init Record could not find db entry for '%s'\n", prec->name);
+    return 1;
+  }
+
+  rs->basePVName   = strdup( dbGetInfo( pdbentry, "epicsPVBase"));
+  rs->redisKeyBase = strdup( dbGetInfo( pdbentry, "redisKeyBase"));
+  rs->readHost     = strdup( dbGetInfo( pdbentry, "redisReadHost"));
+  rs->readPort     = strtol( dbGetInfo( pdbentry, "redisReadPort"),  NULL, 0);
+  rs->readDb       = strtol( dbGetInfo( pdbentry, "redisReadDb"),    NULL, 0);
+  rs->writeHost    = strdup( dbGetInfo( pdbentry, "redisWriteHost"));
+  rs->writePort    = strtol( dbGetInfo( pdbentry, "redisWritePort"), NULL, 0);
+  rs->writeDb      = strtol( dbGetInfo( pdbentry, "redisWriteDb"),   NULL, 0);
+  rs->subHost      = strdup( dbGetInfo( pdbentry, "redisSubHost"));
+  rs->subPort      = strtol( dbGetInfo( pdbentry, "redisSubPort"),   NULL, 0);
+  rs->subDb        = strtol( dbGetInfo( pdbentry, "redisSubDb"),     NULL, 0);
 
   //
   // Initialize contexts
   //
-  if( connectToRedis( &(rs->rc), rs, &(rs->rcfd), "10.1.253.14", 6379, 0) ||
-      connectToRedis( &(rs->wc), rs, &(rs->wcfd), "10.1.253.14", 6379, 0) ||
-      connectToRedis( &(rs->sc), rs, &(rs->scfd), "10.1.253.14", 6379, 0)) {
-
+  if( connectToRedis( rs)) {
     fprintf( stderr, "Record Init Failed: redis connection initialization failed\n");
     return 1;
   }
 
 
-  findOurRecords( rs);
+  //  findOurRecords( rs);
 
   return 0;
 }
@@ -276,7 +346,8 @@ void devRedis_debugCB( redisAsyncContext *ac, void *reply, void *privdata) {
   }
 }
 
-static struct redisValueAIState *redisKeyToPV( const char *key) {
+
+static struct redisValueAIState *redisKeyToPV( struct redisState *rs, const char *key) {
   struct redisValueAIState *rtn;
   struct dbAddr rec;
   char tmp[128];
@@ -286,7 +357,7 @@ static struct redisValueAIState *redisKeyToPV( const char *key) {
     return NULL;
   }
 
-  strncpy( tmp, "21:orange:", sizeof( tmp)-1);
+  snprintf( tmp, sizeof( tmp)-1, "%s:", rs->basePVName);
   tmp[sizeof(tmp)-1] = 0;
 
   for( i=strlen(tmp), j=7; key[j] && j<sizeof(tmp)-1; i++, j++) {
@@ -299,16 +370,13 @@ static struct redisValueAIState *redisKeyToPV( const char *key) {
   if( i < sizeof( tmp))
     tmp[i] = 0;
 
-  strncat( tmp, ".DPVT", sizeof( tmp) -1);
-  tmp[sizeof(tmp)-1] = 0;
+  //fprintf( stderr, "redisValueAIState: key='%s'  PV?: '%s'\n", key, tmp);
 
   if( dbNameToAddr( tmp, &rec)) {
     return NULL;
   }
   
   rtn = (struct redisValueAIState *)((aiRecord *)(rec.precord)->dpvt);
-  //  dbGetField( &rec, DBF_NOACCESS, &rtn, NULL, NULL, NULL);
-
   return rtn;
 }
 
@@ -319,9 +387,6 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
   r = reply;
 
   rvs   = (struct redisValueAIState *)privdata;
-
-  fprintf( stderr, "devRedis_stPVCB: str: '%s',  value: %f\n", r->str, strtod( r->str, NULL));
-  fprintf( stderr, "devRedis_stPBCB: magic = '%s'\n", rvs->magic);
 
   epicsMutexMustLock( rvs->lock);
   rvs->nextValue = strtod( r->str, NULL);
@@ -344,11 +409,11 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
   
   key = r->element[3]->str;
 
-  rvs = redisKeyToPV( key);
+  //fprintf( stderr, "devRedisSubscribeCB: key='%s'\n", key);
+
+  rvs = redisKeyToPV( rs, key);
 
   if( rvs) {
-    fprintf( stderr, "devRedisSubscirbeCB magic '%s'\n", rvs->magic);
-    fprintf( stderr, "devRedisSubscribeCB key: '%s'\n", key);
     redisAsyncCommand( rs->rc, devRedis_setPVCB, rvs, "HGET %s VALUE", key);
   }
 }
@@ -357,10 +422,37 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
 
 static void worker(void *raw) {
   struct redisState *rs = raw;
+  struct redisValueAIState *rvs;
   struct pollfd fds[3];
   redisAsyncContext *racs[3]; 
   int pollReturn;
   int i;
+  DBENTRY dbentry;
+  DBENTRY *pdbentry = &dbentry;
+  int status;
+  
+  status = 0;
+  dbInitEntry( pdbbase, pdbentry);
+  for( status = dbFirstRecordType(pdbentry); !status; status = dbNextRecordType(pdbentry)) {
+    for( status = dbFirstRecord( pdbentry); !status; status = dbNextRecord( pdbentry)) {
+      dbFindField( pdbentry, "DTYP");
+      if( dbFoundField( pdbentry) && strcmp(dbGetString( pdbentry),"Redis Value")==0) {
+	dbFindField( pdbentry, "DPVT");
+	if( dbFoundField( pdbentry)) {
+	  rvs = ((aiRecord *)(pdbentry->precnode->precord))->dpvt;
+	  redisAsyncCommand( rs->rc, devRedis_setPVCB, rvs, "HGET %s VALUE", rvs->redisKey);
+	  //fprintf( stderr, "      record name: %s   redisKey: %s\n", dbGetRecordName( pdbentry), rvs->redisKey);
+	}
+      }
+    }
+  }
+  dbFinishEntry(pdbentry);
+
+
+  //
+  // Get initial values
+  //
+  
 
   //
   // Start up the subscriber
@@ -420,9 +512,6 @@ static void worker(void *raw) {
 	    redisAsyncHandleWrite( racs[i]);
       }
     }
-    
-    rs->lastnum = rand_r(&rs->seed);
-
   }
 }
 
@@ -450,13 +539,11 @@ static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io)
   return 0;
 }
 
-static long read_ai(aiRecord *prec)
+static long read_stringin( stringinRecord *prec)
 {
-  struct redisState* priv=prec->dpvt;
-
-  epicsMutexMustLock(priv->lock);
-  prec->rval = priv->lastnum;
-  epicsMutexUnlock(priv->lock);
+  //
+  // Really, the value of this record is not used.
+  // We only the this record to process other records
 
   return 0;
 }
@@ -471,14 +558,52 @@ static long value_init(int phase) {
 
 static long value_init_ai_record( aiRecord *prec) {
   struct redisValueAIState *rvs;
+  DBENTRY dbentry;
+  DBENTRY *pdbentry = &dbentry;
+  int status;
+  char tmp[128];  // should be plenty big for reasonable redis keys
+  int i;
 
   rvs = callocMustSucceed( 1, sizeof( *rvs), "redis value AI init");
 
   scanIoInit( &rvs->scan);
-  rvs->lock  = epicsMutexMustCreate();
-  rvs->magic = strdup( "3.14159");
+  rvs->lock     = epicsMutexMustCreate();
+  rvs->redisKey = NULL;
   prec->dpvt = rvs;
 
+  //
+  // Get the extra strings we should have attached through the info mechanism
+  //
+  status = 0;
+  dbInitEntry( pdbbase, pdbentry);
+  status = dbFindRecord( pdbentry, prec->name);
+  if( status) {
+    fprintf( stderr, "Redis Value Init Record could not find db entry for '%s'\n", prec->name);
+    return 1;
+  }
+  rvs->epicsPVBase  = strdup( dbGetInfo( pdbentry, "epicsPVBase"));
+  rvs->redisKeyBase = strdup( dbGetInfo( pdbentry, "redisKeyBase"));
+
+  if( strlen( rvs->epicsPVBase) >= sizeof(prec->name)+1) {
+    fprintf( stderr, "value_init_ai_record: PV name is too short.  Name='%s', epicsPVBase='%s'\n", prec->name, rvs->epicsPVBase);
+    return 1;
+  }
+  if( strlen( rvs->redisKeyBase) + strlen( prec->name) + 2 >= sizeof( tmp)) {
+    fprintf( stderr, "Resulting redis key too long.  '%s.%s'\n", rvs->redisKeyBase, &(prec->name[strlen(rvs->epicsPVBase)+1]));
+    return 1;
+  }
+
+  snprintf( tmp, sizeof(tmp)-1, "%s%s", rvs->redisKeyBase, &(prec->name[strlen(rvs->epicsPVBase)+1]));
+
+  tmp[sizeof(tmp)-1]=0;
+  
+  for( i=0; tmp[i]; i++) {
+    if( tmp[i] == ':')
+      tmp[i] = '.';
+  }
+
+  rvs->redisKey = strdup(tmp);
+  //  fprintf( stderr, "redis value ai intit  pv '%s'  rediskey '%s'\n", prec->name, rvs->redisKey);
 
   return 0;
 }
@@ -510,19 +635,17 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_ai;
-  DEVSUPFUN  special_linconv;
-} devAiRedisIntr = {
-  6, /* space for 6 functions */
+  DEVSUPFUN  read_stringin;
+} devStringinRedisConnector = {
+  5, /* space for 6 functions */
   NULL,
   init,
   init_record,
   get_ioint_info,
-  read_ai,
-  NULL
+  read_stringin
 };
 
-epicsExportAddress(dset,devAiRedisIntr);
+epicsExportAddress( dset, devStringinRedisConnector);
 
 struct {
   long num;

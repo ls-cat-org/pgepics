@@ -1,11 +1,18 @@
-record(ai,"$(P)"){
-  field(DTYP,"$(D)")
-  field(DESC,"Random numbers")
-  field(SCAN,"$(SCAN=1 second)")
-  field(INP,"$(S)")
-  field(LINR,"LINEAR")
-  field(ESLO,1e-9)
-  field(EOFF,-1)
+record(stringin,"$(P)"){
+  field(DTYP,"Redis Connector")
+  field(DESC,"Manage redis supplied PVs")
+  field(SCAN,"I/O Intr")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+  info(redisReadHost,"$(RRH)")
+  info(redisReadPort,"$(RRP)")
+  info(redisReadDb,"$(RRDB)")
+  info(redisWriteHost,"$(RWH)")
+  info(redisWritePort,"$(RWP)")
+  info(redisWriteDb,"$(RWDB)")
+  info(redisSubHost,"$(RSH)")
+  info(redisSubPort,"$(RSP)")
+  info(redisSubDb,"$(RSDB)")
 }
 record(ai,"$(P):omega:position"){
   field(DTYP,"Redis Value")
@@ -13,6 +20,8 @@ record(ai,"$(P):omega:position"){
   field(SCAN,"I/O Intr")
   field(INP,"NaN")
   field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
 }
 record(ai,"$(P):align:x:position"){
   field(DTYP,"Redis Value")
@@ -20,4 +29,267 @@ record(ai,"$(P):align:x:position"){
   field(SCAN,"I/O Intr")
   field(INP,"NaN")
   field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):dryer:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):backLight:intensity:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):scint:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):kappa:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):centering:y:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):fastShutter:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):fluo:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):align:x:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):omega:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):table:y:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):align:z:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):cam:zoom:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):capy:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):table:x:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):capz:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):cryo:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):scint:focus:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):lightPolar:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):centering:x:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):smartMagnet:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):frontLight:intensity:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):appz:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):frontLight:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):backLight:factor:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):appy:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):frontLight:factor:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):phi:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):align:y:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
+}
+record(ai,"$(P):backLight:position"){
+  field(DTYP,"Redis Value")
+  field(DESC,"Value from Redis")
+  field(SCAN,"I/O Intr")
+  field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
+  info(redisKeyBase,"$(S)")
+  info(epicsPVBase,"$(P)")
 }

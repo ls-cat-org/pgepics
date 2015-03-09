@@ -1,2 +1,2 @@
-device(ai,CONSTANT,devAiRedisIntr,"Random Intr")
+device(stringin,CONSTANT,devStringinRedisConnector,"Redis Connector")
 device(ai,CONSTANT,devAiRedisValue,"Redis Value")
