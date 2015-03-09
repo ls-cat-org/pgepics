@@ -39,6 +39,14 @@ struct redisPollFDData {
   struct pollfd     *ppfd;
 };
 
+struct redisValueAIState {
+  double       nextValue;
+  epicsMutexId lock;
+  IOSCANPVT    scan;
+  char *magic;
+};
+
+
 static void start_workers(initHookState state);
 
 static long init(int phase) {
@@ -268,8 +276,9 @@ void devRedis_debugCB( redisAsyncContext *ac, void *reply, void *privdata) {
   }
 }
 
-static struct dbAddr *redisKeyToPV( const char *key) {
-  struct dbAddr *paddr;
+static struct redisValueAIState *redisKeyToPV( const char *key) {
+  struct redisValueAIState *rtn;
+  struct dbAddr rec;
   char tmp[128];
   int i, j;
 
@@ -277,7 +286,6 @@ static struct dbAddr *redisKeyToPV( const char *key) {
     return NULL;
   }
 
-  paddr = callocMustSucceed( 1, sizeof( *paddr), "redisKeyToPv");
   strncpy( tmp, "21:orange:", sizeof( tmp)-1);
   tmp[sizeof(tmp)-1] = 0;
 
@@ -291,36 +299,42 @@ static struct dbAddr *redisKeyToPV( const char *key) {
   if( i < sizeof( tmp))
     tmp[i] = 0;
 
-  if( dbNameToAddr( tmp, paddr)) {
-    free( paddr);
-    paddr = NULL;
+  strncat( tmp, ".DPVT", sizeof( tmp) -1);
+  tmp[sizeof(tmp)-1] = 0;
+
+  if( dbNameToAddr( tmp, &rec)) {
+    return NULL;
   }
-  return paddr;
+  
+  rtn = (struct redisValueAIState *)((aiRecord *)(rec.precord)->dpvt);
+  //  dbGetField( &rec, DBF_NOACCESS, &rtn, NULL, NULL, NULL);
+
+  return rtn;
 }
 
 
 static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata) {
-  struct dbAddr *paddr;
-  redisReply *r;
-  struct redisState *rs;
-  struct redisPollFDData *prsfd;
+  redisReply             *r;
+  struct redisValueAIState *rvs;
   r = reply;
 
-  paddr = (struct dbAddr *)privdata;
-  prsfd = (struct redisPollFDData *)c->ev.data;
-  rs    = prsfd->prs;
+  rvs   = (struct redisValueAIState *)privdata;
 
-  epicsMutexMustLock( rs->lock);
-  dbPutField( paddr, DBR_STRING, r->str, 1);
-  epicsMutexUnlock( rs->lock);
-  free( paddr);
+  fprintf( stderr, "devRedis_stPVCB: str: '%s',  value: %f\n", r->str, strtod( r->str, NULL));
+  fprintf( stderr, "devRedis_stPBCB: magic = '%s'\n", rvs->magic);
+
+  epicsMutexMustLock( rvs->lock);
+  rvs->nextValue = strtod( r->str, NULL);
+  epicsMutexUnlock(   rvs->lock);
+
+  scanIoRequest( rvs->scan);
 }
 
 static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privdata) {
   redisReply *r;
   char *key;
   struct redisState *rs;
-  struct dbAddr *paddr;
+  struct redisValueAIState *rvs;
 
   r  = reply;
   rs = privdata;
@@ -330,10 +344,13 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
   
   key = r->element[3]->str;
 
-  paddr = redisKeyToPV( key);
+  rvs = redisKeyToPV( key);
 
-  if( paddr)
-    redisAsyncCommand( rs->rc, devRedis_setPVCB, paddr, "HGET %s VALUE", key);
+  if( rvs) {
+    fprintf( stderr, "devRedisSubscirbeCB magic '%s'\n", rvs->magic);
+    fprintf( stderr, "devRedisSubscribeCB key: '%s'\n", key);
+    redisAsyncCommand( rs->rc, devRedis_setPVCB, rvs, "HGET %s VALUE", key);
+  }
 }
 
 
@@ -444,10 +461,46 @@ static long read_ai(aiRecord *prec)
   return 0;
 }
 
+static long value_init(int phase) {
+  //
+  // Really there is nothing to do as the normal redis process will do 99% of the work
+  //
+  return 0;
+}
+
+
+static long value_init_ai_record( aiRecord *prec) {
+  struct redisValueAIState *rvs;
+
+  rvs = callocMustSucceed( 1, sizeof( *rvs), "redis value AI init");
+
+  scanIoInit( &rvs->scan);
+  rvs->lock  = epicsMutexMustCreate();
+  rvs->magic = strdup( "3.14159");
+  prec->dpvt = rvs;
+
+
+  return 0;
+}
+
+static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
+  struct redisValueAIState* priv=prec->dpvt;
+
+  *io = priv->scan;
+  return 0;
+}
 
 
 static long value_read_ai( aiRecord *prec) {
-  return 0;
+  struct redisValueAIState *rvs;
+  rvs = prec->dpvt;
+
+  epicsMutexMustLock( rvs->lock);
+  prec->val = rvs->nextValue;
+  prec->udf = 0;
+  epicsMutexUnlock( rvs->lock);
+
+  return 2;
 }
 
 
@@ -482,9 +535,9 @@ struct {
 } devAiRedisValue = {
   6, /* space for 6 functions */
   NULL,
-  NULL,
-  NULL,
-  NULL,
+  value_init,
+  value_init_ai_record,
+  value_get_ioint_info,
   value_read_ai,
   NULL
 };

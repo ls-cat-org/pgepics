@@ -10,12 +10,14 @@ record(ai,"$(P)"){
 record(ai,"$(P):omega:position"){
   field(DTYP,"Redis Value")
   field(DESC,"Value from Redis")
-  field(SCAN,"Passive")
+  field(SCAN,"I/O Intr")
   field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
 }
 record(ai,"$(P):align:x:position"){
   field(DTYP,"Redis Value")
   field(DESC,"Value from Redis")
-  field(SCAN,"Passive")
+  field(SCAN,"I/O Intr")
   field(INP,"NaN")
+  field(LINR,"NO CONVERSION")
 }
