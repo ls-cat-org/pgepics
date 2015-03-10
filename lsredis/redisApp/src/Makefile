@@ -23,7 +23,8 @@ redis_DBD += redisdev.dbd
 
 # redis_registerRecordDeviceDriver.cpp derives from redis.dbd
 redis_SRCS += redis_registerRecordDeviceDriver.cpp
-redis_SRCS += devredisintr.c
+redis_SRCS += devLSRedis.c
+redis_SRCS += lsRedisAISupport.c
 
 # Build the main IOC entry point on workstation OSs.
 redis_SRCS_DEFAULT += redisMain.cpp
@@ -47,4 +48,3 @@ redis_SYS_LIBS_Linux += hiredis
 .PHONY: printvars
 printvars:
 	@$(foreach V,$(sort $(.VARIABLES)), $(if $(filter-out environment% default automatic, $(origin $V)),$(warning $V=$($V) ($(value $V)))))
- 
