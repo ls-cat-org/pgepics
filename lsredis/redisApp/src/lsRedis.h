@@ -13,8 +13,10 @@
 #include <hiredis/hiredis.h>
 #include <hiredis/async.h>
 #include <poll.h>
-#include <aiRecord.h>
 #include <stringinRecord.h>
+#include <aiRecord.h>
+#include <biRecord.h>
+#include <longinRecord.h>
 #include <dbStaticLib.h>
 #include <string.h>
 

@@ -15,7 +15,7 @@ static long value_init(int phase) {
 
 /** Initialize our redis value record
  */
-static long value_init_ai_record( aiRecord *prec) {
+static long value_init_bi_record( biRecord *prec) {
   struct redisValueState *rvs;
   DBENTRY dbentry;
   DBENTRY *pdbentry = &dbentry;
@@ -23,7 +23,7 @@ static long value_init_ai_record( aiRecord *prec) {
   char tmp[128];  // should be plenty big for reasonable redis keys
   int i;
 
-  rvs = callocMustSucceed( 1, sizeof( *rvs), "redis value AI init");
+  rvs = callocMustSucceed( 1, sizeof( *rvs), "redis value BI init");
 
   rvs->nsv        = 64;
   rvs->stringVal  = callocMustSucceed( rvs->nsv, sizeof( char), "Redis init_record stringVal");
@@ -47,7 +47,7 @@ static long value_init_ai_record( aiRecord *prec) {
   rvs->redisKeyBase = strdup( dbGetInfo( pdbentry, "redisKeyBase"));
 
   if( strlen( rvs->epicsPVBase) >= sizeof(prec->name)+1) {
-    fprintf( stderr, "value_init_ai_record: PV name is too short.  Name='%s', epicsPVBase='%s'\n", prec->name, rvs->epicsPVBase);
+    fprintf( stderr, "value_init_bi_record: PV name is too short.  Name='%s', epicsPVBase='%s'\n", prec->name, rvs->epicsPVBase);
     return 1;
   }
   if( strlen( rvs->redisKeyBase) + strlen( prec->name) + 2 >= sizeof( tmp)) {
@@ -65,7 +65,7 @@ static long value_init_ai_record( aiRecord *prec) {
   }
 
   rvs->redisKey = strdup(tmp);
-  fprintf( stderr, "redis value ai intit  pv '%s'  rediskey '%s'\n", prec->name, rvs->redisKey);
+  fprintf( stderr, "redis value bi intit  pv '%s'  rediskey '%s'\n", prec->name, rvs->redisKey);
 
   return 0;
 }
@@ -83,14 +83,29 @@ static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
 /** Copy the value that the redis worker gave us and take all the
  ** credit
  */
-static long value_read_ai( aiRecord *prec) {
+static long value_read_bi( biRecord *prec) {
   struct redisValueState *rvs;
   rvs = prec->dpvt;
 
+  fprintf( stderr, "value_read_bi for '%s'  value string: '%s\n", prec->name, rvs->stringVal);
   epicsMutexMustLock( rvs->lock);
-  prec->val = strtod( rvs->stringVal, NULL);
+  switch( rvs->stringVal[0]) {
+  case 'y':
+  case 'Y':
+    prec->val = 1;
+    break;
+    
+  case 'n':
+  case 'N':
+    prec->val = 0;
+    break;
+
+  default:
+    prec->val = (strtol( rvs->stringVal, NULL, 0) == 0 ? 0 : 1);
+  }
   prec->udf = 0;
   epicsMutexUnlock( rvs->lock);
+  fprintf( stderr, "value_read_bi done\n");
 
   return 2;
 }
@@ -103,17 +118,15 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_ai;
-  DEVSUPFUN  special_linconv;
-} devAiRedisValue = {
-  6, /* space for 6 functions */
+  DEVSUPFUN  read_bi;
+} devBiRedisValue = {
+  5, /* space for 6 functions */
   NULL,
   value_init,
-  value_init_ai_record,
+  value_init_bi_record,
   value_get_ioint_info,
-  value_read_ai,
-  NULL
+  value_read_bi
 };
 
-epicsExportAddress(dset,devAiRedisValue);
+epicsExportAddress(dset,devBiRedisValue);
 
