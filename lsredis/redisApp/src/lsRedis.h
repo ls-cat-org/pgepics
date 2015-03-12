@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <stdlib.h>
 #include <epicsExport.h>
 #include <dbAccess.h>
@@ -15,15 +16,23 @@
 #include <poll.h>
 #include <stringinRecord.h>
 #include <aiRecord.h>
+#include <aoRecord.h>
 #include <biRecord.h>
 #include <longinRecord.h>
 #include <dbStaticLib.h>
 #include <string.h>
+#include <search.h>
+#include <errno.h>
+
 
 /** Everything we need to keep track of
  */
-struct redisState {
+typedef struct redisStateStruct {
   ELLNODE node;
+  struct hsearch_data *htab;
+  int hashTableSize;
+  int nhashes;
+  struct lsRedisHashDataStruct *lastHTEntry;	// Hash table entries are also in a linked list so the HT can be resized.
   char *basePVName;
   char *redisKeyBase;
   epicsMutexId lock;
@@ -44,28 +53,41 @@ struct redisState {
   struct pollfd     wcfd;
   redisAsyncContext *sc;	// our subscriber context
   struct pollfd     scfd;
-};
+} redisState;
 
 /** This structure allows us to pass the redis state structure to
  ** routines that need a particular pollfd
  */
-struct redisPollFDData {
-  struct redisState *prs;
+typedef struct redisPollFDDataStruct {
+  struct redisStateStruct *prs;
   struct pollfd     *ppfd;
-};
+} redisPollFDData;
 
 
 /** Use the same state structure for all the various record types to be a little less crazy
  */
-struct redisValueState {
-  char         *stringVal;	// pointer to the string we need to convert in the record support routine.
+typedef struct redisValueStateStruct {
+  dbCommon    *inputPV;		// the PV that services inputs from redis to epics
+  dbCommon    *outputPV;	// the PV that services outputs from epics to redis
+  char        *redisKey;        // Saves a lookup or two
+  redisState  *rs;		// the redis state that services this variable
+  char        *stringVal;	// pointer to the string we need to convert in the record support routine.
   int          nsv;		// Number of characters in stringVal.
 				// Allocate more than needed and we'll
 				// need to increase the buffer rarely
   epicsMutexId lock;		// Keep things thread safe
-  IOSCANPVT    scan;		// So we can request that our record get processed
-  char *epicsPVBase;
-  char *redisKeyBase;
-  char *redisKey;		// What we are called in the redis world
-};
+  IOSCANPVT    in_scan;		// So we can request that our record get processed
+  IOSCANPVT    out_scan;	// So we can request that our record get processed
+  char       * redisConnector;
+  int          writeWasPending;	// detect if write pending has changed
+  int          writePending;		// 0 if we are not waiting for a write callback, 1 if we are
+  int          readPending;
+} redisValueState;
 
+typedef struct lsRedisHashDataStruct {
+  struct lsRedisHashDataStruct *previous;
+  char *redisKey;	// the key in redis land
+  redisValueState *rvs;	// our private data
+} lsRedisHashData;
+
+extern long value_init_record( dbCommon *prec, int inout);
