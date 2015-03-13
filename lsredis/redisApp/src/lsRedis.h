@@ -29,6 +29,11 @@
  */
 typedef struct redisStateStruct {
   ELLNODE node;
+  epicsMutexId queueLock;		// queue is manipulated by more than one thread
+  struct redisValueStateStruct *queue[64];		// queue of our output records that need processing
+  int queueSize;			// in preparation for a variable queue length (hopefully never)
+  int queueIn;				// Next open position to add an entry
+  int queueOut;				// Next position to read from
   struct hsearch_data *htab;
   int hashTableSize;
   int nhashes;

@@ -4,6 +4,8 @@
  ** We need an init routine to support the value records but there is
  ** literally nothing to do.  Except return 0 (meaning everything is
  ** AOK).  So I guess that's something.
+ **
+ ** Called from main thread
  */
 static long value_init(int phase) {
   return 0;
@@ -11,6 +13,8 @@ static long value_init(int phase) {
 
 
 /** Initialize our redis value record
+ **
+ ** Called from main thread
  */
 static long value_init_ao_record( aoRecord *prec) {
   value_init_record( (dbCommon *)prec, 1);
@@ -18,34 +22,11 @@ static long value_init_ao_record( aoRecord *prec) {
 }
 
 
-/** Tell epics we like i/o intr so much we are willing to tell it how.
- */
-static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
-  redisValueState *rvs;
-  
-  rvs = prec->dpvt;
-  *io = rvs->out_scan;
-
-  return 0;
-}
-
-
-static void lsRedis_writeAOCB( redisAsyncContext *c, void *reply, void *privdata) {
-  redisValueState *rvs;
-
-  rvs = privdata;
-
-  epicsMutexMustLock( rvs->lock);
-  rvs->writePending   = 0;
-  rvs->outputPV->pact = 0;
-  epicsMutexUnlock(   rvs->lock);
-
-  scanIoRequest( rvs->out_scan);
-
-}
 
 /** Copy the value that the redis worker gave us and take all the
  ** credit
+ **
+ ** Called from main thread
  */
 static long value_write_ao( aoRecord *prec) {
   static char *id = "value_write_ao";
@@ -58,29 +39,24 @@ static long value_write_ao( aoRecord *prec) {
     return 1;
 
   epicsMutexMustLock( rvs->lock);
-
-  // Don't do anything if we are waiting for the redis callback
-  //
-  if( !rvs->writePending) {
-    if( rvs->writeWasPending) {
-      // Finish up from previous write
-      //
-      rvs->writeWasPending = 0;
-      prec->pact           = 0;
-      fprintf( stderr, "%s: finished writing to redis\n", id);
-    } else {
-      snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
-      tmp[sizeof(tmp)-1] = 0;
-      redisAsyncCommand( rvs->rs->wc, lsRedis_writeAOCB, rvs, "HSET %s VALUE %s", rvs->redisKey, tmp);
-      rvs->writePending    = 1;
-      rvs->writeWasPending = 1;
-      prec->pact           = 1;
-      fprintf( stderr, "%s: writing to '%s'  value %.*f\n", id, rvs->redisKey, prec->prec, prec->val);
-    }
-  }
-
+  snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
+  tmp[sizeof(tmp)-1] = 0;
   epicsMutexUnlock( rvs->lock);
 
+  //
+  // Redis Acync callbacks not needed here because our subscriber
+  // process will pick up the publication notice and mark this
+  // record as no longer being active
+  //
+  epicsMutexMustLock(rvs->rs->lock);
+  redisAsyncCommand( rvs->rs->wc, NULL, NULL, "MULTI");
+  redisAsyncCommand( rvs->rs->wc, NULL, NULL, "HSET %s VALUE %s", rvs->redisKey, tmp);
+  redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
+  redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
+  epicsMutexUnlock(  rvs->rs->lock);
+
+  prec->pact           = 1;
+  fprintf( stderr, "%s: writing to '%s'  value %.*f\n", id, rvs->redisKey, prec->prec, prec->val);
 
   return 0;
 }
@@ -100,7 +76,7 @@ struct {
   NULL,
   value_init,
   value_init_ao_record,
-  value_get_ioint_info,
+  NULL,
   value_write_ao,
   NULL
 };

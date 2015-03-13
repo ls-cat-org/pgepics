@@ -6,38 +6,21 @@ static ELLLIST allredis = ELLLIST_INIT;
 
 static void start_workers(initHookState state);
 
+/** Register our start worker routine
+ **
+ ** Called from main thread
+ */
 static long init(int phase) {
   if(phase==0)
     initHookRegister(&start_workers);
   return 0;
 }
 
-/*
-static void findOurRecords( struct redisState *rs) {
-  int status;
-  DBENTRY dbentry;
-  DBENTRY *pdbentry = &dbentry;
-  if (!pdbbase) {
-    printf("No database loaded\n");
-    return;
-  }
-  status = 0;
-  dbInitEntry(pdbbase, pdbentry);
-
-  for( status = dbFirstRecordType(pdbentry); !status; status = dbNextRecordType(pdbentry)) {
-    for( status = dbFirstRecord( pdbentry); !status; status = dbNextRecord( pdbentry)) {
-      dbFindField( pdbentry, "DTYP");
-      if( dbFoundField( pdbentry) && strcmp(dbGetString( pdbentry),"Redis Value")==0)
-	fprintf( stderr, "      record name: %s\n", dbGetRecordName( pdbentry));
-    }
-  }
-
-  dbFinishEntry(pdbentry);
-}
-*/
-
-
 /** Read socket support for hiredis events 
+ **
+ *******************************
+ ** Called from either thread **
+ *******************************
  */
 void devRedis_addRead( void *data) {
   struct pollfd *pfd;
@@ -52,6 +35,10 @@ void devRedis_addRead( void *data) {
 }
 
 /** (don't) Read socket support for hiredis events 
+ **
+ *******************************
+ ** Called from either thread **
+ *******************************
  */
 void devRedis_delRead( void *data) {
   struct pollfd *pfd;
@@ -66,6 +53,10 @@ void devRedis_delRead( void *data) {
 }
 
 /** Write socket support for hiredis events 
+ **
+ *******************************
+ ** Called from either thread **
+ *******************************
  */
 void devRedis_addWrite( void *data) {
   struct pollfd *pfd;
@@ -80,6 +71,10 @@ void devRedis_addWrite( void *data) {
 }
 
 /** (don't) Write socket support for hiredis events 
+ **
+ *******************************
+ ** Called from either thread **
+ *******************************
  */
 void devRedis_delWrite( void *data) {
   struct pollfd *pfd;
@@ -94,7 +89,11 @@ void devRedis_delWrite( void *data) {
 }
 
 /** hook to clean up hiredis socket events
- * TODO: figure out what we are supposed to do here and do it
+ ** TODO: figure out what we are supposed to do here and do it
+ **
+ *******************************
+ ** Called from either thread **
+ *******************************
  */
 void devRedis_cleanup( void *data) {
   struct pollfd *pfd;
@@ -111,6 +110,9 @@ void devRedis_cleanup( void *data) {
 }
 
 /** Report when we've chaged databases
+ **
+ ** Called from worker thread
+ **
  */
 static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privdata) {
   redisReply *r;
@@ -127,6 +129,9 @@ static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privda
 
 
 /** Perform all connection work once the redis state structure is ready
+ **
+ ** Called from main thread
+ **
  */
 static int connectToRedis( redisState *rs) {
   int err;
@@ -187,6 +192,10 @@ static int connectToRedis( redisState *rs) {
     (*c)->ev.cleanup  = devRedis_cleanup;
     
     if( db != 0) {
+      //
+      // Called from initialization routine before worker starts and,
+      // hence, no mutex is needed.
+      //
       err = redisAsyncCommand( *c, devRedisDBChangedCB, NULL, "SELECT %d", db);
       return err;
     }
@@ -195,6 +204,12 @@ static int connectToRedis( redisState *rs) {
   return 0;
 }
 
+/** See if we need to increase the size of the hash table just before
+ ** adding something to it.
+ **
+ ** Called from main thread.  (TODO: verify this)
+ **
+ */
 static void lsRedisMaybeResizeHashTable( redisState *rs) {
   static char *id = "lsRedisMaybeResizeHashTable";
   ENTRY hte, *htrp;
@@ -233,9 +248,11 @@ static void lsRedisMaybeResizeHashTable( redisState *rs) {
 /** return pointer to redisState given the name of the redis record.
  ** Allocate the storage and attach it to the redis record in
  ** case that record has not yet been initialized
+ **
+ ** Called from main thread.
+ **
  */
-
-redisState *lsRedisGetRedisState( char *connectorName) {
+static redisState *lsRedisGetRedisState( char *connectorName) {
   static char *id = "lsRedisgetRedisState";
   redisState **pprs, *rs;
   struct dbAddr rec;
@@ -261,6 +278,10 @@ redisState *lsRedisGetRedisState( char *connectorName) {
       fprintf( stderr, "%s: failed to allocate hash table\n", id);
       exit( 1);
     }
+    rs->queueLock = epicsMutexMustCreate();
+    rs->queueSize = sizeof( rs->queue)/sizeof( *rs->queue);
+    rs->queueIn   = 0;
+    rs->queueOut  = 0;
     *pprs = rs;
   }
   //fprintf( stderr, "%s: connectorName '%s'   rs: %p\n", id, connectorName, rs);
@@ -271,8 +292,9 @@ redisState *lsRedisGetRedisState( char *connectorName) {
  ** state if need be.  If there are both input and ouput PVs with the
  ** sample redis key then they'll both have the same redis value
  ** state.
+ **
+ ** Called from main thread.
  */
-
 static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char *inputPVName, char *outputPVName) {
   static char *id = "lsRedisGetRedisValueState";
   redisState *rs;
@@ -326,6 +348,7 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
     //
     fprintf( stderr, "%s: adding key '%s'\n", id, redisKey);
     rvs = callocMustSucceed( 1, sizeof( *rvs), id);
+    rvs->redisConnector = strdup( connectorName);
     rvs->redisKey  = strdup( redisKey);
     rvs->inputPV   = inRecord;
     rvs->outputPV  = outRecord;
@@ -359,7 +382,6 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
     prec = (dbCommon *)inRecord;
     prec->dpvt = rvs;
   }
-      
 
   if( outRecord != NULL) {
     scanIoInit( &(rvs->out_scan));
@@ -368,30 +390,16 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
     prec->dpvt = rvs;
   }
 
-  if( outputPVName && outputPVName[0]) {
-    // Add an entry for the pv name too, if it does not exist
-    hte.key  = outputPVName;
-    hte.data = NULL;
-    if( !hsearch_r( hte, FIND, &htrp, rs->htab)) {
-      hte.key  = outputPVName;
-      hte.data = hd;
-      hsearch_r( hte, ENTER, &htrp, rs->htab);
-      rs->nhashes++;
-    }
-    htrp->data = hd;
-  }
-
   fprintf( stderr, "%s: done  redisKey %s  inPV %s at %p  outPV %s at %p  rs %p  rvs %p\n",
 	   id, redisKey, inputPVName, inRecord, outputPVName, outRecord, rs, rvs);
-
 
   return;
 }
 
-
-
-
 /** Initialize redis support
+ **
+ ** Called from main thread.
+ **
  */
 static long init_record( stringinRecord *prec) {
   static char *id = "devLSRedis init_record";
@@ -450,6 +458,9 @@ static long init_record( stringinRecord *prec) {
 }
 
 /** General purpuse callback for debuging redis replies
+ **
+ ** Called from worker thread.
+ **
  */
 void devRedis_debugCB( redisAsyncContext *ac, void *reply, void *privdata) {
   static int indentlevel = 0;
@@ -499,7 +510,11 @@ void devRedis_debugCB( redisAsyncContext *ac, void *reply, void *privdata) {
 }
 
 
-/** Given a redis key name return the state structure associated with the corresponding PV (or null if there is not one)
+/** Given a redis key name return the state structure associated with
+ ** the corresponding PV (or null if there is not one)
+ **
+ ** Called from worker thread.
+ **
  */
 static redisValueState *redisKeyToRedisValueState( redisState *rs, char *key) {
   lsRedisHashData *hdp;
@@ -516,6 +531,9 @@ static redisValueState *redisKeyToRedisValueState( redisState *rs, char *key) {
 
 
 /** redis callback to set the value of a pv.  Or really, tell the main thread to change it to the value we are passing to it.
+ **
+ ** Called from worker thread.
+ **
  */
 static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata) {
   static char *id = "devRedis_setPVCB";
@@ -542,11 +560,15 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
 }
 
 /** Service a message comming from the subscription connection
+ **
+ ** Called from worker thread.
+ **
  */
 static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privdata) {
   //  static char *id = "devRedisSubscribeCB";
   redisReply *r;
   char *key;
+  char *publisher;
   redisState *rs;
   redisValueState *rvs;
   redisPollFDData *prsfd;
@@ -566,18 +588,39 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
   // PV
   //
 
-  key = r->element[3]->str;
+  publisher = r->element[2]->str;
+  key       = r->element[3]->str;
 
   rvs = redisKeyToRedisValueState( rs, key);
 
   if( rvs) {
+    //
+    // is this self published?
+    //
+    if( strstr( publisher, rvs->redisConnector)) {
+      //
+      // put this on our queue for the main thread to request lower
+      // the pact flag
+      //
+      epicsMutexMustLock( rvs->rs->queueLock);
+      rvs->rs->queue[ (rvs->rs->queueIn++ % rvs->rs->queueSize)] = rvs;
+      epicsMutexUnlock( rvs->rs->queueLock);
+      
+      scanIoRequest( rvs->rs->scan);
+    }
     rvs->readPending    = 1;
+
+    epicsMutexMustLock( rs->lock);
     redisAsyncCommand( rvs->rs->rc, devRedis_setPVCB, rvs, "HGET %s VALUE", key);
+    epicsMutexUnlock( rs->lock);
   }
 }
 
 
 /**  Our worker thread.  Handles communication with redis
+ **
+ ** Called from worker thread.  (This is the worker.)
+ **
  */
 static void worker(void *raw) {
   redisState *rs = raw;
@@ -604,8 +647,10 @@ static void worker(void *raw) {
 	dbFindField( pdbentry, "DPVT");
 	if( dbFoundField( pdbentry)) {
 	  rvs = ((aiRecord *)(pdbentry->precnode->precord))->dpvt;
+
+	  epicsMutexMustLock( rs->lock);
 	  redisAsyncCommand( rs->rc, devRedis_setPVCB, rvs, "HGET %s VALUE", rvs->redisKey);
-	  //fprintf( stderr, "      record name: %s   redisKey: %s\n", dbGetRecordName( pdbentry), rvs->redisKey);
+	  epicsMutexUnlock(   rs->lock);
 	}
       }
     }
@@ -615,7 +660,11 @@ static void worker(void *raw) {
   //
   // Start up the subscriber
   //
-  if( redisAsyncCommand( rs->sc, devRedisSubscribeCB, rs, "PSUBSCRIBE *") != REDIS_OK) {
+  epicsMutexMustLock( rs->lock);
+  status = redisAsyncCommand( rs->sc, devRedisSubscribeCB, rs, "PSUBSCRIBE *");
+  epicsMutexUnlock( rs->lock);
+
+  if( status != REDIS_OK) {
     fprintf( stderr, "Queuing subscribe command failed.\n");
     return;
   }
@@ -676,6 +725,9 @@ static void worker(void *raw) {
 
 /** Epics tells us we can now start some workers.
  ** We just have one.
+ **
+ ** Called from main thread.
+ **
  */
 static void start_workers(initHookState state) {
   ELLNODE *cur;
@@ -692,7 +744,11 @@ static void start_workers(initHookState state) {
 }
 
 
-/** Tell epics how to scan us (whatever "scan" means.  Probably the most overused work in data collection environments.) 
+/** Tell epics how to scan us (whatever "scan" means.  Probably the
+ ** most overused work in data collection environments.)
+ **
+ ** Called from main thread.
+ **
  */
 static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io) {
   redisState* priv=prec->dpvt;
@@ -708,12 +764,31 @@ static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io) {
  ** device?  If it really matters then there is a bit of rewritting to
  ** do.
  **
+ ** Called from main thread.
+ **
  */
 static long read_stringin( stringinRecord *prec) {
-  //
-  // Really, the value of this record is not used.
-  // We only the this record to process other records
+  //static char *id = "read_stringin";
+  redisState      *rs;
+  redisValueState *rvs;
 
+  rs = prec->dpvt;
+
+  epicsMutexMustLock( rs->queueLock);
+  while( rs->queueIn != rs->queueOut) {
+    rvs = rs->queue[rs->queueOut++ % rs->queueSize];
+    //
+    // Show which redis key is being processed
+    //
+    strncpy( prec->val, rvs->redisKey, sizeof( prec->val)-1);
+    prec->val[sizeof( prec->val)-1] = 0;
+    
+    //
+    // get epics to do some work
+    //
+    rvs->outputPV->pact = 0;		// Allow the record to get processed later.
+  }
+  epicsMutexUnlock( rs->queueLock);
   return 0;
 }
 
@@ -741,6 +816,9 @@ epicsExportAddress( dset, devStringinRedisConnector);
 
 /** Initialize our redis value record
  ** inout = 0 for an input record, 1 for an output
+ **
+ ** Called from main thread.
+ **
  */
 long value_init_record( dbCommon *prec, int inout) {
   static char *id = "value_init_record";
