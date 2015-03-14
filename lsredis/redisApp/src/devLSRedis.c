@@ -218,8 +218,6 @@ static void connectToPostgres( redisState *rs) {
   }
     
   rs->pgfd.fd     = PQsocket( rs->q);
-  rs->pgfd.events = POLLOUT;
-  
 
   while( connecting) {
     switch( PQconnectPoll( rs->q)) {
@@ -254,6 +252,9 @@ static void connectToPostgres( redisState *rs) {
     poll( &(rs->pgfd), 1, -1);
     
   }
+  //
+  // Default state is listening
+  rs->pgfd.events = POLLIN;
 }
 
 
@@ -401,17 +402,19 @@ static void readQueryService( redisState *rs) {
  **
  */
 static void lsRedisPGQueryNext( redisState *rs) {
+  //  static char *id = "lsRedisPGQueryNext";
   char *qs;
 
   qs = NULL;
   if( rs->pgReadyForQuery) {
-    if( rs->pgQueueIn != rs->pgQueueOut)
+    if( rs->pgQueueIn != rs->pgQueueOut) {
       qs = rs->pgQueue[ rs->pgQueueOut++ % rs->pgQueueSize];
 
-    if( qs != NULL) {
-      PQsendQuery( rs->q, qs);
-      rs->pgReadyForQuery = 0;
-      rs->pgfd.events = POLLIN | POLLOUT;
+      if( qs != NULL) {
+	PQsendQuery( rs->q, qs);
+	rs->pgReadyForQuery = 0;
+	rs->pgfd.events = POLLIN | POLLOUT;	// enable sending the query
+      }
     }
   }
 }
@@ -754,18 +757,23 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
 
 // called from worker
 static void postgresRead( redisState *rs) {
+  static char *id = "postgresRead";
   int err;
   PGresult *pgr;
 
   err = PQconsumeInput( rs->q);
   if( err == 0) {
+    fprintf( stderr, "%s: PQconsumeInput returned an error\n", id);
     // TODO: handle the error
   }
-  if( !PQisBusy( rs->q)) {
+  while( !PQisBusy( rs->q)) {
     pgr = PQgetResult( rs->q);
     if( pgr == NULL) {
+      fprintf( stderr, "%s: Ready for next query\n", id);
       rs->pgReadyForQuery = 1;
+      break;
     } else {
+      fprintf( stderr, "%s: Received response\n", id);
       // TODO: Surely there is something useful coming back.  Do
       // something with the responses.
       //
@@ -777,6 +785,7 @@ static void postgresRead( redisState *rs) {
 
 // called from worker
 static void postgresWrite( redisState *rs) {
+  static char *id = "postgresWrite";
   int status;
 
   status = PQflush( rs->q);
@@ -795,6 +804,7 @@ static void postgresWrite( redisState *rs) {
   case -1:
   default:
     // TODO: Figure out what this really means and handle it
+    fprintf( stderr, "%s: PQflush returned an error\n", id);
     rs->pgfd.events = POLLIN;
   }
 }
@@ -877,7 +887,7 @@ static void worker(void *raw) {
     fds[2].events  = rs->scfd.events;
     fds[2].revents = 0;
 
-    lsRedisPGQueryNext( rs);		// maybe queues the next query
+    lsRedisPGQueryNext( rs);		// maybe dequeues and sends the next query
     fds[3].fd      = rs->pgfd.fd;
     fds[3].events  = rs->pgfd.events;
     fds[3].revents = 0;
