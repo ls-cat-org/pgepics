@@ -31,6 +31,7 @@ static long value_init_ao_record( aoRecord *prec) {
 static long value_write_ao( aoRecord *prec) {
   static char *id = "value_write_ao";
   char tmp[128];
+  char pgtmp[128];
   redisValueState *rvs;
 
   rvs = prec->dpvt;
@@ -41,12 +42,15 @@ static long value_write_ao( aoRecord *prec) {
   epicsMutexMustLock( rvs->lock);
   snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
   tmp[sizeof(tmp)-1] = 0;
+
+  snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%.*f')", rvs->redisKey, prec->prec, prec->val);
+  pgtmp[sizeof(pgtmp)-1] = 0;
   epicsMutexUnlock( rvs->lock);
 
   //
   // Redis Acync callbacks not needed here because our subscriber
-  // process will pick up the publication notice and mark this
-  // record as no longer being active
+  // process will pick up the publication notice and mark this record
+  // as no longer being active by setting pact = 0.
   //
   epicsMutexMustLock(rvs->rs->lock);
   redisAsyncCommand( rvs->rs->wc, NULL, NULL, "MULTI");
@@ -55,8 +59,12 @@ static long value_write_ao( aoRecord *prec) {
   redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
   epicsMutexUnlock(  rvs->rs->lock);
 
+  
+  fprintf( stderr, "%s: sending query '%s'\n", id, pgtmp);
+  lsRedisSendQuery( rvs->rs, pgtmp);
+
+
   prec->pact           = 1;
-  fprintf( stderr, "%s: writing to '%s'  value %.*f\n", id, rvs->redisKey, prec->prec, prec->val);
 
   return 0;
 }

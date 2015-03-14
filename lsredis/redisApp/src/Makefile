@@ -43,7 +43,7 @@ include $(TOP)/configure/RULES
 #----------------------------------------
 #  ADD RULES AFTER THIS LINE
 
-redis_SYS_LIBS_Linux += hiredis
+redis_SYS_LIBS_Linux += hiredis pq
 
 
 .PHONY: printvars

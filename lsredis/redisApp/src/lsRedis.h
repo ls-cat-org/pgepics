@@ -23,7 +23,9 @@
 #include <string.h>
 #include <search.h>
 #include <errno.h>
-
+#include <postgresql/libpq-fe.h>
+#include <sys/socket.h>
+#include <unistd.h>
 
 /** Everything we need to keep track of
  */
@@ -32,8 +34,8 @@ typedef struct redisStateStruct {
   epicsMutexId queueLock;		// queue is manipulated by more than one thread
   struct redisValueStateStruct *queue[64];		// queue of our output records that need processing
   int queueSize;			// in preparation for a variable queue length (hopefully never)
-  int queueIn;				// Next open position to add an entry
-  int queueOut;				// Next position to read from
+  unsigned int queueIn;			// Next open position to add an entry
+  unsigned int queueOut;		// Next position to read from
   struct hsearch_data *htab;
   int hashTableSize;
   int nhashes;
@@ -43,6 +45,20 @@ typedef struct redisStateStruct {
   epicsMutexId lock;
   IOSCANPVT scan;
   epicsThreadId generator;
+  int   pgIn;			// socket to read from to receive query requests
+  int   pgOut;			// socket to write queries to
+  char *pgHost;			// our postgres server location
+  int   pgPort;			// and its port
+  char *pgUser;			// postgres user name
+  char *pgDb;			// name of the postgres database to use
+  PGconn *q;			// our postgres conneciton
+  struct pollfd pgfd;		// poll object for postgress
+  char *pgQueue[64];		// our query queue
+  int   pgQuerySize;		// Our fixed length query string size
+  int   pgQueueSize;
+  unsigned int   pgQueueIn;
+  unsigned int   pgQueueOut;
+  int   pgReadyForQuery;	// flag to indicate we can send off another query
   char *readHost;		// redis host for read requests
   int   readPort;		// redis port on redis host for read requests
   int   readDb;			// redis database number for read requests
@@ -96,3 +112,4 @@ typedef struct lsRedisHashDataStruct {
 } lsRedisHashData;
 
 extern long value_init_record( dbCommon *prec, int inout);
+extern void lsRedisSendQuery( redisState *rs, char *qs);

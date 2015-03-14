@@ -18,9 +18,7 @@ static long init(int phase) {
 
 /** Read socket support for hiredis events 
  **
- *******************************
- ** Called from either thread **
- *******************************
+ ** Called from worker thread **
  */
 void devRedis_addRead( void *data) {
   struct pollfd *pfd;
@@ -36,9 +34,7 @@ void devRedis_addRead( void *data) {
 
 /** (don't) Read socket support for hiredis events 
  **
- *******************************
- ** Called from either thread **
- *******************************
+ ** Called from worker thread **
  */
 void devRedis_delRead( void *data) {
   struct pollfd *pfd;
@@ -54,9 +50,7 @@ void devRedis_delRead( void *data) {
 
 /** Write socket support for hiredis events 
  **
- *******************************
- ** Called from either thread **
- *******************************
+ ** Called from worker thread **
  */
 void devRedis_addWrite( void *data) {
   struct pollfd *pfd;
@@ -72,9 +66,7 @@ void devRedis_addWrite( void *data) {
 
 /** (don't) Write socket support for hiredis events 
  **
- *******************************
- ** Called from either thread **
- *******************************
+ ** Called from worker thread **
  */
 void devRedis_delWrite( void *data) {
   struct pollfd *pfd;
@@ -91,9 +83,7 @@ void devRedis_delWrite( void *data) {
 /** hook to clean up hiredis socket events
  ** TODO: figure out what we are supposed to do here and do it
  **
- *******************************
- ** Called from either thread **
- *******************************
+ ** Called from worker thread **
  */
 void devRedis_cleanup( void *data) {
   struct pollfd *pfd;
@@ -204,6 +194,69 @@ static int connectToRedis( redisState *rs) {
   return 0;
 }
 
+static void connectToPostgres( redisState *rs) {
+  static char *id = "connectToPostgres";
+  int connecting = 1;
+  char tmp[128];
+  int err;
+
+  snprintf( tmp, sizeof(tmp)-1, "hostaddr=%s user=%s dbname=%s port=%d", rs->pgHost, rs->pgUser, rs->pgDb, rs->pgPort);
+  tmp[sizeof(tmp)-1] = 0;
+
+  fprintf( stderr, "%s: postgres connection string: '%s'\n", id, tmp);
+  rs->q = PQconnectStart( tmp);
+
+  err   = PQstatus( rs->q);
+  if( err == CONNECTION_BAD) {
+    fprintf( stderr, "%s: Cannot initiate connection to postgresql\n", id);
+    exit( 1);
+  }
+  err   = PQsetnonblocking( rs->q, 1);
+  if( err != 0) {
+    fprintf( stderr, "%s: Cannot set the postgresql to non-blocking. Odd.\n", id);
+    exit( 1);
+  }
+    
+  rs->pgfd.fd     = PQsocket( rs->q);
+  rs->pgfd.events = POLLOUT;
+  
+
+  while( connecting) {
+    switch( PQconnectPoll( rs->q)) {
+    case PGRES_POLLING_WRITING:
+      rs->pgfd.events = POLLOUT;      
+      fprintf( stderr, "%s: pgres writing\n", id);
+      break;
+      
+    case PGRES_POLLING_READING:
+      rs->pgfd.events = POLLIN;      
+      fprintf( stderr, "%s: pgres reading\n", id);
+      break;
+      
+    case PGRES_POLLING_OK:
+      connecting = 0;
+      rs->pgfd.events = POLLIN;
+      fprintf( stderr, "%s: connection to postgresql server established\n", id);
+      break;
+      
+    case PGRES_POLLING_FAILED:
+    default:
+      rs->pgfd.events = 0;
+      fprintf( stderr, "%s: pgres failed\n", id);
+      exit( 1);
+      // TODO: initiate recovering the pg connection
+      break;
+    }
+    
+    if( !connecting)
+      break;
+    rs->pgfd.revents = 0;
+    poll( &(rs->pgfd), 1, -1);
+    
+  }
+}
+
+
 /** See if we need to increase the size of the hash table just before
  ** adding something to it.
  **
@@ -257,6 +310,8 @@ static redisState *lsRedisGetRedisState( char *connectorName) {
   redisState **pprs, *rs;
   struct dbAddr rec;
   char tmp[128];
+  int i;
+  int sv[2];
 
   snprintf( tmp, sizeof( tmp)-1, "%s.DPVT", connectorName);
   tmp[sizeof(tmp)-1] = 0;
@@ -282,10 +337,83 @@ static redisState *lsRedisGetRedisState( char *connectorName) {
     rs->queueSize = sizeof( rs->queue)/sizeof( *rs->queue);
     rs->queueIn   = 0;
     rs->queueOut  = 0;
+
+    if( -1 == socketpair( AF_LOCAL, SOCK_STREAM | SOCK_NONBLOCK, 0, sv)) {
+      fprintf( stderr, "%s: socketpair creation failed\n", id);
+      exit( 1);
+    }
+    rs->pgIn  = sv[0];
+    rs->pgOut = sv[1];
+    rs->pgQueueSize = sizeof( rs->pgQueue)/sizeof( *rs->pgQueue);
+    rs->pgQuerySize = 64;
+    for( i=0; i < rs->pgQueueSize; i++) {
+      rs->pgQueue[i] = callocMustSucceed( rs->pgQuerySize, sizeof( char), id);
+    }
+    rs->pgQueueIn   = 0;
+    rs->pgQueueOut  = 0;
+    rs->pgReadyForQuery = 1;
+
     *pprs = rs;
   }
   //fprintf( stderr, "%s: connectorName '%s'   rs: %p\n", id, connectorName, rs);
   return rs;
+}
+
+
+/** Send a query to the worker.
+ **
+ ** Called from main thread.
+ **
+ */
+void lsRedisSendQuery( redisState *rs, char *qs) {
+  static char *id = "lsRedisSendQuery";
+  ssize_t  nchars;
+  // TODO: handle the return values.
+  nchars = write( rs->pgOut, qs, strlen( qs));
+  if( nchars == -1) {
+    fprintf( stderr, "%s: write error\n", id);
+  }
+}
+
+/** Add an item to the query queue
+ **
+ ** Called from worker
+ **
+ */
+static void readQueryService( redisState *rs) {
+  static char *id = "readQueryService";
+  char *buf;
+  ssize_t nchars;
+
+  buf = rs->pgQueue[rs->pgQueueIn++ % rs->pgQueueSize];
+
+  nchars = read( rs->pgIn, buf, rs->pgQuerySize - 1);
+  buf[rs->pgQuerySize - 1] = 0;
+  if( nchars <= 0) {
+    fprintf( stderr, "%s: read returned %d, this is probably bad.\n", id, (int)nchars);
+  }
+
+  fprintf( stderr, "%s: read %d bytes.  query: %s\n", id, (int)nchars, buf);
+}
+
+/** perhaps queue a new query and set the fd events send it
+ ** Otherwise do not mess with the fd events
+ **
+ */
+static void lsRedisPGQueryNext( redisState *rs) {
+  char *qs;
+
+  qs = NULL;
+  if( rs->pgReadyForQuery) {
+    if( rs->pgQueueIn != rs->pgQueueOut)
+      qs = rs->pgQueue[ rs->pgQueueOut++ % rs->pgQueueSize];
+
+    if( qs != NULL) {
+      PQsendQuery( rs->q, qs);
+      rs->pgReadyForQuery = 0;
+      rs->pgfd.events = POLLIN | POLLOUT;
+    }
+  }
 }
 
 /** Return a valid redis value state.  Create it as well as the redis
@@ -439,6 +567,12 @@ static long init_record( stringinRecord *prec) {
   rs->subHost      = strdup( dbGetInfo( pdbentry, "redisSubHost"));
   rs->subPort      = strtol( dbGetInfo( pdbentry, "redisSubPort"),   NULL, 0);
   rs->subDb        = strtol( dbGetInfo( pdbentry, "redisSubDb"),     NULL, 0);
+  
+  rs->pgHost       = strdup( dbGetInfo( pdbentry, "pgHost"));
+  rs->pgPort       = strtol( dbGetInfo( pdbentry, "pgPort"),         NULL, 0);
+  rs->pgUser       = strdup( dbGetInfo( pdbentry, "pgUser"));
+  rs->pgDb         = strdup( dbGetInfo( pdbentry, "pgDb"));
+
 
   dbFinishEntry( pdbentry);
 
@@ -449,6 +583,8 @@ static long init_record( stringinRecord *prec) {
     fprintf( stderr, "%s: redis connection initialization failed\n", id);
     return 1;
   }
+
+  connectToPostgres( rs);
 
   fprintf( stderr, "%s: rs %p   rc %p   wc %p   sc %p\n", id, rs, rs->rc, rs->wc, rs->sc);
 
@@ -616,6 +752,52 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
   }
 }
 
+// called from worker
+static void postgresRead( redisState *rs) {
+  int err;
+  PGresult *pgr;
+
+  err = PQconsumeInput( rs->q);
+  if( err == 0) {
+    // TODO: handle the error
+  }
+  if( !PQisBusy( rs->q)) {
+    pgr = PQgetResult( rs->q);
+    if( pgr == NULL) {
+      rs->pgReadyForQuery = 1;
+    } else {
+      // TODO: Surely there is something useful coming back.  Do
+      // something with the responses.
+      //
+      PQclear( pgr);
+      rs->pgReadyForQuery = 0;
+    } 
+  }
+}
+
+// called from worker
+static void postgresWrite( redisState *rs) {
+  int status;
+
+  status = PQflush( rs->q);
+
+  switch( status) {
+  case 1:
+    // There is more to write;
+    rs->pgfd.events = POLLIN | POLLOUT;
+    break;
+    
+  case 0:
+    // There is nothing more to write at this time
+    rs->pgfd.events = POLLIN;
+    break;
+
+  case -1:
+  default:
+    // TODO: Figure out what this really means and handle it
+    rs->pgfd.events = POLLIN;
+  }
+}
 
 /**  Our worker thread.  Handles communication with redis
  **
@@ -623,9 +805,10 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
  **
  */
 static void worker(void *raw) {
+  static char *id = "worker";
   redisState *rs = raw;
   redisValueState *rvs;
-  struct pollfd fds[3];
+  struct pollfd fds[5];
   redisAsyncContext *racs[3]; 
   int pollReturn;
   int i;
@@ -676,6 +859,7 @@ static void worker(void *raw) {
   racs[1] = rs->wc;
   racs[2] = rs->sc;
 
+  fprintf( stderr, "%s: starting event loop\n", id);
 
   while(1) {
     //
@@ -693,11 +877,20 @@ static void worker(void *raw) {
     fds[2].events  = rs->scfd.events;
     fds[2].revents = 0;
 
+    lsRedisPGQueryNext( rs);		// maybe queues the next query
+    fds[3].fd      = rs->pgfd.fd;
+    fds[3].events  = rs->pgfd.events;
+    fds[3].revents = 0;
+
+    fds[4].fd      = rs->pgIn;
+    fds[4].events  = POLLIN;
+    fds[4].revents = 0;
+
     //    epicsMutexUnlock( rs->lock);
     //
     // Wait for as long as it takes
     //
-    pollReturn = poll( fds, 3, -1);
+    pollReturn = poll( fds, 5, -1);
 
     //    epicsMutexMustLock( rs->lock);
     //
@@ -719,6 +912,15 @@ static void worker(void *raw) {
 	    redisAsyncHandleWrite( racs[i]);
       }
     }
+    if( fds[3].revents & POLLIN)
+      postgresRead( rs);
+
+    if( fds[3].revents & POLLOUT)
+      postgresWrite( rs);
+
+    if( fds[4].revents & POLLIN)
+      readQueryService( rs);
+
   }
 }
 

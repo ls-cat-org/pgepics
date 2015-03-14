@@ -11,7 +11,7 @@ dbLoadDatabase("$(TOP)/dbd/redis.dbd",0,0)
 redis_registerRecordDeviceDriver(pdbbase) 
 
 
-dbLoadRecords("$(TOP)/db/redis.db","P=21:orange,S=stns.2,RRH=localhost,RRP=6379,RRDB=0,RWH=orange-2.ls-cat.org,RWP=6379,RWDB=0")
+dbLoadRecords("$(TOP)/db/redis.db","P=21:orange,S=stns.2,RRH=localhost,RRP=6379,RRDB=0,RWH=orange-2.ls-cat.org,RWP=6379,RWDB=0,pgHost=10.1.0.3,pgPort=5432,pgUser=lsuser,pgDb=ls")
 
 
 iocInit()
