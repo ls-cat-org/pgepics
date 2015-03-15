@@ -15,10 +15,13 @@
 #include <hiredis/async.h>
 #include <poll.h>
 #include <stringinRecord.h>
+#include <stringoutRecord.h>
 #include <aiRecord.h>
 #include <aoRecord.h>
 #include <biRecord.h>
+#include <boRecord.h>
 #include <longinRecord.h>
+#include <longoutRecord.h>
 #include <dbStaticLib.h>
 #include <string.h>
 #include <search.h>
@@ -90,16 +93,16 @@ typedef struct redisPollFDDataStruct {
 typedef struct redisValueStateStruct {
   dbCommon    *inputPV;		// the PV that services inputs from redis to epics
   dbCommon    *outputPV;	// the PV that services outputs from epics to redis
-  char        *redisKey;        // Saves a lookup or two
+  const char  *redisKey;        // Saves a lookup or two
   redisState  *rs;		// the redis state that services this variable
   char        *stringVal;	// pointer to the string we need to convert in the record support routine.
   int          nsv;		// Number of characters in stringVal.
+  const char  *setter;		// name of the setter routine.  Currently the choices are "kvset" and "redis"
 				// Allocate more than needed and we'll
 				// need to increase the buffer rarely
   epicsMutexId lock;		// Keep things thread safe
   IOSCANPVT    in_scan;		// So we can request that our record get processed
-  IOSCANPVT    out_scan;	// So we can request that our record get processed
-  char       * redisConnector;
+  const char  *redisConnector;
   int          writeWasPending;	// detect if write pending has changed
   int          writePending;		// 0 if we are not waiting for a write callback, 1 if we are
   int          readPending;
@@ -107,7 +110,7 @@ typedef struct redisValueStateStruct {
 
 typedef struct lsRedisHashDataStruct {
   struct lsRedisHashDataStruct *previous;
-  char *redisKey;	// the key in redis land
+  const char *redisKey;	// the key in redis land
   redisValueState *rvs;	// our private data
 } lsRedisHashData;
 

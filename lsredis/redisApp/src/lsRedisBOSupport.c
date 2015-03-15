@@ -3,7 +3,7 @@
 /**
  ** We need an init routine to support the value records but there is
  ** literally nothing to do.  Except return 0 (meaning everything is
- ** AOK).  So I guess that's something.
+ ** BOK).  So I guess that's something.
  **
  ** Called from main thread
  */
@@ -16,7 +16,7 @@ static long value_init(int phase) {
  **
  ** Called from main thread
  */
-static long value_init_ao_record( aoRecord *prec) {
+static long value_init_bo_record( boRecord *prec) {
   value_init_record( (dbCommon *)prec, 1);
   return 2;
 }
@@ -28,8 +28,8 @@ static long value_init_ao_record( aoRecord *prec) {
  **
  ** Called from main thread
  */
-static long value_write_ao( aoRecord *prec) {
-  //  static char *id = "value_write_ao";
+static long value_write_bo( boRecord *prec) {
+  //  static char *id = "value_write_bo";
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -41,12 +41,12 @@ static long value_write_ao( aoRecord *prec) {
 
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
-    snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
+    snprintf( tmp, sizeof(tmp)-1, "%d", prec->val == 0 ? 0 : 1);
     tmp[sizeof(tmp)-1] = 0;
   }
 
   if( strcmp( rvs->setter, "kvset") == 0) {
-    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%.*f')", rvs->redisKey, prec->prec, prec->val);
+    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, prec->val == 0 ? 0 : 1);
     pgtmp[sizeof(pgtmp)-1] = 0;
   }
   epicsMutexUnlock( rvs->lock);
@@ -64,7 +64,7 @@ static long value_write_ao( aoRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
 
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 1;		// Set back to zero when we see that redis has published our new value
 
     //    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
 
@@ -87,17 +87,15 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  write_ao;
-  DEVSUPFUN  special_linconv;
-} devAoRedisValue = {
-  6, /* space for 6 functions */
+  DEVSUPFUN  write_bo;
+} devBoRedisValue = {
+  5, /* space for 6 functions */
   NULL,
   value_init,
-  value_init_ao_record,
+  value_init_bo_record,
   NULL,
-  value_write_ao,
-  NULL
+  value_write_bo
 };
 
-epicsExportAddress(dset,devAoRedisValue);
+epicsExportAddress(dset,devBoRedisValue);
 

@@ -108,8 +108,6 @@ static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privda
   redisReply *r;
   
   r = reply;
-  //fprintf( stderr, "DB Changed with type %d: '%s'\n", r->type, r->str);
-
   if( r->type == REDIS_REPLY_ERROR) {
     //
     // TODO: at this point our context is unusable, should probably do something about that.
@@ -161,8 +159,6 @@ static int connectToRedis( redisState *rs) {
       break;
     }
     
-    //fprintf( stderr, "connectToRedis: host='%s'  port=%d  db=%d\n", host, port, db);
-
     *c = redisAsyncConnect( host, port);
     if( !(*c) || (*c)->err) {
       fprintf( stderr, "Unsuccessful attempt at creating redis context.\n");
@@ -203,7 +199,6 @@ static void connectToPostgres( redisState *rs) {
   snprintf( tmp, sizeof(tmp)-1, "hostaddr=%s user=%s dbname=%s port=%d", rs->pgHost, rs->pgUser, rs->pgDb, rs->pgPort);
   tmp[sizeof(tmp)-1] = 0;
 
-  fprintf( stderr, "%s: postgres connection string: '%s'\n", id, tmp);
   rs->q = PQconnectStart( tmp);
 
   err   = PQstatus( rs->q);
@@ -223,24 +218,20 @@ static void connectToPostgres( redisState *rs) {
     switch( PQconnectPoll( rs->q)) {
     case PGRES_POLLING_WRITING:
       rs->pgfd.events = POLLOUT;      
-      fprintf( stderr, "%s: pgres writing\n", id);
       break;
       
     case PGRES_POLLING_READING:
       rs->pgfd.events = POLLIN;      
-      fprintf( stderr, "%s: pgres reading\n", id);
       break;
       
     case PGRES_POLLING_OK:
       connecting = 0;
       rs->pgfd.events = POLLIN;
-      fprintf( stderr, "%s: connection to postgresql server established\n", id);
       break;
       
     case PGRES_POLLING_FAILED:
     default:
       rs->pgfd.events = 0;
-      fprintf( stderr, "%s: pgres failed\n", id);
       exit( 1);
       // TODO: initiate recovering the pg connection
       break;
@@ -287,7 +278,7 @@ static void lsRedisMaybeResizeHashTable( redisState *rs) {
     // bigger it's time to repopulate our hash table world.
     //
     for( hd = rs->lastHTEntry; hd != NULL; hd = hd->previous) {
-      hte.key  = hd->redisKey;
+      hte.key  = (char *)hd->redisKey;
       hte.data = hd;
       hsearch_r( hte, ENTER, &htrp, rs->htab);
       if( hd->rvs->outputPV) {
@@ -306,7 +297,7 @@ static void lsRedisMaybeResizeHashTable( redisState *rs) {
  ** Called from main thread.
  **
  */
-static redisState *lsRedisGetRedisState( char *connectorName) {
+static redisState *lsRedisGetRedisState( const char *connectorName) {
   static char *id = "lsRedisgetRedisState";
   redisState **pprs, *rs;
   struct dbAddr rec;
@@ -356,7 +347,6 @@ static redisState *lsRedisGetRedisState( char *connectorName) {
 
     *pprs = rs;
   }
-  //fprintf( stderr, "%s: connectorName '%s'   rs: %p\n", id, connectorName, rs);
   return rs;
 }
 
@@ -393,8 +383,6 @@ static void readQueryService( redisState *rs) {
   if( nchars <= 0) {
     fprintf( stderr, "%s: read returned %d, this is probably bad.\n", id, (int)nchars);
   }
-
-  fprintf( stderr, "%s: read %d bytes.  query: %s\n", id, (int)nchars, buf);
 }
 
 /** perhaps queue a new query and set the fd events send it
@@ -426,7 +414,11 @@ static void lsRedisPGQueryNext( redisState *rs) {
  **
  ** Called from main thread.
  */
-static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char *inputPVName, char *outputPVName) {
+static void lsRedisSetRedisValueState( const char *connectorName,
+				       const char *redisKey,
+				       const char *inputPVName,
+				       const char *outputPVName,
+				       const char *setter) {
   static char *id = "lsRedisGetRedisValueState";
   redisState *rs;
   struct dbAddr rec;
@@ -436,7 +428,6 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
   redisValueState *rvs;
   dbCommon *prec;
 
-  fprintf( stderr, "%s: starting\n", id);
   rs = lsRedisGetRedisState( connectorName);
 
   // Don't go on if we were given nothing to do
@@ -466,7 +457,7 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
 
 
   // See if we already have an entry for this redis key
-  hte.key  = redisKey;
+  hte.key  = (char *)redisKey;
   hte.data = NULL;
   if( !hsearch_r( hte, FIND, &htrp, rs->htab)) {
     //
@@ -477,7 +468,6 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
     //
     // Add a key
     //
-    fprintf( stderr, "%s: adding key '%s'\n", id, redisKey);
     rvs = callocMustSucceed( 1, sizeof( *rvs), id);
     rvs->redisConnector = strdup( connectorName);
     rvs->redisKey  = strdup( redisKey);
@@ -494,7 +484,7 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
     hd->redisKey    = rvs->redisKey;
     hd->rvs         = rvs;
 
-    hte.key         = hd->redisKey;
+    hte.key         = (char *)hd->redisKey;
     hte.data        = hd;
     hsearch_r( hte, ENTER, &htrp, rs->htab);
     rs->nhashes++;
@@ -508,21 +498,18 @@ static void lsRedisSetRedisValueState( char *connectorName, char *redisKey, char
   rvs = hd->rvs;
 
   if( inRecord != NULL) {
-    scanIoInit( &(rvs->in_scan));
+    scanIoInit( &(rvs->in_scan));	// only the in record is I/O Intr
     rvs->inputPV  = inRecord;
     prec = (dbCommon *)inRecord;
     prec->dpvt = rvs;
   }
 
   if( outRecord != NULL) {
-    scanIoInit( &(rvs->out_scan));
+    rvs->setter   = setter;		// only the out record has a setter
     rvs->outputPV = outRecord;
     prec = (dbCommon *)outRecord;
     prec->dpvt = rvs;
   }
-
-  fprintf( stderr, "%s: done  redisKey %s  inPV %s at %p  outPV %s at %p  rs %p  rvs %p\n",
-	   id, redisKey, inputPVName, inRecord, outputPVName, outRecord, rs, rvs);
 
   return;
 }
@@ -588,10 +575,6 @@ static long init_record( stringinRecord *prec) {
   }
 
   connectToPostgres( rs);
-
-  fprintf( stderr, "%s: rs %p   rc %p   wc %p   sc %p\n", id, rs, rs->rc, rs->wc, rs->sc);
-
-  //  findOurRecords( rs);
 
   return 0;
 }
@@ -676,7 +659,7 @@ static redisValueState *redisKeyToRedisValueState( redisState *rs, char *key) {
  */
 static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata) {
   static char *id = "devRedis_setPVCB";
-  redisReply             *r;
+  redisReply  *r;
   redisValueState *rvs;
 
   r = reply;
@@ -693,9 +676,8 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
 
   epicsMutexUnlock(   rvs->lock);
 
-  fprintf( stderr, "%s: rcvd string '%s'\n", id, r->str);
-
-  scanIoRequest( rvs->in_scan);
+  if( rvs->in_scan)
+    scanIoRequest( rvs->in_scan);
 }
 
 /** Service a message comming from the subscription connection
@@ -815,7 +797,7 @@ static void postgresWrite( redisState *rs) {
  **
  */
 static void worker(void *raw) {
-  static char *id = "worker";
+  //  static char *id = "worker";
   redisState *rs = raw;
   redisValueState *rvs;
   struct pollfd fds[5];
@@ -868,8 +850,6 @@ static void worker(void *raw) {
   racs[0] = rs->rc;
   racs[1] = rs->wc;
   racs[2] = rs->sc;
-
-  fprintf( stderr, "%s: starting event loop\n", id);
 
   while(1) {
     //
@@ -1037,8 +1017,9 @@ long value_init_record( dbCommon *prec, int inout) {
   DBENTRY dbentry;
   DBENTRY *pdbentry = &dbentry;
   int status;
-  char *redisConnector;
-  char *redisKey;
+  const char *redisConnector;
+  const char *redisKey;
+  const char *setter;
 
   //
   // Get the extra strings we should have attached through the info mechanism
@@ -1050,15 +1031,18 @@ long value_init_record( dbCommon *prec, int inout) {
     fprintf( stderr, "%s could not find db entry for '%s'\n", id, prec->name);
     return 1;
   }
-  redisConnector  = strdup( dbGetInfo( pdbentry, "redisConnector"));
-  redisKey        = strdup( dbGetInfo( pdbentry, "redisKey"));
-  
+  redisConnector = dbGetInfo( pdbentry, "redisConnector");
+  redisKey       = dbGetInfo( pdbentry, "redisKey");
+  setter         = dbGetInfo( pdbentry, "setter");
+  if( !setter)
+    setter = strdup( "");
+
   //
   // the redis value state is shared between the output and input records
-  if( inout)
-    lsRedisSetRedisValueState( redisConnector, redisKey, NULL, prec->name);
-  else
-    lsRedisSetRedisValueState( redisConnector, redisKey, prec->name, NULL);
-
+  if( inout) {
+    lsRedisSetRedisValueState( redisConnector, redisKey, NULL, prec->name, setter);
+  } else {
+    lsRedisSetRedisValueState( redisConnector, redisKey, prec->name, NULL, setter);
+  }
   return 0;
 }

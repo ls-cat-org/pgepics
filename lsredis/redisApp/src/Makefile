@@ -26,6 +26,8 @@ redis_SRCS += redis_registerRecordDeviceDriver.cpp
 redis_SRCS += devLSRedis.c
 redis_SRCS += lsRedisAISupport.c
 redis_SRCS += lsRedisAOSupport.c
+redis_SRCS += lsRedisBISupport.c
+redis_SRCS += lsRedisBOSupport.c
 
 # Build the main IOC entry point on workstation OSs.
 redis_SRCS_DEFAULT += redisMain.cpp

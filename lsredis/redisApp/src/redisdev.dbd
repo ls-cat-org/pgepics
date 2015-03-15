@@ -1,3 +1,5 @@
 device(stringin,CONSTANT,devStringinRedisConnector,"Redis Connector")
 device(ai,CONSTANT,devAiRedisValue,"Redis Value")
 device(ao,CONSTANT,devAoRedisValue,"Redis Value")
+device(bi,CONSTANT,devBiRedisValue,"Redis Value")
+device(bo,CONSTANT,devBoRedisValue,"Redis Value")
