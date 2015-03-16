@@ -59,6 +59,8 @@ static long ca_read_ai( aiRecord *prec) {
 
   dbGetLink( &prec->inp, DBR_DOUBLE, &ourVal, NULL, NULL);
 
+  prec->val = ourVal;
+  prec->udf = 0;
 
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
@@ -86,18 +88,13 @@ static long ca_read_ai( aiRecord *prec) {
     epicsMutexUnlock(  rvs->rs->lock);
 
     prec->pact = 1;		// Set back to one when we see that redis has published our new value
-
-    //    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
-
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
     lsRedisSendQuery( rvs->rs, pgtmp);
     prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
-
-    //fprintf( stderr, "%s: using kvset to set value of '%s' to '%s'\n", id, rvs->redisKey, pgtmp);
   }
-  return 0;
+  return 2;
 }
 
 

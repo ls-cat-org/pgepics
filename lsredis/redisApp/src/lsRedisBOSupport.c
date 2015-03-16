@@ -3,7 +3,7 @@
 /**
  ** We need an init routine to support the value records but there is
  ** literally nothing to do.  Except return 0 (meaning everything is
- ** BOK).  So I guess that's something.
+ ** AOK).  So I guess that's something.
  **
  ** Called from main thread
  */
@@ -65,16 +65,11 @@ static long value_write_bo( boRecord *prec) {
     epicsMutexUnlock(  rvs->rs->lock);
 
     prec->pact = 1;		// Set back to zero when we see that redis has published our new value
-
-    //    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
-
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
     lsRedisSendQuery( rvs->rs, pgtmp);
     prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
-
-    //fprintf( stderr, "%s: using kvset to set value of '%s' to '%s'\n", id, rvs->redisKey, pgtmp);
   }
   return 0;
 }

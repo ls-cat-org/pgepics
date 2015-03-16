@@ -28,6 +28,10 @@ redis_SRCS += lsRedisAISupport.c
 redis_SRCS += lsRedisAOSupport.c
 redis_SRCS += lsRedisBISupport.c
 redis_SRCS += lsRedisBOSupport.c
+redis_SRCS += lsRedisLonginSupport.c
+redis_SRCS += lsRedisLongoutSupport.c
+redis_SRCS += lsRedisStringinSupport.c
+redis_SRCS += lsRedisStringoutSupport.c
 
 # Build the main IOC entry point on workstation OSs.
 redis_SRCS_DEFAULT += redisMain.cpp

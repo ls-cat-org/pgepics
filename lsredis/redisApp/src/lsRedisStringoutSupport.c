@@ -4,6 +4,8 @@
  ** We need an init routine to support the value records but there is
  ** literally nothing to do.  Except return 0 (meaning everything is
  ** AOK).  So I guess that's something.
+ **
+ ** Called from main thread
  */
 static long value_init(int phase) {
   return 0;
@@ -11,43 +13,23 @@ static long value_init(int phase) {
 
 
 /** Initialize our redis value record
+ **
+ ** Called from main thread
  */
-static long value_init_bi_record( aoRecord *prec) {
-  return value_init_record( (dbCommon *)prec, 0);
+static long value_init_stringout_record( stringoutRecord *prec) {
+  value_init_record( (dbCommon *)prec, 1);
+  return 2;
 }
 
-/** Tell epics we like i/o intr so much we are willing to tell it how.
- */
-static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
-  redisValueState* rvs;
-
-  rvs = prec->dpvt;
-  *io = rvs->in_scan;
-  return 0;
-}
 
 
 /** Copy the value that the redis worker gave us and take all the
  ** credit
- */
-static long value_read_bi( biRecord *prec) {
-  redisValueState *rvs;
-  rvs = prec->dpvt;
-
-  epicsMutexMustLock( rvs->lock);
-  prec->val = strtol( rvs->stringVal, NULL, 0) == 0 ? 0 : 1;
-  prec->udf = 0;
-  epicsMutexUnlock( rvs->lock);
-
-  return 2;
-}
-
-/** Send our value to redis
  **
+ ** Called from main thread
  */
-static long ca_read_bi( biRecord *prec) {
-  //  static char *id = "ca_read_bi";
-  epicsInt8 ourVal;
+static long value_write_stringout( stringoutRecord *prec) {
+  static char *id = "value_write_stringout";
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -57,20 +39,24 @@ static long ca_read_bi( biRecord *prec) {
   if( rvs == NULL)
     return 1;
 
-  dbGetLink( &prec->inp, DBR_CHAR, &ourVal, NULL, NULL);
+  //
+  // TODO: remove the need for the following SQL injection trap:
+  //
+  if( rvs->setter && strcmp( rvs->setter, "kvset")==0 && strchr( prec->val, '\'') != NULL) {
+    fprintf( stderr, "%s: TODO: use prepared statements so we can process strings like this: %s\n", id, prec->val);
+    return 0;
+  }
 
-
-  prec->val = ourVal == 0 ? 0 : 1;
-  prec->udf = 0;
-
+  //
+  //
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
-    snprintf( tmp, sizeof(tmp)-1, "%d", ourVal == 0 ? 0 : 1);
+    snprintf( tmp, sizeof(tmp)-1, "%s", prec->val);
     tmp[sizeof(tmp)-1] = 0;
   }
 
   if( strcmp( rvs->setter, "kvset") == 0) {
-    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal == 0 ? 0 : 1);
+    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%s')", rvs->redisKey, prec->val);
     pgtmp[sizeof(pgtmp)-1] = 0;
   }
   epicsMutexUnlock( rvs->lock);
@@ -88,16 +74,15 @@ static long ca_read_bi( biRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
 
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 1;		// Set back to zero when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
     lsRedisSendQuery( rvs->rs, pgtmp);
     prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
   }
-  return 2;
+  return 0;
 }
-
 
 /** Interface to the IOC code that calls us
  */
@@ -107,33 +92,15 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_bi;
-} devBiRedisSource = {
+  DEVSUPFUN  write_stringout;
+} devStringoutRedisSource = {
   5, /* space for 6 functions */
   NULL,
   value_init,
-  value_init_bi_record,
-  value_get_ioint_info,
-  value_read_bi
-};
-
-epicsExportAddress(dset,devBiRedisSource);
-
-struct {
-  long num;
-  DEVSUPFUN  report;
-  DEVSUPFUN  init;
-  DEVSUPFUN  init_record;
-  DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_bi;
-} devBiCASource = {
-  5, /* space for 6 functions */
+  value_init_stringout_record,
   NULL,
-  value_init,
-  value_init_bi_record,
-  value_get_ioint_info,
-  ca_read_bi
+  value_write_stringout
 };
 
-epicsExportAddress(dset,devBiCASource);
+epicsExportAddress( dset, devStringoutRedisSource);
 

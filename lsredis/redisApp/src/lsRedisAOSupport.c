@@ -29,7 +29,7 @@ static long value_init_ao_record( aoRecord *prec) {
  ** Called from main thread
  */
 static long value_write_ao( aoRecord *prec) {
-  static char *id = "value_write_ao";
+  //  static char *id = "value_write_ao";
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -41,7 +41,6 @@ static long value_write_ao( aoRecord *prec) {
   if( rvs == NULL)
     return 1;
 
-  fprintf( stderr, "%s: Here I am with record '%s' and setter '%s'\n", id, prec->name, rvs->setter);
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
     snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
@@ -68,16 +67,11 @@ static long value_write_ao( aoRecord *prec) {
     epicsMutexUnlock(  rvs->rs->lock);
 
     prec->pact = 1;		// Set back to one when we see that redis has published our new value
-
-    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
-
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
     lsRedisSendQuery( rvs->rs, pgtmp);
     prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
-
-    fprintf( stderr, "%s: using kvset to set value of '%s' to '%s'\n", id, rvs->redisKey, pgtmp);
   }
   return 0;
 }

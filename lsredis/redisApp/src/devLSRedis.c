@@ -80,8 +80,9 @@ void devRedis_delWrite( void *data) {
   }
 }
 
-/** hook to clean up hiredis socket events
- ** TODO: figure out what we are supposed to do here and do it
+/** Hook to clean up hiredis socket events. Called by hiredis at the
+ ** tail end of closing up shop.  This is where we should be freeing
+ ** up any memory that we have allocated.
  **
  ** Called from worker thread **
  */
@@ -92,11 +93,9 @@ void devRedis_cleanup( void *data) {
   prsfd = (redisPollFDData *)data;
   pfd = prsfd->ppfd;
 
-  pfd->fd = -1;
+  pfd->fd     = -1;
+  pfd->events = 0;
 
-  if( (pfd->events & (POLLOUT | POLLIN)) != 0) {
-    pfd->events &= ~(POLLOUT | POLLIN);
-  }
 }
 
 /** Report when we've chaged databases
@@ -337,7 +336,7 @@ static redisState *lsRedisGetRedisState( const char *connectorName) {
     rs->pgIn  = sv[0];
     rs->pgOut = sv[1];
     rs->pgQueueSize = sizeof( rs->pgQueue)/sizeof( *rs->pgQueue);
-    rs->pgQuerySize = 64;
+    rs->pgQuerySize = 256;
     for( i=0; i < rs->pgQueueSize; i++) {
       rs->pgQueue[i] = callocMustSucceed( rs->pgQuerySize, sizeof( char), id);
     }
@@ -390,7 +389,7 @@ static void readQueryService( redisState *rs) {
  **
  */
 static void lsRedisPGQueryNext( redisState *rs) {
-  //  static char *id = "lsRedisPGQueryNext";
+  static char *id = "lsRedisPGQueryNext";
   char *qs;
 
   qs = NULL;
@@ -400,6 +399,7 @@ static void lsRedisPGQueryNext( redisState *rs) {
 
       if( qs != NULL) {
 	PQsendQuery( rs->q, qs);
+	fprintf( stderr, "%s: sending query %s\n", id, qs);
 	rs->pgReadyForQuery = 0;
 	rs->pgfd.events = POLLIN | POLLOUT;	// enable sending the query
       }
@@ -753,11 +753,9 @@ static void postgresRead( redisState *rs) {
   while( !PQisBusy( rs->q)) {
     pgr = PQgetResult( rs->q);
     if( pgr == NULL) {
-      fprintf( stderr, "%s: Ready for next query\n", id);
       rs->pgReadyForQuery = 1;
       break;
     } else {
-      fprintf( stderr, "%s: Received response\n", id);
       // TODO: Surely there is something useful coming back.  Do
       // something with the responses.
       //

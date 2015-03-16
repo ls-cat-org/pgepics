@@ -12,7 +12,7 @@ static long value_init(int phase) {
 
 /** Initialize our redis value record
  */
-static long value_init_bi_record( aoRecord *prec) {
+static long value_init_longin_record( aoRecord *prec) {
   return value_init_record( (dbCommon *)prec, 0);
 }
 
@@ -30,12 +30,12 @@ static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
 /** Copy the value that the redis worker gave us and take all the
  ** credit
  */
-static long value_read_bi( biRecord *prec) {
+static long value_read_longin( longinRecord *prec) {
   redisValueState *rvs;
   rvs = prec->dpvt;
 
   epicsMutexMustLock( rvs->lock);
-  prec->val = strtol( rvs->stringVal, NULL, 0) == 0 ? 0 : 1;
+  prec->val = strtol( rvs->stringVal, NULL, 0);
   prec->udf = 0;
   epicsMutexUnlock( rvs->lock);
 
@@ -45,32 +45,31 @@ static long value_read_bi( biRecord *prec) {
 /** Send our value to redis
  **
  */
-static long ca_read_bi( biRecord *prec) {
-  //  static char *id = "ca_read_bi";
-  epicsInt8 ourVal;
+static long ca_read_longin( longinRecord *prec) {
+  //  static char *id = "ca_read_longin";
+  epicsInt32 ourVal;
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
 
   rvs = prec->dpvt;
-
   if( rvs == NULL)
     return 1;
 
-  dbGetLink( &prec->inp, DBR_CHAR, &ourVal, NULL, NULL);
+  dbGetLink( &prec->inp, DBR_LONG, &ourVal, NULL, NULL);
 
 
-  prec->val = ourVal == 0 ? 0 : 1;
+  prec->val = ourVal;
   prec->udf = 0;
 
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
-    snprintf( tmp, sizeof(tmp)-1, "%d", ourVal == 0 ? 0 : 1);
+    snprintf( tmp, sizeof(tmp)-1, "%d", ourVal);
     tmp[sizeof(tmp)-1] = 0;
   }
 
   if( strcmp( rvs->setter, "kvset") == 0) {
-    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal == 0 ? 0 : 1);
+    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal);
     pgtmp[sizeof(pgtmp)-1] = 0;
   }
   epicsMutexUnlock( rvs->lock);
@@ -107,17 +106,17 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_bi;
-} devBiRedisSource = {
+  DEVSUPFUN  read_longin;
+} devLonginRedisSource = {
   5, /* space for 6 functions */
   NULL,
   value_init,
-  value_init_bi_record,
+  value_init_longin_record,
   value_get_ioint_info,
-  value_read_bi
+  value_read_longin
 };
 
-epicsExportAddress(dset,devBiRedisSource);
+epicsExportAddress(dset,devLonginRedisSource);
 
 struct {
   long num;
@@ -125,15 +124,15 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_bi;
-} devBiCASource = {
+  DEVSUPFUN  read_longin;
+} devLonginCASource = {
   5, /* space for 6 functions */
   NULL,
   value_init,
-  value_init_bi_record,
+  value_init_longin_record,
   value_get_ioint_info,
-  ca_read_bi
+  ca_read_longin
 };
 
-epicsExportAddress(dset,devBiCASource);
+epicsExportAddress(dset,devLonginCASource);
 
