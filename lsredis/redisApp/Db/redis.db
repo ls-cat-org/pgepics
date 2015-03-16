@@ -573,3 +573,562 @@ record( bi,              "$(P):smartMagnet:position"){
   info(  redisKey,       "$(S).smartMagnet.position")
   info(  redisConnector, "$(P)")
 }
+record( bi, "$(P):capDetected") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value to Redis")
+  field( INP,            "21:ECAMS:Edge1:VerticalFound")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).capDetected")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ai, "$(P):detector:dist") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value to Redis")
+  field( INP,       "21:E1:DT:Z0:ActPos")     
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).detector.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ai, "$(P):table:y:position") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value to Redis")
+  field( INP,		"21:E1:TB:H:ActPos")      
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).table.y.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ai, "$(P):table:x:position") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value to Redis")
+  field( INP,		 "21:E1:TB:L:ActPos")      
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).table.x.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+
+record( bi, "$(P):pss:bleps_fe_shutter_permit") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "EPS:21:ID:BLEPS:SPER")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.bleps_fe_shutter_permit")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:bleps_fe_vacuum_permit") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "EPS:21:ID:BLEPS:VACPER")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.bleps_fe_vacuum_permit")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:bleps_station_permit") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PC:21ID:SES_BLEPS_PERMIT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.bleps_station_permit")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:acis_permit") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:ACIS_FES_PERMIT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.acis_permit")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:global_online") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:ACIS_GLOBAL_ONLINE")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.global_online")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_enabled") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_APS_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_enabled")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_door_1_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_door_1_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_door_2_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_DOOR_2_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_door_2_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_searched") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_SEARCHED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_searched")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_user_key") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_USER_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_user_key")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_searching") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_VOICE_SEARCHING")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_searching")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_enabled") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_APS_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_enabled")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_door_1_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_door_1_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_door_2_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_DOOR_2_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_door_2_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_searched") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_SEARCHED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_searched")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_enabled") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_USER_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_enabled")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_searching") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_VOICE_SEARCHING")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_searching")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_enabled") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_APS_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_enabled")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_door_1_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_door_1_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_searched") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_SEARCHED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_searched")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_user_key") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_USER_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_user_key")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_searching") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_VOICE_SEARCHING")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_searching")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:di_water_flow1_trip") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:DIW_FLOW_1_LOW_SPT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.di_water_flow1_trip")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:di_water_flow2_trip") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:DIW_FLOW_2_LOW_SPT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.di_water_flow2_trip")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:di_water_flow3_trip") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:DIW_FLOW_3_LOW_SPT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.di_water_flow3_trip")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:di_water_flow4_trip") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:DIW_FLOW_4_LOW_SPT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.di_water_flow4_trip")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:e_enabled") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_APS_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.e_enabled")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:e_door_1_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.e_door_1_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:e_door_2_a") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_DOOR_2_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.e_door_2_a")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:e_searched") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_SEARCHED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.e_searched")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:e_user_key") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_USER_KEY")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.e_user_key")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:e_searching") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_VOICE_SEARCHING")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.e_searching")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:chain_a_fault") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:FAULT_EXISTS")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.chain_a_fault")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:fe_shutter") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:FES_BLOCKING_BEAM")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.fe_shutter")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:stn_shutter") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:SES_BLOCKING_BEAM")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.stn_shutter")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:chain_a_trip") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:TRIP_EXISTS")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.chain_a_trip")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_door_1_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:A_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_door_1_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_door_2_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:A_DOOR_2_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_door_2_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_door_1_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:B_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_door_1_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_door_2_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:B_DOOR_2_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_door_2_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_door_1_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:C_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_door_1_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:door_1_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:E_DOOR_1_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.door_1_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:door_2_b") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:E_DOOR_2_CLOSED")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.door_2_b")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:chain_b_fault") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:FAULT_EXISTS")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.chain_b_fault")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:chain_b_trip") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PB:21ID:TRIP_EXISTS")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.chain_b_trip")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_beam_present") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_BEAM_PRESENT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_beam_present")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_beam_present") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_BEAM_PRESENT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_beam_present")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_beam_present") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_BEAM_PRESENT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_beam_present")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:beam_present") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_BEAM_PRESENT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.beam_present")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:fe_eps") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PC:21ID:FEEPS_FES_PERMIT")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.fe_eps")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:a_crash_button_1") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:A_CRASH_BUTTON_1")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.a_crash_button_1")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_crash_button_1") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_CRASH_BUTTON_1")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_crash_button_1")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:b_crash_button_2") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:B_CRASH_BUTTON_2")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.b_crash_button_2")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_crash_button_1") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_CRASH_BUTTON_1")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_crash_button_1")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:c_crash_button_2") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:C_CRASH_BUTTON_2")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.c_crash_button_2")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:crash_button_1") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_CRASH_BUTTON_1")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.crash_button_1")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:crash_button_2") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_CRASH_BUTTON_2")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.crash_button_2")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
+record( bi, "$(P):pss:crash_button_3") {
+  field( DTYP,                "CA Source")
+  field( DESC,                "Value to Redis")
+  field( INP,                 "PA:21ID:E_CRASH_BUTTON_3")
+  field( SCAN,                "Passive")
+  info(  redisKey,            "$(S).pss.crash_button_3")
+  info(  redisConnector,      "$(P)")
+  info(  setter,              "redis")
+}
