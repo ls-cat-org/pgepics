@@ -18,8 +18,8 @@ record(stringin,"$(P)"){
   info( pgUser,        "$(pgUser)")
   info( pgDb,          "$(pgDb)")
 }
-record( ao, "$(P):omega:position"){
-  field( DTYP,           "Redis Value")
+record(  ao,             "$(P):omega:position"){
+  field( DTYP,           "Redis Source")
   field( DESC,           "Value to Redis")
   field( SCAN,           "Passive")
   field( LINR,           "NO CONVERSION")
@@ -28,42 +28,43 @@ record( ao, "$(P):omega:position"){
   info(  setter,         "kvset")
 }
 record( ai,              "$(P):omega:position_RBV"){
-  field( DTYP,           "Redis Value")
+  field( DTYP,           "Redis Source")
   field( DESC,           "Value from Redis")
   field( SCAN,           "I/O Intr")
   field( LINR,           "NO CONVERSION")
   info(  redisKey,       "$(S).omega.position")
   info(  redisConnector, "$(P)")
 }
-record( ao, "$(P):current"){
-  field( DTYP,           "Redis Value")
+record( ai, "$(P):current"){
+  field( DTYP,           "CA Source")
   field( DESC,           "Value to Redis")
+  field( INP,            "S:SRcurrentAI CP")
   field( SCAN,           "Passive")
   field( LINR,           "NO CONVERSION")
   info(  redisKey,       "$(S).current")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
-record( bo, "$(P):backLight:position"){
-  field( DTYP,           "Redis Value")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  info(  redisKey,       "$(S).backLight.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):backLight:position_RBV"){
-  field( DTYP,           "Redis Value")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  info(  redisKey,       "$(S).backLight.position")
-  info(  redisConnector, "$(P)")
-}
-record( bo, "$(P):pss:e_enabled"){
-  field( DTYP,           "Redis Value")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  info(  redisKey,       "$(S).pss.e_enabled")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "redis")
-}
+#record( bo, "$(P):backLight:position"){
+#  field( DTYP,           "Redis Source")
+#  field( DESC,           "Value to Redis")
+#  field( SCAN,           "Passive")
+#  info(  redisKey,       "$(S).backLight.position")
+#  info(  redisConnector, "$(P)")
+#  info(  setter,         "kvset")
+#}
+#record( bi,              "$(P):backLight:position_RBV"){
+#  field( DTYP,           "Redis Source")
+#  field( DESC,           "Value from Redis")
+#  field( SCAN,           "I/O Intr")
+#  info(  redisKey,       "$(S).backLight.position")
+#  info(  redisConnector, "$(P)")
+#}
+#record( bo, "$(P):pss:e_enabled"){
+#  field( DTYP,           "Epics Source")
+#  field( DESC,           "Value to Redis")
+#  field( SCAN,           "Passive")
+#  info(  redisKey,       "$(S).pss.e_enabled")
+#  info(  redisConnector, "$(P)")
+#  info(  setter,         "redis")
+#}

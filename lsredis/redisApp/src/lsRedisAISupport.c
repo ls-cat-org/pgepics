@@ -42,6 +42,65 @@ static long value_read_ai( aiRecord *prec) {
   return 2;
 }
 
+/** Send our value to redis
+ **
+ */
+static long ca_read_ai( aiRecord *prec) {
+  //  static char *id = "ca_read_ai";
+  double ourVal;
+  char tmp[128];
+  char pgtmp[128];
+  redisValueState *rvs;
+
+  rvs = prec->dpvt;
+
+  if( rvs == NULL)
+    return 1;
+
+  dbGetLink( &prec->inp, DBR_DOUBLE, &ourVal, NULL, NULL);
+
+
+  epicsMutexMustLock( rvs->lock);
+  if( strcmp( rvs->setter, "redis") == 0) {
+    snprintf( tmp, sizeof(tmp)-1, "%f", ourVal);
+    tmp[sizeof(tmp)-1] = 0;
+  }
+
+  if( strcmp( rvs->setter, "kvset") == 0) {
+    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%f')", rvs->redisKey, prec->val);
+    pgtmp[sizeof(pgtmp)-1] = 0;
+  }
+  epicsMutexUnlock( rvs->lock);
+
+  //
+  // Redis Acync callbacks not needed here because our subscriber
+  // process will pick up the publication notice and mark this record
+  // as no longer being active by setting pact = 0.
+  //
+  if( strcmp( rvs->setter, "redis") == 0) {
+    epicsMutexMustLock(rvs->rs->lock);
+    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "MULTI");
+    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "HSET %s VALUE %s", rvs->redisKey, tmp);
+    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
+    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
+    epicsMutexUnlock(  rvs->rs->lock);
+
+    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+
+    //    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
+
+  }
+  
+  if( strcmp( rvs->setter, "kvset") == 0) {
+    lsRedisSendQuery( rvs->rs, pgtmp);
+    prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
+
+    //fprintf( stderr, "%s: using kvset to set value of '%s' to '%s'\n", id, rvs->redisKey, pgtmp);
+  }
+  return 0;
+}
+
+
 /** Interface to the IOC code that calls us
  */
 struct {
@@ -52,7 +111,7 @@ struct {
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  read_ai;
   DEVSUPFUN  special_linconv;
-} devAiRedisValue = {
+} devAiRedisSource = {
   6, /* space for 6 functions */
   NULL,
   value_init,
@@ -62,5 +121,25 @@ struct {
   NULL
 };
 
-epicsExportAddress(dset,devAiRedisValue);
+epicsExportAddress(dset,devAiRedisSource);
+
+struct {
+  long num;
+  DEVSUPFUN  report;
+  DEVSUPFUN  init;
+  DEVSUPFUN  init_record;
+  DEVSUPFUN  get_ioint_info;
+  DEVSUPFUN  read_ai;
+  DEVSUPFUN  special_linconv;
+} devAiCASource = {
+  6, /* space for 6 functions */
+  NULL,
+  value_init,
+  value_init_ai_record,
+  value_get_ioint_info,
+  ca_read_ai,
+  NULL
+};
+
+epicsExportAddress(dset,devAiCASource);
 

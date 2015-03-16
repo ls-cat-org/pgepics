@@ -51,7 +51,7 @@ struct {
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  read_bi;
-} devBiRedisValue = {
+} devBiRedisSource = {
   5, /* space for 6 functions */
   NULL,
   value_init,
@@ -60,5 +60,5 @@ struct {
   value_read_bi
 };
 
-epicsExportAddress(dset,devBiRedisValue);
+epicsExportAddress( dset, devBiRedisSource);
 

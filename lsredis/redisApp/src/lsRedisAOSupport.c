@@ -29,16 +29,19 @@ static long value_init_ao_record( aoRecord *prec) {
  ** Called from main thread
  */
 static long value_write_ao( aoRecord *prec) {
-  //  static char *id = "value_write_ao";
+  static char *id = "value_write_ao";
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
 
   rvs = prec->dpvt;
 
+
+
   if( rvs == NULL)
     return 1;
 
+  fprintf( stderr, "%s: Here I am with record '%s' and setter '%s'\n", id, prec->name, rvs->setter);
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
     snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
@@ -66,7 +69,7 @@ static long value_write_ao( aoRecord *prec) {
 
     prec->pact = 1;		// Set back to one when we see that redis has published our new value
 
-    //    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
+    fprintf( stderr, "%s: using redis to set value of '%s' to '%s'\n", id, rvs->redisKey, tmp);
 
   }
   
@@ -74,7 +77,7 @@ static long value_write_ao( aoRecord *prec) {
     lsRedisSendQuery( rvs->rs, pgtmp);
     prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
 
-    //fprintf( stderr, "%s: using kvset to set value of '%s' to '%s'\n", id, rvs->redisKey, pgtmp);
+    fprintf( stderr, "%s: using kvset to set value of '%s' to '%s'\n", id, rvs->redisKey, pgtmp);
   }
   return 0;
 }
@@ -89,7 +92,7 @@ struct {
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  write_ao;
   DEVSUPFUN  special_linconv;
-} devAoRedisValue = {
+} devAoRedisSource = {
   6, /* space for 6 functions */
   NULL,
   value_init,
@@ -99,5 +102,5 @@ struct {
   NULL
 };
 
-epicsExportAddress(dset,devAoRedisValue);
+epicsExportAddress(dset,devAoRedisSource);
 

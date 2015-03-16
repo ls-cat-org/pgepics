@@ -497,6 +497,9 @@ static void lsRedisSetRedisValueState( const char *connectorName,
   hd  = htrp->data;
   rvs = hd->rvs;
 
+  if( setter)
+    rvs->setter = setter;
+
   if( inRecord != NULL) {
     scanIoInit( &(rvs->in_scan));	// only the in record is I/O Intr
     rvs->inputPV  = inRecord;
@@ -505,7 +508,6 @@ static void lsRedisSetRedisValueState( const char *connectorName,
   }
 
   if( outRecord != NULL) {
-    rvs->setter   = setter;		// only the out record has a setter
     rvs->outputPV = outRecord;
     prec = (dbCommon *)outRecord;
     prec->dpvt = rvs;
@@ -818,7 +820,7 @@ static void worker(void *raw) {
   for( status = dbFirstRecordType(pdbentry); !status; status = dbNextRecordType(pdbentry)) {
     for( status = dbFirstRecord( pdbentry); !status; status = dbNextRecord( pdbentry)) {
       dbFindField( pdbentry, "DTYP");
-      if( dbFoundField( pdbentry) && strcmp(dbGetString( pdbentry),"Redis Value")==0) {
+      if( dbFoundField( pdbentry) && strcmp(dbGetString( pdbentry),"Redis Source")==0) {
 	dbFindField( pdbentry, "DPVT");
 	if( dbFoundField( pdbentry)) {
 	  rvs = ((aiRecord *)(pdbentry->precnode->precord))->dpvt;
@@ -978,7 +980,11 @@ static long read_stringin( stringinRecord *prec) {
     //
     // get epics to do some work
     //
-    rvs->outputPV->pact = 0;		// Allow the record to get processed later.
+    if( rvs->outputPV)
+      rvs->outputPV->pact = 0;		// Allow the record to get processed later.
+
+    if( rvs->inputPV)
+      rvs->inputPV->pact  = 0;
   }
   epicsMutexUnlock( rs->queueLock);
   return 0;

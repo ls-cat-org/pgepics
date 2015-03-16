@@ -88,7 +88,7 @@ struct {
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  write_bo;
-} devBoRedisValue = {
+} devBoRedisSource = {
   5, /* space for 6 functions */
   NULL,
   value_init,
@@ -97,5 +97,5 @@ struct {
   value_write_bo
 };
 
-epicsExportAddress(dset,devBoRedisValue);
+epicsExportAddress( dset, devBoRedisSource);
 
