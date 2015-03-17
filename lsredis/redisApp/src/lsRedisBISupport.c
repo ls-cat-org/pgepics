@@ -46,7 +46,7 @@ static long value_read_bi( biRecord *prec) {
  **
  */
 static long ca_read_bi( biRecord *prec) {
-  //  static char *id = "ca_read_bi";
+  static char *id = "ca_read_bi";
   epicsInt8 ourVal;
   char tmp[128];
   char pgtmp[128];
@@ -54,8 +54,11 @@ static long ca_read_bi( biRecord *prec) {
 
   rvs = prec->dpvt;
 
-  if( rvs == NULL)
+
+  if( rvs == NULL) {
+    fprintf( stderr, "%s: PV %s   with missing rvs(!) \n", id, prec->name);
     return 1;
+  }
 
   dbGetLink( &prec->inp, DBR_CHAR, &ourVal, NULL, NULL);
 

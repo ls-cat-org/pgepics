@@ -497,7 +497,7 @@ static void lsRedisSetRedisValueState( const char *connectorName,
   hd  = htrp->data;
   rvs = hd->rvs;
 
-  if( setter)
+  if( setter && (rvs->setter == NULL || rvs->setter[0] == 0))
     rvs->setter = setter;
 
   if( inRecord != NULL) {
