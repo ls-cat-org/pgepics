@@ -10,7 +10,7 @@ configList = {
     "stns.1" : {
         "stn": 1,
         "rconnect": {
-            "host": "vidalia.ls-cat.org",
+            "host": "mung-2.ls-cat.org",
             "port": 6379,
             "db":   0
             },
@@ -88,7 +88,7 @@ configList = {
     "stns.2" : {
         "stn": 2,
         "rconnect": {
-            "host": "venison.ls-cat.org",
+            "host": "orange-2.ls-cat.org",
             "port": 6379,
             "db":   0
             },
@@ -163,7 +163,7 @@ configList = {
     "stns.3" : {
         "stn": 3,
         "rconnect": {
-            "host": "vanilla.ls-cat.org",
+            "host": "kiwi-2.ls-cat.org",
             "port": 6379,
             "db":   0
             },
@@ -241,7 +241,7 @@ configList = {
     "stns.4" : {
         "stns": 4,
         "rconnect": {
-            "host": "vinegar.ls-cat.org",
+            "host": "mango-2.ls-cat.org",
             "port": 6379,
             "db":   0
             },
