@@ -42,7 +42,7 @@ record( ai, "$(P):current"){
   field( INP,            "S:SRcurrentAI CP")
   field( SCAN,           "Passive")
   field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
+  field( PREC,           "1")
   info(  redisKey,       "$(S).current")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
@@ -585,16 +585,17 @@ record( bi, "$(P):capDetected") {
   info(  setter,         "redis")
 }
 record( ai, "$(P):detector:dist") {
-  field( DTYP,           "Redis Source")
+  field( DTYP,           "CA Source")
   field( DESC,           "Value to Redis")
   field( INP,		 "21:E1:DT:Z0:ActPos CP")     
   field( SCAN,           "Passive")
+  field( PREC,           "1")
   info(  redisKey,       "$(S).detector.dist")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
 record( ai, "$(P):table:y:position") {
-  field( DTYP,           "Redis Source")
+  field( DTYP,           "CA Source")
   field( DESC,           "Value to Redis")
   field( INP,		"21:E1:TB:H:ActPos CP")      
   field( SCAN,           "Passive")
@@ -603,7 +604,7 @@ record( ai, "$(P):table:y:position") {
   info(  setter,         "redis")
 }
 record( ai, "$(P):table:x:position") {
-  field( DTYP,           "Redis Source")
+  field( DTYP,           "CA Source")
   field( DESC,           "Value to Redis")
   field( INP,		 "21:E1:TB:L:ActPos CP")
   field( SCAN,           "Passive")

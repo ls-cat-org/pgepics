@@ -43,8 +43,10 @@ typedef struct redisStateStruct {
   int hashTableSize;
   int nhashes;
   struct lsRedisHashDataStruct *lastHTEntry;	// Hash table entries are also in a linked list so the HT can be resized.
-  char *basePVName;
-  char *redisKeyBase;
+  int notifyIn;			// This is what the worker listens to to see if hiredis waits us to look at its state
+  int notifyOut;		// Socket to tell us when the hiredis state has possibly changed
+  char *basePVName;		// Our related PV's start with this. Not currently used as the clients use "redisConnector" in their own state structure
+  char *redisKeyBase;		// Our redis world key base for our variables (Not currently used)
   epicsMutexId lock;
   IOSCANPVT scan;
   epicsThreadId generator;
@@ -59,8 +61,8 @@ typedef struct redisStateStruct {
   char *pgQueue[64];		// our query queue
   int   pgQuerySize;		// Our fixed length query string size
   int   pgQueueSize;
-  unsigned int   pgQueueIn;
-  unsigned int   pgQueueOut;
+  unsigned int   pgQueueIn;	// Worker listens for queries on this socket
+  unsigned int   pgQueueOut;	// Main thread sends queries here
   int   pgReadyForQuery;	// flag to indicate we can send off another query
   char *readHost;		// redis host for read requests
   int   readPort;		// redis port on redis host for read requests

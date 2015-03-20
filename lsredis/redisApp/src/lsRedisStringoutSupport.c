@@ -73,6 +73,8 @@ static long value_write_stringout( stringoutRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
+    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+      fprintf( stderr, "%s: unexpected response from notifyOut\n", id);
 
     prec->pact = 1;		// Set back to zero when we see that redis has published our new value
   }

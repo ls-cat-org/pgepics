@@ -61,19 +61,22 @@ static long ca_read_bi( biRecord *prec) {
   }
 
   dbGetLink( &prec->inp, DBR_CHAR, &ourVal, NULL, NULL);
+  ourVal = ourVal == 0 ? 0 : 1;
 
+  if( !prec->udf && prec->val == ourVal)
+    return 2;
 
-  prec->val = ourVal == 0 ? 0 : 1;
+  prec->val = ourVal;
   prec->udf = 0;
 
   epicsMutexMustLock( rvs->lock);
   if( strcmp( rvs->setter, "redis") == 0) {
-    snprintf( tmp, sizeof(tmp)-1, "%d", ourVal == 0 ? 0 : 1);
+    snprintf( tmp, sizeof(tmp)-1, "%d", ourVal);
     tmp[sizeof(tmp)-1] = 0;
   }
 
   if( strcmp( rvs->setter, "kvset") == 0) {
-    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal == 0 ? 0 : 1);
+    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal);
     pgtmp[sizeof(pgtmp)-1] = 0;
   }
   epicsMutexUnlock( rvs->lock);
@@ -90,8 +93,11 @@ static long ca_read_bi( biRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
+    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+      fprintf( stderr, "%s: unexpected response from notifyOut. This is probably bad\n", id);
 
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    // TODO: see note for AI support
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

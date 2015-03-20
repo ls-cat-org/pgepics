@@ -46,7 +46,7 @@ static long value_read_longin( longinRecord *prec) {
  **
  */
 static long ca_read_longin( longinRecord *prec) {
-  //  static char *id = "ca_read_longin";
+  static char *id = "ca_read_longin";
   epicsInt32 ourVal;
   char tmp[128];
   char pgtmp[128];
@@ -58,6 +58,8 @@ static long ca_read_longin( longinRecord *prec) {
 
   dbGetLink( &prec->inp, DBR_LONG, &ourVal, NULL, NULL);
 
+  if( !prec->udf && prec->val == ourVal)
+    return 2;
 
   prec->val = ourVal;
   prec->udf = 0;
@@ -86,8 +88,11 @@ static long ca_read_longin( longinRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
+    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+      fprintf( stderr, "%s: unexpected response from notifyOut\n", id);
 
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    // TODO: see note for AI support
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

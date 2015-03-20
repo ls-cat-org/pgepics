@@ -317,6 +317,12 @@ static redisState *lsRedisGetRedisState( const char *connectorName) {
   if( rs == NULL) {
     rs = callocMustSucceed( 1, sizeof( *rs), id);
     rs->htab = callocMustSucceed( 1, sizeof( struct hsearch_data), id);
+    if( -1 == socketpair( AF_LOCAL, SOCK_STREAM | SOCK_NONBLOCK, 0, sv)) {
+      fprintf( stderr, "%s: socketpair creation failed\n", id);
+      exit( 1);
+    }
+    rs->notifyIn      = sv[0];
+    rs->notifyOut     = sv[1];
     rs->hashTableSize = 4096;
     rs->nhashes       = 0;
     rs->lastHTEntry   = NULL;
@@ -670,7 +676,8 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
   epicsMutexMustLock( rvs->lock);
   if( rvs->nsv < strlen( r->str)-1) {
     rvs->nsv = strlen( r->str) + 32;
-    free( rvs->stringVal);
+    if( rvs->stringVal)
+      free( rvs->stringVal);
     rvs->stringVal = callocMustSucceed( rvs->nsv, sizeof( char), id);
   }
   strncpy( rvs->stringVal, r->str, rvs->nsv - 1);
@@ -791,6 +798,19 @@ static void postgresWrite( redisState *rs) {
   }
 }
 
+// Service the signal that hiredis may have changed state We currently
+// do nothing with whatever is sent.  We are only sent 1 character for
+// each request and other routines are responsible for the state.  If
+// we somehow do not read all the input then we get it next time
+// around.
+static void lsRedisService( redisState *rs) {
+  static char *id = "lsRedisService";
+  char dummy[128];
+
+  if( 0 >= read( rs->notifyIn, dummy, sizeof( dummy)))
+    fprintf( stderr, "%s: error reading from notifyIn socket\n", id);
+}
+
 /**  Our worker thread.  Handles communication with redis
  **
  ** Called from worker thread.  (This is the worker.)
@@ -800,7 +820,7 @@ static void worker(void *raw) {
   //  static char *id = "worker";
   redisState *rs = raw;
   redisValueState *rvs;
-  struct pollfd fds[5];
+  struct pollfd fds[6];
   redisAsyncContext *racs[3]; 
   int pollReturn;
   int i;
@@ -876,11 +896,15 @@ static void worker(void *raw) {
     fds[4].events  = POLLIN;
     fds[4].revents = 0;
 
+    fds[5].fd      = rs->notifyIn;
+    fds[5].events  = POLLIN;
+    fds[5].revents = 0;
+
     //    epicsMutexUnlock( rs->lock);
     //
     // Wait for as long as it takes
     //
-    pollReturn = poll( fds, 5, -1);
+    pollReturn = poll( fds, 6, -1);
 
     //    epicsMutexMustLock( rs->lock);
     //
@@ -911,6 +935,8 @@ static void worker(void *raw) {
     if( fds[4].revents & POLLIN)
       readQueryService( rs);
 
+    if( fds[5].revents & POLLIN)
+      lsRedisService( rs);
   }
 }
 
@@ -949,12 +975,7 @@ static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io) {
   return 0;
 }
 
-/** How to read a string for our redis record We need to have such a
- ** routine to make everyone happy (and not have to write our own
- ** redis record) BUT it makes no sense to give this record a value.
- ** Does that make this really just a device driver rather than a
- ** device?  If it really matters then there is a bit of rewritting to
- ** do.
+/** How to read a string for our redis record.
  **
  ** Called from main thread.
  **

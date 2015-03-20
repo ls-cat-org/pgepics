@@ -29,7 +29,7 @@ static long value_init_longout_record( longoutRecord *prec) {
  ** Called from main thread
  */
 static long value_write_longout( longoutRecord *prec) {
-  //  static char *id = "value_write_longout";
+  static char *id = "value_write_longout";
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -63,6 +63,8 @@ static long value_write_longout( longoutRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
+    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+      fprintf( stderr, "%s: unexpected response from notifyOut\n", id);
 
     prec->pact = 1;		// Set back to zero when we see that redis has published our new value
   }

@@ -69,6 +69,10 @@ static long ca_read_stringin( stringinRecord *prec) {
   }
   //
   //
+  // Only process new values
+  //
+  if( !prec->udf && strcmp( prec->val, ourVal) == 0)
+    return 0;
 
   strncpy( prec->val, ourVal, sizeof( prec->val) - 1);
   prec->val[sizeof( prec->val)-1] = 0;
@@ -101,8 +105,11 @@ static long ca_read_stringin( stringinRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
+    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+      fprintf( stderr, "%s: unexpected response from notifyOut\n", id);
 
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    // see note for AI support
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

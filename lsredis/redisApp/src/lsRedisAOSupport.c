@@ -29,7 +29,7 @@ static long value_init_ao_record( aoRecord *prec) {
  ** Called from main thread
  */
 static long value_write_ao( aoRecord *prec) {
-  //  static char *id = "value_write_ao";
+  static char *id = "value_write_ao";
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -65,6 +65,8 @@ static long value_write_ao( aoRecord *prec) {
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
     redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
     epicsMutexUnlock(  rvs->rs->lock);
+    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+      fprintf( stderr, "%s: unexpected response from notifyOut\n", id);
 
     prec->pact = 1;		// Set back to one when we see that redis has published our new value
   }
