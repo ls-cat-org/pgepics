@@ -18,6 +18,29 @@ record(stringin,"$(P)"){
   info( pgUser,        "$(pgUser)")
   info( pgDb,          "$(pgDb)")
 }
+record(  longin,         "$(P):esaf") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value from Redis")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).esaf")
+  info(  redisConnector, "$(P)")
+}
+record(  stringin,       "$(P):robot:path") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value from Redis")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).robot.path")
+  info(  redisConnector, "$(P)")
+}
+record(  bi,             "$(P):collection:running") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Value from Redis")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "False")
+  field( ONAM,           "True")
+  info(  redisKey,       "$(S).collection.running")
+  info(  redisConnector, "$(P)")
+}
 record(  ao,             "$(P):omega"){
   field( DTYP,           "Redis Source")
   field( DESC,           "Value to Redis")
