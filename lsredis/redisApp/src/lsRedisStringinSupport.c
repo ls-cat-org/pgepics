@@ -99,17 +99,10 @@ static long ca_read_stringin( stringinRecord *prec) {
   // as no longer being active by setting pact = 0.
   //
   if( strcmp( rvs->setter, "redis") == 0) {
-    epicsMutexMustLock(rvs->rs->lock);
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "MULTI");
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "HSET %s VALUE %s", rvs->redisKey, tmp);
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
-    epicsMutexUnlock(  rvs->rs->lock);
-    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
-      fprintf( stderr, "%s: unexpected response from notifyOut\n", id);
+    setRedis( rvs, tmp);
 
     // see note for AI support
-    prec->pact = 0;		// Set back to one when we see that redis has published our new value
+    prec->pact = 1;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

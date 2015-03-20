@@ -189,6 +189,29 @@ static int connectToRedis( redisState *rs) {
   return 0;
 }
 
+/** Set a redis variable
+ **
+ ** Called by Main Thread
+ */
+void setRedis( redisValueState *rvs, char *value) {
+  static char *id = "setRedis";
+
+  epicsMutexMustLock( rvs->rs->lock);
+
+  // KLUDGE: we are assuming REDIS_OK = 0.  If not then there will be a problem here.
+  if( redisAsyncCommand(    rvs->rs->wc, NULL, NULL, "MULTI")
+      || redisAsyncCommand( rvs->rs->wc, NULL, NULL, "HSET %s VALUE %s", rvs->redisKey,       value)
+      || redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey)
+      || redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC")) {
+    fprintf( stderr, "%s: redisAsyncCommand returned an error.  This should be unusual.  Key '%s'   Value '%s'\n", id, rvs->redisKey, value);
+  }
+
+  epicsMutexUnlock( rvs->rs->lock);
+
+  if( 1 != write( rvs->rs->notifyOut, "\n", 1))
+    fprintf( stderr, "%s: unexpected response from notifyOut.  Key: %s   Value: %s\n", id, rvs->redisKey, value);
+}
+
 static void connectToPostgres( redisState *rs) {
   static char *id = "connectToPostgres";
   int connecting = 1;
@@ -344,7 +367,7 @@ static redisState *lsRedisGetRedisState( const char *connectorName) {
     rs->pgQueueSize = sizeof( rs->pgQueue)/sizeof( *rs->pgQueue);
     rs->pgQuerySize = 256;
     for( i=0; i < rs->pgQueueSize; i++) {
-      rs->pgQueue[i] = callocMustSucceed( rs->pgQuerySize, sizeof( char), id);
+      rs->pgQueue[i] = callocMustSucceed( rs->pgQuerySize, sizeof( **(rs->pgQueue)), id);
     }
     rs->pgQueueIn   = 0;
     rs->pgQueueOut  = 0;
@@ -480,8 +503,8 @@ static void lsRedisSetRedisValueState( const char *connectorName,
     rvs->inputPV   = inRecord;
     rvs->outputPV  = outRecord;
     rvs->rs        = rs;
-    rvs->nsv       = 64;
-    rvs->stringVal = callocMustSucceed( rvs->nsv, sizeof( char), id);
+    rvs->nsv       = 128;
+    rvs->stringVal = callocMustSucceed( rvs->nsv, sizeof( *(rvs->stringVal)), id);
     rvs->lock      = epicsMutexMustCreate();
 
     hd = callocMustSucceed( 1, sizeof( *hd), id);
@@ -678,7 +701,7 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
     rvs->nsv = strlen( r->str) + 32;
     if( rvs->stringVal)
       free( rvs->stringVal);
-    rvs->stringVal = callocMustSucceed( rvs->nsv, sizeof( char), id);
+    rvs->stringVal = callocMustSucceed( rvs->nsv, sizeof( *(rvs->stringVal)), id);
   }
   strncpy( rvs->stringVal, r->str, rvs->nsv - 1);
   rvs->stringVal[rvs->nsv - 1] = 0;
@@ -920,10 +943,16 @@ static void worker(void *raw) {
 
     for( i=0; i<3; i++) {
       if( fds[i].revents) {
-	  if(  fds[i].revents & POLLIN)
-	    redisAsyncHandleRead( racs[i]);
-	  if(  fds[i].revents & POLLOUT)
-	    redisAsyncHandleWrite( racs[i]);
+	if(  fds[i].revents & POLLIN) {
+	  epicsMutexMustLock( rs->lock);
+	  redisAsyncHandleRead( racs[i]);
+	  epicsMutexUnlock( rs->lock);
+	}
+	if(  fds[i].revents & POLLOUT) {
+	  epicsMutexMustLock( rs->lock);
+	  redisAsyncHandleWrite( racs[i]);
+	  epicsMutexUnlock( rs->lock);
+	}
       }
     }
     if( fds[3].revents & POLLIN)
@@ -981,7 +1010,7 @@ static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io) {
  **
  */
 static long read_stringin( stringinRecord *prec) {
-  //static char *id = "read_stringin";
+  //  static char *id = "read_stringin";
   redisState      *rs;
   redisValueState *rvs;
 

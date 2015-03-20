@@ -32,10 +32,30 @@ static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
  */
 static long value_read_bi( biRecord *prec) {
   redisValueState *rvs;
+  int ourVal;
   rvs = prec->dpvt;
 
   epicsMutexMustLock( rvs->lock);
-  prec->val = strtol( rvs->stringVal, NULL, 0) == 0 ? 0 : 1;
+  switch( rvs->stringVal[0]) {
+  case 'Y':
+  case 'y':
+  case 'T':
+  case 't':
+    ourVal = 1;
+    break;
+
+  case 'N':
+  case 'n':
+  case 'F':
+  case 'f':
+    ourVal = 0;
+    break;
+
+  default:
+    ourVal = strtol( rvs->stringVal, NULL, 0) == 0 ? 0 : 1;
+  }
+
+  prec->val = ourVal; 
   prec->udf = 0;
   epicsMutexUnlock( rvs->lock);
 
@@ -47,7 +67,7 @@ static long value_read_bi( biRecord *prec) {
  */
 static long ca_read_bi( biRecord *prec) {
   static char *id = "ca_read_bi";
-  epicsInt8 ourVal;
+  int ourVal;
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -60,7 +80,8 @@ static long ca_read_bi( biRecord *prec) {
     return 1;
   }
 
-  dbGetLink( &prec->inp, DBR_CHAR, &ourVal, NULL, NULL);
+  dbGetLink( &prec->inp, DBR_LONG, &ourVal, NULL, NULL);
+
   ourVal = ourVal == 0 ? 0 : 1;
 
   if( !prec->udf && prec->val == ourVal)
@@ -87,17 +108,10 @@ static long ca_read_bi( biRecord *prec) {
   // as no longer being active by setting pact = 0.
   //
   if( strcmp( rvs->setter, "redis") == 0) {
-    epicsMutexMustLock(rvs->rs->lock);
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "MULTI");
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "HSET %s VALUE %s", rvs->redisKey, tmp);
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "PUBLISH UI-%s %s", rvs->redisConnector, rvs->redisKey);
-    redisAsyncCommand( rvs->rs->wc, NULL, NULL, "EXEC");
-    epicsMutexUnlock(  rvs->rs->lock);
-    if( 1 != write( rvs->rs->notifyOut, "\n", 1))
-      fprintf( stderr, "%s: unexpected response from notifyOut. This is probably bad\n", id);
+    setRedis( rvs, tmp);
 
     // TODO: see note for AI support
-    prec->pact = 0;		// Set back to one when we see that redis has published our new value
+    prec->pact = 1;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

@@ -45,7 +45,7 @@ typedef struct redisStateStruct {
   struct lsRedisHashDataStruct *lastHTEntry;	// Hash table entries are also in a linked list so the HT can be resized.
   int notifyIn;			// This is what the worker listens to to see if hiredis waits us to look at its state
   int notifyOut;		// Socket to tell us when the hiredis state has possibly changed
-  char *basePVName;		// Our related PV's start with this. Not currently used as the clients use "redisConnector" in their own state structure
+  char *basePVName;		// Our related PV's start with this.  (Not currently used)
   char *redisKeyBase;		// Our redis world key base for our variables (Not currently used)
   epicsMutexId lock;
   IOSCANPVT scan;
@@ -118,3 +118,5 @@ typedef struct lsRedisHashDataStruct {
 
 extern long value_init_record( dbCommon *prec, int inout);
 extern void lsRedisSendQuery( redisState *rs, char *qs);
+
+extern void setRedis( redisValueState *rvs, char *value);
