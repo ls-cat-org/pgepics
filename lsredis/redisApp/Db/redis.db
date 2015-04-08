@@ -1,1276 +1,2239 @@
-record(stringin,"$(P)"){
+
+record(stringout,"$(P)") {
   field( DTYP,         "Redis Connector")
   field( DESC,         "Manage redis supplied PVs")
   field( SCAN,         "I/O Intr")
-  info( redisKeyBase,  "$(S)")
-  info( epicsPVBase,   "$(P)")
-  info( redisReadHost, "$(RRH)")
-  info( redisReadPort, "$(RRP)")
-  info( redisReadDb,   "$(RRDB)")
-  info( redisWriteHost,"$(RWH)")
-  info( redisWritePort,"$(RWP)")
-  info( redisWriteDb,  "$(RWDB)")
-  info( redisSubHost,  "$(RRH)")
-  info( redisSubPort,  "$(RRP)")
-  info( redisSubDb,    "$(RRDB)")
-  info( pgHost,        "$(pgHost)")
-  info( pgPort,        "$(pgPort)")
-  info( pgUser,        "$(pgUser)")
-  info( pgDb,          "$(pgDb)")
+  field( OMSL,         "supervisory")
+  info(  redisKeyBase,  "$(S)")
+  info(  epicsPVBase,   "$(P)")
+  info(  redisReadHost, "$(RRH)")
+  info(  redisReadPort, "$(RRP)")
+  info(  redisReadDb,   "$(RRDB)")
+  info(  redisWriteHost,"$(RWH)")
+  info(  redisWritePort,"$(RWP)")
+  info(  redisWriteDb,  "$(RWDB)")
+  info(  redisSubHost,  "$(RRH)")
+  info(  redisSubPort,  "$(RRP)")
+  info(  redisSubDb,    "$(RRDB)")
+  info(  pgHost,        "$(pgHost)")
+  info(  pgPort,        "$(pgPort)")
+  info(  pgUser,        "$(pgUser)")
+  info(  pgDb,          "$(pgDb)")
 }
-record(  longin,         "$(P):esaf") {
+
+record( ao, "$(P):align:x_RBV") {
   field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "I/O Intr")
-  info(  redisKey,       "$(S).esaf")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).align.x.position")
   info(  redisConnector, "$(P)")
 }
-record(  stringin,       "$(P):robot:path") {
+record( ai, "$(P):align:x") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).align.x.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):align:y_RBV") {
   field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "I/O Intr")
-  info(  redisKey,       "$(S).robot.path")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).align.y.position")
   info(  redisConnector, "$(P)")
 }
-record(  bi,             "$(P):collection:running") {
+record( ai, "$(P):align:y") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).align.y.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):align:z_RBV") {
   field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).align.z.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):align:z") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).align.z.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):appy_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).appy.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):appy") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).appy.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):appz_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).appz.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):appz") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).appz.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):backLight:factor_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).backLight.factor.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):backLight:factor") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).backLight.factor.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):backLight:intensity_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "0")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).backLight.intensity.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):backLight:intensity") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "0")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).backLight.intensity.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bo, "$(P):backLight_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).backLight.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):backLight") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).backLight.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):cam:zoom_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "0")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).cam.zoom.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):cam:zoom") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "0")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).cam.zoom.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bi, "$(P):capDetected") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "21:ECAMS:Edge1:VerticalFound")
+  info(  redisKey,       "$(S).capDetected")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):capy_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).capy.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):capy") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).capy.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):capz_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).capz.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):capz") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).capz.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):centering:x_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).centering.x.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):centering:x") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).centering.x.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):centering:y_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).centering.y.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):centering:y") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).centering.y.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bo, "$(P):collection:running") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "I/O Intr")
   field( ZNAM,           "False")
   field( ONAM,           "True")
   info(  redisKey,       "$(S).collection.running")
   info(  redisConnector, "$(P)")
 }
-record(  ao,             "$(P):omega"){
+record( bo, "$(P):cryo_RBV") {
   field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Out")
+  field( ONAM,           "In")
+  info(  redisKey,       "$(S).cryo.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):cryo") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).omega.position")
+  field( ZNAM,           "Out")
+  field( ONAM,           "In")
+  info(  redisKey,       "$(S).cryo.position")
   info(  redisConnector, "$(P)")
   info(  setter,         "kvset")
 }
-record( ai,              "$(P):omega:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).omega.position")
-  info(  redisConnector, "$(P)")
-}
-record( ai, "$(P):current"){
+record( ai, "$(P):current") {
   field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,            "S:SRcurrentAI CP")
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "Passive")
+  field( INP,            "S:SRcurrentAI")
+  field( PREC,            "1")
   field( LINR,           "NO CONVERSION")
-  field( PREC,           "1")
   info(  redisKey,       "$(S).current")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "redis")
-}
-record( bo, "$(P):backLight"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Down")
-  field( ONAM,           "Up")
-  info(  redisKey,       "$(S).backLight.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):backLight:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Down")
-  field( ONAM,           "Up")
-  info(  redisKey,       "$(S).backLight.position")
-  info(  redisConnector, "$(P)")
-}
-record( bo, "$(P):frontLight"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Down")
-  field( ONAM,           "Up")
-  info(  redisKey,       "$(S).frontLight.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):frontLight:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Down")
-  field( ONAM,           "Up")
-  info(  redisKey,       "$(S).frontLight.position")
-  info(  redisConnector, "$(P)")
-}
-record( bi, "$(P):pss:e_enabled"){
-  field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,            "PA:21ID:E_APS_KEY CP")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Disabled")
-  field( ONAM,           "Enabled")
-  info(  redisKey,       "$(S).pss.e_enabled")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "redis")
-}
-record( longout, "$(P):cam:zoom"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  info(  redisKey,       "$(S).cam.zoom.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( longin,          "$(P):cam:zoom:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  info(  redisKey,       "$(S).cam.zoom.position")
-  info(  redisConnector, "$(P)")
-}
-record( longin, "$(P):undulator:HarmonicValue"){
-  field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,            "ID21ds:HarmonicValue CP")
-  field( SCAN,           "Passive")
-  info(  redisKey,       "$(S).undulator.HarmonicValue")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "redis")
-}
-record( stringin,        "$(P):time"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  info(  redisKey,       "$(S).time")
-  info(  redisConnector, "$(P)")
-}
-record( stringin, "$(P):undulator:Message1"){
-  field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,            "ID21ds:Message1 CP")
-  field( SCAN,           "Passive")
-  info(  redisKey,       "$(S).undulator.Message1")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "redis")
-}
-record( bo, "$(P):dryer"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Off")
-  field( ONAM,           "On")
-  info(  redisKey,       "$(S).dryer.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):dryer:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Off")
-  field( ONAM,           "On")
-  info(  redisKey,       "$(S).dryer.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):backLight:intensity"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).backLight.intensity.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):backLight:intensity:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).backLight.intensity.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):backLight:factor"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).backLight.factor.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):backLight:factor:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).backLight.factor.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):frontLight:intensity"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).frontLight.intensity.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):frontLight:intensity:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).frontLight.intensity.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):frontLight:factor"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).frontLight.factor.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):frontLight:factor:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).frontLight.factor.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):scint"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).scint.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):scint:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).scint.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):kappa"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).kappa.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):kappa:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).kappa.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):phi"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).phi.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):phi:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).phi.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):centering:x"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).centering.x.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):centering:x:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).centering.x.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):centering:y"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).centering.y.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):centering:y:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).centering.y.position")
-  info(  redisConnector, "$(P)")
-}
-record( bo, "$(P):fastShutter"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Closed")
-  field( ONAM,           "Open")
-  info(  redisKey,       "$(S).fastShutter.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):fastShutter:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Closed")
-  field( ONAM,           "Open")
-  info(  redisKey,       "$(S).fastShutter.position")
-  info(  redisConnector, "$(P)")
-}
-record( bo, "$(P):fluo"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Out")
-  field( ONAM,           "In")
-  info(  redisKey,       "$(S).fluo.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):fluo:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Out")
-  field( ONAM,           "In")
-  info(  redisKey,       "$(S).fluo.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):align:x"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).align.x.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):align:x:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).align.x.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):align:y"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).align.y.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):align:y:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).align.y.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):align:z"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).align.z.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):align:z:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).align.z.position")
-  info(  redisConnector, "$(P)")
-}
-#record(  ao,             "$(P):table.x"){
-#  field( DTYP,           "Redis Source")
-#  field( DESC,           "Value to Redis")
-#  field( SCAN,           "Passive")
-#  field( LINR,           "NO CONVERSION")
-#  info(  redisKey,       "$(S).table.x.position")
-#  info(  redisConnector, "$(P)")
-#  info(  setter,         "kvset")
-#}
-#record( ai,              "$(P):table.x:position"){
-#  field( DTYP,           "Redis Source")
-#  field( DESC,           "Value from Redis")
-#  field( SCAN,           "I/O Intr")
-#  field( LINR,           "NO CONVERSION")
-#  field( PREC,           "3")
-#  info(  redisKey,       "$(S).table.x.position")
-#  info(  redisConnector, "$(P)")
-#}
-#record(  ao,             "$(P):table.y"){
-#  field( DTYP,           "Redis Source")
-#  field( DESC,           "Value to Redis")
-#  field( SCAN,           "Passive")
-#  field( LINR,           "NO CONVERSION")
-#  info(  redisKey,       "$(S).table.y.position")
-#  info(  redisConnector, "$(P)")
-#  info(  setter,         "kvset")
-#}
-#record( ai,              "$(P):table.y:position"){
-#  field( DTYP,           "Redis Source")
-#  field( DESC,           "Value from Redis")
-#  field( SCAN,           "I/O Intr")
-#  field( LINR,           "NO CONVERSION")
-# field( PREC,           "3")
-#  info(  redisKey,       "$(S).table.y.position")
-#  info(  redisConnector, "$(P)")
-#}
-record(  ao,             "$(P):capy"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).capy.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):capy:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).capy.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):appy"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).appy.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):capy:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).appy.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):appz"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).appz.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):capz:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).capz.position")
-  info(  redisConnector, "$(P)")
-}
-record( bo, "$(P):cryo"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Out")
-  field( ONAM,           "In")
-  info(  redisKey,       "$(S).cryo.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):cryo:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Down")
-  field( ONAM,           "Up")
-  info(  redisKey,       "$(S).cryo.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):scint:focus"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).scint.focus.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):scint:focus:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).scint.focus.position")
-  info(  redisConnector, "$(P)")
-}
-record(  ao,             "$(P):lightPolar"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( LINR,           "NO CONVERSION")
-  info(  redisKey,       "$(S).lightPolar.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( ai,              "$(P):lightPolar:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( LINR,           "NO CONVERSION")
-  field( PREC,           "3")
-  info(  redisKey,       "$(S).lightPolar.position")
-  info(  redisConnector, "$(P)")
-}
-record( bo, "$(P):smartMagnet"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value to Redis")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "Closed")
-  field( ONAM,           "Open")
-  info(  redisKey,       "$(S).smartMagnet.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "kvset")
-}
-record( bi,              "$(P):smartMagnet:position"){
-  field( DTYP,           "Redis Source")
-  field( DESC,           "Value from Redis")
-  field( SCAN,           "I/O Intr")
-  field( ZNAM,           "Closed")
-  field( ONAM,           "Open")
-  info(  redisKey,       "$(S).smartMagnet.position")
-  info(  redisConnector, "$(P)")
-}
-record( bi, "$(P):capDetected") {
-  field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,            "21:ECAMS:Edge1:VerticalFound CP")
-  field( SCAN,           "Passive")
-  field( ZNAM,           "No")
-  field( ONAM,           "Yes")
-  info(  redisKey,       "$(S).capDetected")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
 record( ai, "$(P):detector:dist") {
   field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,		 "21:E1:DT:Z0:ActPos CP")     
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "Passive")
-  field( PREC,           "1")
+  field( INP,            "21:E1:DT:Z0:ActPos")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
   info(  redisKey,       "$(S).detector.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):dryer_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).dryer.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):dryer") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).dryer.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( longout, "$(P):stns:2:esaf") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).esaf")
+  info(  redisConnector, "$(P)")
+}
+record( bo, "$(P):fastShutter_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Closed")
+  field( ONAM,           "Open")
+  info(  redisKey,       "$(S).fastShutter.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):fastShutter") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Closed")
+  field( ONAM,           "Open")
+  info(  redisKey,       "$(S).fastShutter.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bo, "$(P):fluo_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Out")
+  field( ONAM,           "In")
+  info(  redisKey,       "$(S).fluo.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):fluo") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Out")
+  field( ONAM,           "In")
+  info(  redisKey,       "$(S).fluo.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):frontLight:factor_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).frontLight.factor.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):frontLight:factor") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).frontLight.factor.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):frontLight:intensity_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "0")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).frontLight.intensity.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):fzzntLight:intensity") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "0")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).frontLight.intensity.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bo, "$(P):frontLight_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).frontLight.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):frontLight") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).frontLight.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):kappa_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).kappa.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):kappa") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).kappa.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):lightPolar_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).lightPolar.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):lightPolar") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).lightPolar.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):omega_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).omega.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):omega") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).omega.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):phi_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).phi.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):phi") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).phi.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bi, "$(P):pss:a_beam_present") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_BEAM_PRESENT")
+  info(  redisKey,       "$(S).pss.a_beam_present")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_crash_button_1") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_CRASH_BUTTON_1")
+  info(  redisKey,       "$(S).pss.a_crash_button_1")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_door_1_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.a_door_1_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_door_1_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:A_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.a_door_1_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_door_2_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_DOOR_2_CLOSED")
+  info(  redisKey,       "$(S).pss.a_door_2_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_door_2_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:A_DOOR_2_CLOSED")
+  info(  redisKey,       "$(S).pss.a_door_2_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_enabled") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_APS_KEY")
+  info(  redisKey,       "$(S).pss.a_enabled")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_searched") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_SEARCHED")
+  info(  redisKey,       "$(S).pss.a_searched")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_searching") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_VOICE_SEARCHING")
+  info(  redisKey,       "$(S).pss.a_searching")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:a_user_key") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:A_USER_KEY")
+  info(  redisKey,       "$(S).pss.a_user_key")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:acis_permit") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:ACIS_FES_PERMIT")
+  info(  redisKey,       "$(S).pss.acis_permit")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_beam_present") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_BEAM_PRESENT")
+  info(  redisKey,       "$(S).pss.b_beam_present")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_crash_button_1") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_CRASH_BUTTON_1")
+  info(  redisKey,       "$(S).pss.b_crash_button_1")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_crash_button_2") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_CRASH_BUTTON_2")
+  info(  redisKey,       "$(S).pss.b_crash_button_2")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_door_1_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.b_door_1_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_door_1_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:B_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.b_door_1_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_door_2_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_DOOR_2_CLOSED")
+  info(  redisKey,       "$(S).pss.b_door_2_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_door_2_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:B_DOOR_2_CLOSED")
+  info(  redisKey,       "$(S).pss.b_door_2_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_enabled") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_USER_KEY")
+  info(  redisKey,       "$(S).pss.b_enabled")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_searched") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_SEARCHED")
+  info(  redisKey,       "$(S).pss.b_searched")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:b_searching") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:B_VOICE_SEARCHING")
+  info(  redisKey,       "$(S).pss.b_searching")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:beam_present") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_BEAM_PRESENT")
+  info(  redisKey,       "$(S).pss.beam_present")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:bleps_fe_shutter_permit") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "EPS:21:ID:BLEPS:SPER")
+  info(  redisKey,       "$(S).pss.bleps_fe_shutter_permit")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:bleps_fe_vacuum_permit") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "EPS:21:ID:BLEPS:VACPER")
+  info(  redisKey,       "$(S).pss.bleps_fe_vacuum_permit")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:bleps_station_permit") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PC:21ID:SES_BLEPS_PERMIT")
+  info(  redisKey,       "$(S).pss.bleps_station_permit")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_beam_present") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_BEAM_PRESENT")
+  info(  redisKey,       "$(S).pss.c_beam_present")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_crash_button_1") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_CRASH_BUTTON_1")
+  info(  redisKey,       "$(S).pss.c_crash_button_1")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_crash_button_2") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_CRASH_BUTTON_2")
+  info(  redisKey,       "$(S).pss.c_crash_button_2")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_door_1_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.c_door_1_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_door_1_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:C_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.c_door_1_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_enabled") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_APS_KEY")
+  info(  redisKey,       "$(S).pss.c_enabled")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_searched") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_SEARCHED")
+  info(  redisKey,       "$(S).pss.c_searched")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_searching") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_VOICE_SEARCHING")
+  info(  redisKey,       "$(S).pss.c_searching")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:c_user_key") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:C_USER_KEY")
+  info(  redisKey,       "$(S).pss.c_user_key")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:chain_a_fault") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:FAULT_EXISTS")
+  info(  redisKey,       "$(S).pss.chain_a_fault")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:chain_a_trip") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:TRIP_EXISTS")
+  info(  redisKey,       "$(S).pss.chain_a_trip")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:chain_b_fault") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:FAULT_EXISTS")
+  info(  redisKey,       "$(S).pss.chain_b_fault")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:chain_b_trip") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:TRIP_EXISTS")
+  info(  redisKey,       "$(S).pss.chain_b_trip")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:crash_button_1") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_CRASH_BUTTON_1")
+  info(  redisKey,       "$(S).pss.crash_button_1")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:crash_button_2") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_CRASH_BUTTON_2")
+  info(  redisKey,       "$(S).pss.crash_button_2")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:crash_button_3") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_CRASH_BUTTON_3")
+  info(  redisKey,       "$(S).pss.crash_button_3")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:di_water_flow1_trip") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:DIW_FLOW_1_LOW_SPT")
+  info(  redisKey,       "$(S).pss.di_water_flow1_trip")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:di_water_flow2_trip") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:DIW_FLOW_2_LOW_SPT")
+  info(  redisKey,       "$(S).pss.di_water_flow2_trip")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:di_water_flow3_trip") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:DIW_FLOW_3_LOW_SPT")
+  info(  redisKey,       "$(S).pss.di_water_flow3_trip")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:di_water_flow4_trip") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:DIW_FLOW_4_LOW_SPT")
+  info(  redisKey,       "$(S).pss.di_water_flow4_trip")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:door_1_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:E_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.door_1_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:door_2_b") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PB:21ID:E_DOOR_2_CLOSED")
+  info(  redisKey,       "$(S).pss.door_2_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:e_door_1_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_DOOR_1_CLOSED")
+  info(  redisKey,       "$(S).pss.e_door_1_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:e_door_2_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_DOOR_2_CLOSED")
+  info(  redisKey,       "$(S).pss.e_door_2_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:e_enabled") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_APS_KEY")
+  info(  redisKey,       "$(S).pss.e_enabled")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:e_searched") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_SEARCHED")
+  info(  redisKey,       "$(S).pss.e_searched")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:e_searching") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_VOICE_SEARCHING")
+  info(  redisKey,       "$(S).pss.e_searching")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:e_user_key") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_USER_KEY")
+  info(  redisKey,       "$(S).pss.e_user_key")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:fe_eps") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PC:21ID:FEEPS_FES_PERMIT")
+  info(  redisKey,       "$(S).pss.fe_eps")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:fe_shutter") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:FES_BLOCKING_BEAM")
+  info(  redisKey,       "$(S).pss.fe_shutter")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:global_online") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:ACIS_GLOBAL_ONLINE")
+  info(  redisKey,       "$(S).pss.global_online")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:stn_shutter") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:SES_BLOCKING_BEAM")
+  info(  redisKey,       "$(S).pss.stn_shutter")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):stns:2:robot:path") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).robot.path")
+  info(  redisConnector, "$(P)")
+}
+record( ao, "$(P):saxs:0:ax0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.ax0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:ax0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.ax0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:ay0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.ay0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:ay0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.ay0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:az0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.az0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:az0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.az0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:cx0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.cx0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:cx0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.cx0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:cy0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.cy0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:cy0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.cy0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:0:set_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.0.set")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:0:set") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.0.set")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:x:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.x.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:x:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.x.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:x:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.x.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:x:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.x.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:y:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.y.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:y:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.y.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:0:y:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.y.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:0:y:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.0.y.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:ax0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.ax0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:ax0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.ax0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:ay0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.ay0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:ay0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.ay0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:az0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.az0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:az0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.az0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:cx0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.cx0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:cx0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.cx0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:cy0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.cy0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:cy0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.cy0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:1:set_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.1.set")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:1:set") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.1.set")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:x:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.x.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:x:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.x.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:x:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.x.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:x:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.x.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:y:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.y.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:y:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.y.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:1:y:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.y.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:1:y:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.1.y.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:ax0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.ax0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:ax0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.ax0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:ay0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.ay0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:ay0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.ay0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:az0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.az0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:az0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.az0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:cx0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.cx0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:cx0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.cx0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:cy0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.cy0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:cy0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.cy0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:2:set_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.2.set")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:2:set") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.2.set")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:x:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.x.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:x:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.x.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:x:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.x.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:x:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.x.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:y:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.y.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:y:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.y.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:2:y:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.y.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:2:y:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.2.y.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:ax0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.ax0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:ax0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.ax0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:ay0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.ay0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:ay0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.ay0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:az0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.az0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:az0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.az0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:cx0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.cx0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:cx0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.cx0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:cy0_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.cy0")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:cy0") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.cy0")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:3:set_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.3.set")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:3:set") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.3.set")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:x:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.x.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:x:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.x.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:x:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.x.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:x:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.x.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:y:dist_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.y.dist")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:y:dist") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.y.dist")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:3:y:npts_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.y.npts")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:3:y:npts") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.3.y.npts")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:abort_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.abort")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:abort") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.abort")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:delta_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.delta")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:delta") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.delta")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):saxs:directory_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.directory")
+  info(  redisConnector, "$(P)")
+}
+record( stringin, "$(P):saxs:directory") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.directory")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):saxs:exptime_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.exptime")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):saxs:exptime") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "2")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).saxs.exptime")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:pause_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.pause")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:pause") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.pause")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):saxs:prefix_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.prefix")
+  info(  redisConnector, "$(P)")
+}
+record( stringin, "$(P):saxs:prefix") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.prefix")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):saxs:prefix1_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.prefix1")
+  info(  redisConnector, "$(P)")
+}
+record( stringin, "$(P):saxs:prefix1") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.prefix1")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):saxs:prefix2_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.prefix2")
+  info(  redisConnector, "$(P)")
+}
+record( stringin, "$(P):saxs:prefix2") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.prefix2")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):saxs:prefix3_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.prefix3")
+  info(  redisConnector, "$(P)")
+}
+record( stringin, "$(P):saxs:prefix3") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.prefix3")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( stringout, "$(P):saxs:prefix4_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.prefix4")
+  info(  redisConnector, "$(P)")
+}
+record( stringin, "$(P):saxs:prefix4") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.prefix4")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:retake_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.retake")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:retake") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.retake")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( longout, "$(P):saxs:retakeframe_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  info(  redisKey,       "$(S).saxs.retakeframe")
+  info(  redisConnector, "$(P)")
+}
+record( longin, "$(P):saxs:retakeframe") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  info(  redisKey,       "$(S).saxs.retakeframe")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:snap_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.snap")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:snap") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.snap")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bo, "$(P):saxs:start_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.start")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):saxs:start") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).saxs.start")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( ao, "$(P):scint:focus_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).scint.focus.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):scint:focus") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "1")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).scint.focus.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ao, "$(P):scint_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).scint.position")
+  info(  redisConnector, "$(P)")
+}
+record( ai, "$(P):scint") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).scint.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( bo, "$(P):smartMagnet_RBV") {
+  field( DTYP,           "Redis Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "I/O Intr")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).smartMagnet.position")
+  info(  redisConnector, "$(P)")
+}
+record( bi, "$(P):smartMagnet") {
+  field( DTYP,           "VAL Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  info(  redisKey,       "$(S).smartMagnet.position")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "kvset")
+}
+record( ai, "$(P):table:x:position") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( INP,            "21:E1:TB:L:ActPos")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
+  info(  redisKey,       "$(S).table.x.position")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
 record( ai, "$(P):table:y:position") {
   field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,		"21:E1:TB:H:ActPos CP")      
+  field( DESC,           "Reids Bridge")
   field( SCAN,           "Passive")
+  field( INP,            "21:E1:TB:H:ActPos")
+  field( PREC,            "3")
+  field( LINR,           "NO CONVERSION")
   info(  redisKey,       "$(S).table.y.position")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
-}
-record( ai, "$(P):table:x:position") {
-  field( DTYP,           "CA Source")
-  field( DESC,           "Value to Redis")
-  field( INP,		 "21:E1:TB:L:ActPos CP")
-  field( SCAN,           "Passive")
-  info(  redisKey,       "$(S).table.x.position")
-  info(  redisConnector, "$(P)")
-  info(  setter,         "redis")
-}
-
-record( bi, "$(P):pss:bleps_fe_shutter_permit") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "EPS:21:ID:BLEPS:SPER CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.bleps_fe_shutter_permit")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:bleps_fe_vacuum_permit") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "EPS:21:ID:BLEPS:VACPER CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.bleps_fe_vacuum_permit")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:bleps_station_permit") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PC:21ID:SES_BLEPS_PERMIT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.bleps_station_permit")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:acis_permit") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:ACIS_FES_PERMIT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.acis_permit")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:global_online") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:ACIS_GLOBAL_ONLINE CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.global_online")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_enabled") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_APS_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_enabled")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_door_1_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_door_1_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_door_2_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_DOOR_2_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_door_2_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_searched") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_SEARCHED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_searched")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_user_key") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_USER_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_user_key")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_searching") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_VOICE_SEARCHING CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_searching")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_enabled") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_APS_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_enabled")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_door_1_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_door_1_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_door_2_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_DOOR_2_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_door_2_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_searched") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_SEARCHED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_searched")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_enabled") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_USER_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_enabled")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_searching") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_VOICE_SEARCHING CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_searching")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_enabled") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_APS_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_enabled")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_door_1_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_door_1_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_searched") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_SEARCHED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_searched")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_user_key") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_USER_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_user_key")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_searching") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_VOICE_SEARCHING CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_searching")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:di_water_flow1_trip") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:DIW_FLOW_1_LOW_SPT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.di_water_flow1_trip")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:di_water_flow2_trip") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:DIW_FLOW_2_LOW_SPT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.di_water_flow2_trip")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:di_water_flow3_trip") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:DIW_FLOW_3_LOW_SPT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.di_water_flow3_trip")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:di_water_flow4_trip") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:DIW_FLOW_4_LOW_SPTP CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.di_water_flow4_trip")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:e_enabled") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_APS_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.e_enabled")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:e_door_1_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.e_door_1_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:e_door_2_a") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_DOOR_2_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.e_door_2_a")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:e_searched") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_SEARCHED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.e_searched")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:e_user_key") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_USER_KEY CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.e_user_key")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:e_searching") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_VOICE_SEARCHING CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.e_searching")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:chain_a_fault") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:FAULT_EXISTS CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.chain_a_fault")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:fe_shutter") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:FES_BLOCKING_BEAM CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.fe_shutter")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:stn_shutter") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:SES_BLOCKING_BEAM CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.stn_shutter")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:chain_a_trip") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:TRIP_EXISTS CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.chain_a_trip")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_door_1_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:A_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_door_1_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_door_2_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:A_DOOR_2_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_door_2_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_door_1_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:B_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_door_1_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_door_2_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:B_DOOR_2_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_door_2_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_door_1_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:C_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_door_1_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:door_1_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:E_DOOR_1_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.door_1_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:door_2_b") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:E_DOOR_2_CLOSED CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.door_2_b")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:chain_b_fault") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:FAULT_EXISTS CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.chain_b_fault")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:chain_b_trip") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PB:21ID:TRIP_EXISTS CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.chain_b_trip")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_beam_present") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_BEAM_PRESENT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_beam_present")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_beam_present") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_BEAM_PRESENT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_beam_present")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_beam_present") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_BEAM_PRESENT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_beam_present")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:beam_present") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_BEAM_PRESENT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.beam_present")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:fe_eps") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PC:21ID:FEEPS_FES_PERMIT CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.fe_eps")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:a_crash_button_1") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:A_CRASH_BUTTON_1 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.a_crash_button_1")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_crash_button_1") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_CRASH_BUTTON_1 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_crash_button_1")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:b_crash_button_2") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:B_CRASH_BUTTON_2 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.b_crash_button_2")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_crash_button_1") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_CRASH_BUTTON_1 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_crash_button_1")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:c_crash_button_2") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:C_CRASH_BUTTON_2 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.c_crash_button_2")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:crash_button_1") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_CRASH_BUTTON_1 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.crash_button_1")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:crash_button_2") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_CRASH_BUTTON_2 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.crash_button_2")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
-}
-record( bi, "$(P):pss:crash_button_3") {
-  field( DTYP,                "CA Source")
-  field( DESC,                "Value to Redis")
-  field( INP,                 "PA:21ID:E_CRASH_BUTTON_3 CP")
-  field( SCAN,                "Passive")
-  field( ZNAM,	              "No")
-  field( ONAM,                "Yes")
-  info(  redisKey,            "$(S).pss.crash_button_3")
-  info(  redisConnector,      "$(P)")
-  info(  setter,              "redis")
 }

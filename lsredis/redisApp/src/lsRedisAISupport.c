@@ -27,20 +27,6 @@ static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
 }
 
 
-/** Copy the value that the redis worker gave us and take all the
- ** credit
- */
-static long value_read_ai( aiRecord *prec) {
-  redisValueState *rvs;
-  rvs = prec->dpvt;
-
-  epicsMutexMustLock( rvs->lock);
-  prec->val = strtod( rvs->stringVal, NULL);
-  prec->udf = 0;
-  epicsMutexUnlock( rvs->lock);
-
-  return 2;
-}
 
 /** Send our value to redis
  **
@@ -101,28 +87,67 @@ static long ca_read_ai( aiRecord *prec) {
   return 2;
 }
 
-
-/** Interface to the IOC code that calls us
+/** Send our VALue to redis
+ **
  */
-struct {
-  long num;
-  DEVSUPFUN  report;
-  DEVSUPFUN  init;
-  DEVSUPFUN  init_record;
-  DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_ai;
-  DEVSUPFUN  special_linconv;
-} devAiRedisSource = {
-  6, /* space for 6 functions */
-  NULL,
-  value_init,
-  value_init_ai_record,
-  value_get_ioint_info,
-  value_read_ai,
-  NULL
-};
+static long val_read_ai( aiRecord *prec) {
+  static char *id = "val_read_ai";
+  double ourVal;
+  char tmp[128];
+  char pgtmp[128];
+  int dontSet;
 
-epicsExportAddress(dset,devAiRedisSource);
+  redisValueState *rvs;
+
+  rvs = prec->dpvt;
+
+  fprintf( stderr, "%s: %s\n", id, prec->name);
+
+  if( rvs == NULL) {
+    fprintf( stderr, "%s: Missing redis value state for %s\n", id, prec->name);
+    return 1;
+  }
+  dontSet = 0;
+
+  epicsMutexMustLock( rvs->lock);
+  if( prec->udf) {
+    prec->val = strtod( rvs->stringVal, NULL);
+    dontSet = 1;
+  } else {
+    ourVal = prec->val;
+    snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, ourVal);
+    tmp[sizeof(tmp)-1] = 0;
+  
+    if( strstr( rvs->setter, "kvset") != NULL) {
+      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%f')", rvs->redisKey, prec->val);
+      pgtmp[sizeof(pgtmp)-1] = 0;
+    }
+  }
+  prec->udf = 0;
+  epicsMutexUnlock( rvs->lock);
+
+  if( dontSet)
+    return 2;
+
+  //
+  // Redis Acync callbacks not needed here because our subscriber
+  // process will pick up the publication notice and mark this record
+  // as no longer being active by setting pact = 0.
+  //
+  if( strstr( rvs->setter, "redis") != NULL) {
+    setRedis( rvs, tmp);
+
+    prec->pact = 0;		// Set back to zero when we see that redis has published our new value
+  }
+  
+  if( strstr( rvs->setter, "kvset") != NULL) {
+    lsRedisSendQuery( rvs->rs, pgtmp);
+    prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
+  }
+  return 2;
+}
+
+
 
 struct {
   long num;
@@ -143,4 +168,24 @@ struct {
 };
 
 epicsExportAddress(dset,devAiCASource);
+
+struct {
+  long num;
+  DEVSUPFUN  report;
+  DEVSUPFUN  init;
+  DEVSUPFUN  init_record;
+  DEVSUPFUN  get_ioint_info;
+  DEVSUPFUN  read_ai;
+  DEVSUPFUN  special_linconv;
+} devAiVALSource = {
+  6, /* space for 6 functions */
+  NULL,
+  value_init,
+  value_init_ai_record,
+  value_get_ioint_info,
+  val_read_ai,
+  NULL
+};
+
+epicsExportAddress(dset,devAiVALSource);
 

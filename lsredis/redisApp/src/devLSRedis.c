@@ -530,13 +530,14 @@ static void lsRedisSetRedisValueState( const char *connectorName,
     rvs->setter = setter;
 
   if( inRecord != NULL) {
-    scanIoInit( &(rvs->in_scan));	// only the in record is I/O Intr
+    scanIoInit( &(rvs->in_scan));
     rvs->inputPV  = inRecord;
     prec = (dbCommon *)inRecord;
     prec->dpvt = rvs;
   }
 
   if( outRecord != NULL) {
+    scanIoInit( &(rvs->out_scan));
     rvs->outputPV = outRecord;
     prec = (dbCommon *)outRecord;
     prec->dpvt = rvs;
@@ -550,7 +551,7 @@ static void lsRedisSetRedisValueState( const char *connectorName,
  ** Called from main thread.
  **
  */
-static long init_record( stringinRecord *prec) {
+static long init_record( stringoutRecord *prec) {
   static char *id = "devLSRedis init_record";
   DBENTRY dbentry;
   DBENTRY *pdbentry = &dbentry;
@@ -607,6 +608,7 @@ static long init_record( stringinRecord *prec) {
 
   connectToPostgres( rs);
 
+  fprintf( stderr, "%s: initialized\n", id);
   return 0;
 }
 
@@ -696,6 +698,11 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
   r = reply;
   rvs   = (redisValueState *)privdata;
 
+  if( r->type != REDIS_REPLY_STRING) {
+    fprintf( stderr, "%s: problem with key '%s'  type: %d\n", id, rvs->redisKey, r->type);
+    return;
+  }
+
   epicsMutexMustLock( rvs->lock);
   if( rvs->nsv < strlen( r->str)-1) {
     rvs->nsv = strlen( r->str) + 32;
@@ -710,6 +717,11 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
 
   if( rvs->in_scan)
     scanIoRequest( rvs->in_scan);
+
+  if( rvs->out_scan)
+    scanIoRequest( rvs->out_scan);
+
+  fprintf( stderr, "%s:  '%s' = '%s'\n", id, rvs->redisKey, rvs->stringVal);
 }
 
 /** Service a message comming from the subscription connection
@@ -861,7 +873,7 @@ static void worker(void *raw) {
   for( status = dbFirstRecordType(pdbentry); !status; status = dbNextRecordType(pdbentry)) {
     for( status = dbFirstRecord( pdbentry); !status; status = dbNextRecord( pdbentry)) {
       dbFindField( pdbentry, "DTYP");
-      if( dbFoundField( pdbentry) && strcmp(dbGetString( pdbentry),"Redis Source")==0) {
+      if( dbFoundField( pdbentry) && (strcmp(dbGetString( pdbentry),"Redis Source")==0 || strcmp(dbGetString( pdbentry), "VAL Source")==0)) {
 	dbFindField( pdbentry, "DPVT");
 	if( dbFoundField( pdbentry)) {
 	  rvs = ((aiRecord *)(pdbentry->precnode->precord))->dpvt;
@@ -977,6 +989,7 @@ static void worker(void *raw) {
  **
  */
 static void start_workers(initHookState state) {
+  //static char *id = "start_workers";
   ELLNODE *cur;
   if(state!=initHookAfterInterruptAccept)
     return;
@@ -1009,14 +1022,18 @@ static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io) {
  ** Called from main thread.
  **
  */
-static long read_stringin( stringinRecord *prec) {
-  //  static char *id = "read_stringin";
+static long write_stringout( stringoutRecord *prec) {
+  static char *id = "write_stringout";
   redisState      *rs;
   redisValueState *rvs;
+  int udf;
 
   rs = prec->dpvt;
 
+  fprintf( stderr, "%s: servicing %s\n", id, prec->name);
+
   epicsMutexMustLock( rs->queueLock);
+  prec->udf = 0;
   while( rs->queueIn != rs->queueOut) {
     rvs = rs->queue[rs->queueOut++ % rs->queueSize];
     //
@@ -1025,15 +1042,27 @@ static long read_stringin( stringinRecord *prec) {
     strncpy( prec->val, rvs->redisKey, sizeof( prec->val)-1);
     prec->val[sizeof( prec->val)-1] = 0;
     
+    fprintf( stderr, "%s:      %s\n", id, rvs->redisKey);
+
     //
     // get epics to do some work
     //
-    if( rvs->outputPV)
+    if( rvs->outputPV) {
+      epicsMutexMustLock( rvs->lock);
       rvs->outputPV->pact = 0;		// Allow the record to get processed later.
-
-    if( rvs->inputPV)
+      epicsMutexUnlock( rvs->lock);
+    }
+    if( rvs->inputPV) {
+      epicsMutexMustLock( rvs->lock);
       rvs->inputPV->pact  = 0;
+      udf = rvs->inputPV->udf;
+      epicsMutexUnlock( rvs->lock);
+      if( udf)
+	dbScanPassive( NULL, rvs->inputPV);
+    }
+
   }
+  prec->pact = 0;
   epicsMutexUnlock( rs->queueLock);
   return 0;
 }
@@ -1047,17 +1076,17 @@ struct {
   DEVSUPFUN  init;
   DEVSUPFUN  init_record;
   DEVSUPFUN  get_ioint_info;
-  DEVSUPFUN  read_stringin;
-} devStringinRedisConnector = {
-  5, /* space for 6 functions */
+  DEVSUPFUN  write_stringout;
+} devStringoutRedisConnector = {
+  5, /* space for 5 functions */
   NULL,
   init,
   init_record,
   get_ioint_info,
-  read_stringin
+  write_stringout
 };
 
-epicsExportAddress( dset, devStringinRedisConnector);
+epicsExportAddress( dset, devStringoutRedisConnector);
 
 
 /** Initialize our redis value record

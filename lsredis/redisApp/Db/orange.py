@@ -1,6 +1,9 @@
 import redis
 configList = {
     "stns.2" : [
+        #
+        # EPICS originated pvs
+        #
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:E1:DT:Z0:ActPos",           "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:E1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
@@ -64,80 +67,200 @@ configList = {
         { "inp": "PA:21ID:E_CRASH_BUTTON_1",     "key": "pss.crash_button_1",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:E_CRASH_BUTTON_2",     "key": "pss.crash_button_2",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:E_CRASH_BUTTON_3",     "key": "pss.crash_button_3",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-#
-#
-        { "pv": "align.x",                       "key": "align.x.position",              "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "align.x.position",              "key": "align.x.position",                                 "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "align.y",                       "key": "align.y.position",              "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "align.y.position",              "key": "align.y.position",                                 "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "align.z",                       "key": "align.z.position",              "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "align.z.position",              "key": "align.z.position",                                 "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "appy",                          "key": "appy.position",                 "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "appy.position",                 "key": "appy.position",                                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "appz",                          "key": "appz.position",                 "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "appz.position",                 "key": "appz.position",                                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "backLight.factor",              "key": "backLight.factor.position",     "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "1"},
-        { "pv": "backLight.factor.position",     "key": "backLight.factor.position",                        "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "1"},
-        { "pv": "backLight.intensity",           "key": "backLight.intensity.position",  "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
-        { "pv": "backLight.intensity.position",  "key": "backLight.intensity.position",                     "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "0"},
-        { "pv": "backLight",                     "key": "backLight.position",            "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "bo", "znam": "Off", "onam": "On"},
-        { "pv": "backLight.position",            "key": "backLight.position",                               "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "pv": "cam.zoom",                      "key": "cam.zoom.position",             "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
-        { "pv": "cam.zoom.position",             "key": "cam.zoom.position",                                "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "0"},
-        { "pv": "capy",                          "key": "capy.position",                 "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "capy.position",                 "key": "capy.position",                                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "capz",                          "key": "capz.position",                 "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "capz.position",                 "key": "capz.position",                                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "centering.x",                   "key": "centering.x.position",          "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "centering.x.position",          "key": "centering.x.position",                             "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "centering.y",                   "key": "centering.y.position",          "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "centering.y.position",          "key": "centering.y.position",                             "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "cryo",                          "key": "cryo.position",                 "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "cryo.position",                 "key": "cryo.position",                                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Out",    "onam": "In"},
-        { "pv": "dryer",                         "key": "dryer.position",                "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "bo", "znam": "Out",    "onam": "In"},
-        { "pv": "dryer.position",                "key": "dryer.position",                                   "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Off",    "onam": "On"},
-        { "pv": "fastShutter",                   "key": "fastShutter.position",          "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "bo", "znam": "Off",    "onam": "On"},
-        { "pv": "fastShutter.position",          "key": "fastShutter.position",                             "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Closed", "onam": "Open"},
-        { "pv": "fluo",                          "key": "fluo.position",                 "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "bo", "znam": "Out",    "onam": "In"},
-        { "pv": "fluo.position",                 "key": "fluo.position",                                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Out",    "onam": "In"},
-        { "pv": "frontLight.factor",             "key": "frontLight.factor.position",    "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "1"},
-        { "pv": "frontLight.factor.position",    "key": "frontLight.factor.position",                       "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "1"},
-        { "pv": "frontLight.intensity",          "key": "frontLight.intensity.position", "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
-        { "pv": "frontLight.intensity.position", "key": "frontLight.intensity.position",                    "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "0"},
-        { "pv": "frontLight",                    "key": "frontLight.position",           "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "bo", "znam": "Off",    "onam": "On"},
-        { "pv": "frontLight.position",           "key": "frontLight.position",                              "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Off",    "onam": "On"},
-        { "pv": "kappa",                         "key": "kappa.position",                "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "kappa.position",                "key": "kappa.position",                                   "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "lightPolar",                    "key": "lightPolar.position",           "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "lightPolar.position",           "key": "lightPolar.position",                              "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "omega",                         "key": "omega.position",                "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "omega.position",                "key": "omega.position",                                   "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "phi",                           "key": "phi.position",                  "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "phi.position",                  "key": "phi.position",                                     "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "scint.focus",                   "key": "scint.focus.position",          "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "1"},
-        { "pv": "scint.focus.position",          "key": "scint.focus.position",                             "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "1"},
-        { "pv": "scint",                         "key": "scint.position",                "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
-        { "pv": "scint.position",                "key": "scint.position",                                   "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "ai", "prec": "3"},
-        { "pv": "smartMagnet",                   "key": "smartMagnet.position",          "setter": "kvset", "oscan": "Passive",  "dtyp": "Redis Source", "ro": "bo", "znam": "Off",    "onam": "On"},
-        { "pv": "smartMagnet.position",          "key": "smartMagnet.position",                             "iscan": "I/O Intr", "dtyp": "Redis Source", "ri": "bi", "znam": "Off",    "onam": "On"},
         #
+        # MD2 originated PVs
+        #  setter allows write access
         #
+        { "pv": "align:x",                  "key": "align.x.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "align:x_RBV",              "key": "align.x.position",                                 "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "align:y",                  "key": "align.y.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "align:y_RBV",              "key": "align.y.position",                                 "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "align:z",                  "key": "align.z.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "align:z_RBV",              "key": "align.z.position",                                 "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "appy",                     "key": "appy.position",                 "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "appy_RBV",                 "key": "appy.position",                                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "appz",                     "key": "appz.position",                 "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "appz_RBV",                 "key": "appz.position",                                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "backLight:factor",         "key": "backLight.factor.position",     "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "1"},
+        { "pv": "backLight:factor_RBV",     "key": "backLight.factor.position",                        "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "1"},
+        { "pv": "backLight:intensity",      "key": "backLight.intensity.position",  "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "0"},
+        { "pv": "backLight:intensity_RBV",  "key": "backLight.intensity.position",                     "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
+        { "pv": "backLight",                "key": "backLight.position",            "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Off", "onam": "On"},
+        { "pv": "backLight_RBV",            "key": "backLight.position",                               "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Off", "onam": "On"},
+        { "pv": "cam:zoom",                 "key": "cam.zoom.position",             "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "0"},
+        { "pv": "cam:zoom_RBV",             "key": "cam.zoom.position",                                "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
+        { "pv": "capy",                     "key": "capy.position",                 "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "capy_RBV",                 "key": "capy.position",                                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "capz",                     "key": "capz.position",                 "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "capz_RBV",                 "key": "capz.position",                                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "centering:x",              "key": "centering.x.position",          "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "centering:x_RBV",          "key": "centering.x.position",                             "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "centering:y",              "key": "centering.y.position",          "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "centering:y_RBV",          "key": "centering.y.position",                             "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "cryo",                     "key": "cryo.position",                 "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Out",    "onam": "In"},
+        { "pv": "cryo_RBV",                 "key": "cryo.position",                                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Out",    "onam": "In"},
+        { "pv": "dryer",                    "key": "dryer.position",                "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Out",    "onam": "In"},
+        { "pv": "dryer_RBV",                "key": "dryer.position",                                   "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Off",    "onam": "On"},
+        { "pv": "fastShutter",              "key": "fastShutter.position",          "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Off",    "onam": "On"},
+        { "pv": "fastShutter_RBV",          "key": "fastShutter.position",                             "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Closed", "onam": "Open"},
+        { "pv": "fluo",                     "key": "fluo.position",                 "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Out",    "onam": "In"},
+        { "pv": "fluo_RBV",                 "key": "fluo.position",                                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Out",    "onam": "In"},
+        { "pv": "frontLight:factor",        "key": "frontLight.factor.position",    "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "1"},
+        { "pv": "frontLight:factor_RBV",    "key": "frontLight.factor.position",                       "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "1"},
+        { "pv": "fzzntLight:intensity",     "key": "frontLight.intensity.position", "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "0"},
+        { "pv": "frontLight:intensity_RBV", "key": "frontLight.intensity.position",                    "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
+        { "pv": "frontLight",               "key": "frontLight.position",           "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Off",    "onam": "On"},
+        { "pv": "frontLight_RBV",           "key": "frontLight.position",                              "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Off",    "onam": "On"},
+        { "pv": "kappa",                    "key": "kappa.position",                "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "kappa_RBV",                "key": "kappa.position",                                   "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "lightPolar",               "key": "lightPolar.position",           "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "lightPolar_RBV",           "key": "lightPolar.position",                              "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "omega",                    "key": "omega.position",                "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "omega_RBV",                "key": "omega.position",                                   "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "phi",                      "key": "phi.position",                  "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "phi_RBV",                  "key": "phi.position",                                     "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "scint:focus",              "key": "scint.focus.position",          "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "1"},
+        { "pv": "scint:focus_RBV",          "key": "scint.focus.position",                             "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "1"},
+        { "pv": "scint",                    "key": "scint.position",                "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
+        { "pv": "scint_RBV",                "key": "scint.position",                                   "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
+        { "pv": "smartMagnet",              "key": "smartMagnet.position",          "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "bi", "znam": "Off",    "onam": "On"},
+        { "pv": "smartMagnet_RBV",          "key": "smartMagnet.position",                             "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "Off",    "onam": "On"},
+        { "pv": "collection:running",       "key": "collection.running",                               "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "bo", "znam": "False",  "onam": "True"},
         #
-        { "key": "esaf",               "ri": "longin",   "iscan": "I/O Intr", "dtyp": "Redis Source"},
-        { "key": "robot.path",         "ri": "stringin", "iscan": "I/O Intr", "dtyp": "Redis Source"},
-        { "key": "collection.running", "ri": "bi",       "iscan": "I/O Intr", "dtyp": "Redis Source"}
+        # Script sourced variables
+        #
+        { "key": "esaf",               "ro": "longout",   "oscan": "I/O Intr", "dtyp": "Redis Source"},  # kvRedis.js
+        { "key": "robot.path",         "ro": "stringout", "oscan": "I/O Intr", "dtyp": "Redis Source"},  # CatsOk.py
+
+        { "pv": "saxs:start_RBV",       "key": "saxs.start",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.start",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        { "pv": "saxs:abort_RBV",       "key": "saxs.abort",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.abort",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        { "pv": "saxs:pause_RBV",       "key": "saxs.pause",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.pause",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        { "pv": "saxs:snap_RBV",        "key": "saxs.snap",        "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.snap",        "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        { "pv": "saxs:retake_RBV",      "key": "saxs.retake",      "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.retake",      "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        { "pv": "saxs:retakeframe_RBV", "key": "saxs.retakeframe", "ro": "longout",                      "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.retakeframe", "ri": "longin",    "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source"},
+        { "pv": "saxs:directory_RBV",   "key": "saxs.directory",   "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.directory",   "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "saxs:prefix_RBV",      "key": "saxs.prefix",      "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.prefix",      "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "saxs:exptime_RBV",     "key": "saxs.exptime",     "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.exptime",     "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:delta_RBV",       "key": "saxs.delta",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.delta",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:ax0_RBV",       "key": "saxs.0.ax0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.ax0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:ay0_RBV",       "key": "saxs.0.ay0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.ay0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:az0_RBV",       "key": "saxs.0.az0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.az0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:cx0_RBV",       "key": "saxs.0.cx0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.cx0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:cy0_RBV",       "key": "saxs.0.cy0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.cy0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:x:dist_RBV",    "key": "saxs.0.x.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.x.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:x:npts_RBV",    "key": "saxs.0.x.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.x.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:y:dist_RBV",    "key": "saxs.0.y.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.y.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:y:npts_RBV",    "key": "saxs.0.y.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.0.y.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:0:set_RBV",       "key": "saxs.0.set",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.0.set",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
+        { "pv": "saxs:prefix1_RBV",     "key": "saxs.prefix1",     "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.prefix1",     "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "saxs:1:ax0_RBV",       "key": "saxs.1.ax0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.ax0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:ay0_RBV",       "key": "saxs.1.ay0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.ay0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:az0_RBV",       "key": "saxs.1.az0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.az0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:cx0_RBV",       "key": "saxs.1.cx0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.cx0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:cy0_RBV",       "key": "saxs.1.cy0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.cy0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:x:dist_RBV",    "key": "saxs.1.x.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.x.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:x:npts_RBV",    "key": "saxs.1.x.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.x.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:y:dist_RBV",    "key": "saxs.1.y.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.y.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:y:npts_RBV",    "key": "saxs.1.y.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.1.y.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:1:set_RBV",       "key": "saxs.1.set",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.1.set",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
+        { "pv": "saxs:prefix2_RBV",     "key": "saxs.prefix2",     "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.prefix2",     "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "saxs:2:ax0_RBV",       "key": "saxs.2.ax0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.ax0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:ay0_RBV",       "key": "saxs.2.ay0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.ay0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:az0_RBV",       "key": "saxs.2.az0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.az0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:cx0_RBV",       "key": "saxs.2.cx0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.cx0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:cy0_RBV",       "key": "saxs.2.cy0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.cy0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:x:dist_RBV",    "key": "saxs.2.x.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.x.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:x:npts_RBV",    "key": "saxs.2.x.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.x.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:y:dist_RBV",    "key": "saxs.2.y.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.y.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:y:npts_RBV",    "key": "saxs.2.y.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.2.y.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:2:set_RBV",       "key": "saxs.2.set",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.2.set",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
+        { "pv": "saxs:prefix3_RBV",     "key": "saxs.prefix3",     "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.prefix3",     "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "saxs:3:ax0_RBV",       "key": "saxs.3.ax0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.ax0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:ay0_RBV",       "key": "saxs.3.ay0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.ay0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:az0_RBV",       "key": "saxs.3.az0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.az0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:cx0_RBV",       "key": "saxs.3.cx0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.cx0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:cy0_RBV",       "key": "saxs.3.cy0",       "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.cy0",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:x:dist_RBV",    "key": "saxs.3.x.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.x.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:x:npts_RBV",    "key": "saxs.3.x.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.x.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:y:dist_RBV",    "key": "saxs.3.y.dist",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.y.dist",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:y:npts_RBV",    "key": "saxs.3.y.npts",    "ro": "ao",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "prec": "2"},    # medm for saxs.py
+        {                               "key": "saxs.3.y.npts",    "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "prec": "2"},     # medm for saxs.py
+        { "pv": "saxs:3:set_RBV",       "key": "saxs.3.set",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.3.set",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
+        { "pv": "saxs:prefix4_RBV",     "key": "saxs.prefix4",     "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
+        {                               "key": "saxs.prefix4",     "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        
     ]
 }
 
 ndx    = "stns.2"
 for obj in configList[ndx]:
     k = ndx+'.'+obj["key"]
+    
+    print 'HDEL %s DTYP OUT_RECORD INP ZNAM ONAM OUT_SCAN OUT_PV SETTER IN_RECORD OUT IN_PV OUT_DTYP IN_DTYP' % (k)
 
+for obj in configList[ndx]:
+    k = ndx+'.'+obj["key"]
+    
     if obj.has_key( 'ro'):
-        print 'HSET %s DTYP "%s"' % ( k, obj["dtyp"])
+        print 'HSET %s OUT_DTYP "%s"' % ( k, obj["dtyp"])
         print 'HSET %s OUT_RECORD %s' % ( k, obj["ro"])
-        if obj.has_key( 'inp'):
-            print 'HSET %s INP %s' % ( k, obj["inp"])
+        if obj.has_key( 'out'):
+            print 'HSET %s OUT %s' % ( k, obj["out"])
+
+        if obj.has_key( 'prec'):
+            print 'HSET %s PREC %s' % ( k, obj["prec"])
             
         if obj.has_key( 'znam'):
             print 'HSET %s ZNAM %s' %( k, obj["znam"])
@@ -157,11 +280,14 @@ for obj in configList[ndx]:
         if obj.has_key( 'setter'):
             print 'HSET %s SETTER %s' % ( k, obj["setter"])
     
-        print 'HSET %s DTYP "%s"' % ( k, obj["dtyp"])
+        print 'HSET %s IN_DTYP "%s"' % ( k, obj["dtyp"])
         print 'HSET %s IN_RECORD %s' % ( k, obj["ri"])
         if obj.has_key( 'inp'):
             print 'HSET %s INP %s' % ( k, obj["inp"])
             
+        if obj.has_key( 'prec'):
+            print 'HSET %s PREC %s' % ( k, obj["prec"])
+
         if obj.has_key( 'znam'):
             print 'HSET %s ZNAM %s' %( k, obj["znam"])
 
@@ -175,3 +301,4 @@ for obj in configList[ndx]:
         else:
             print 'HSET %s IN_PV %s' % ( k, obj["key"].replace( '.', ':'))
 
+    print 'HSETNX %s VALUE ""' % ( k)

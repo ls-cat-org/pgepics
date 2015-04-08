@@ -104,6 +104,7 @@ typedef struct redisValueStateStruct {
 				// need to increase the buffer rarely
   epicsMutexId lock;		// Keep things thread safe
   IOSCANPVT    in_scan;		// So we can request that our record get processed
+  IOSCANPVT    out_scan;	// So we can request that our record get processed
   const char  *redisConnector;
   int          writeWasPending;	// detect if write pending has changed
   int          writePending;		// 0 if we are not waiting for a write callback, 1 if we are

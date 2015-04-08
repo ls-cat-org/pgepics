@@ -23,16 +23,15 @@ static long value_init_bo_record( boRecord *prec) {
 
 
 
-/** Copy the value that the redis worker gave us and take all the
- ** credit
+/** Receive value from redis
+ ** 
  **
  ** Called from main thread
  */
 static long value_write_bo( boRecord *prec) {
   //  static char *id = "value_write_bo";
-  char tmp[128];
-  char pgtmp[128];
   redisValueState *rvs;
+  int ourVal;
 
   rvs = prec->dpvt;
 
@@ -40,31 +39,42 @@ static long value_write_bo( boRecord *prec) {
     return 1;
 
   epicsMutexMustLock( rvs->lock);
-  if( strcmp( rvs->setter, "redis") == 0) {
-    snprintf( tmp, sizeof(tmp)-1, "%d", prec->val == 0 ? 0 : 1);
-    tmp[sizeof(tmp)-1] = 0;
+  switch( rvs->stringVal[0]) {
+  case 'Y':
+  case 'y':
+  case 'T':
+  case 't':
+    ourVal = 1;
+    break;
+
+  case 'N':
+  case 'n':
+  case 'F':
+  case 'f':
+    ourVal = 0;
+    break;
+
+  default:
+    ourVal = strtol( rvs->stringVal, NULL, 0) == 0 ? 0 : 1;
   }
 
-  if( strcmp( rvs->setter, "kvset") == 0) {
-    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, prec->val == 0 ? 0 : 1);
-    pgtmp[sizeof(pgtmp)-1] = 0;
-  }
+  prec->val = ourVal; 
+  prec->udf = 0;
+  if( rvs->inputPV && rvs->inputPV->udf)
+    dbScanPassive( NULL, rvs->inputPV);
   epicsMutexUnlock( rvs->lock);
 
-  //
-  // Redis Acync callbacks not needed here because our subscriber
-  // process will pick up the publication notice and mark this record
-  // as no longer being active by setting pact = 0.
-  //
-  if( strcmp( rvs->setter, "redis") == 0) {
-    setRedis( rvs, tmp);
-    prec->pact = 1;		// Set back to zero when we see that redis has published our new value
-  }
-  
-  if( strcmp( rvs->setter, "kvset") == 0) {
-    lsRedisSendQuery( rvs->rs, pgtmp);
-    prec->pact = 0;		// TODO: set to one here and back to zero when PG acts on (or at least sees) the command
-  }
+  return 0;
+}
+
+
+/** Tell epics we like i/o intr so much we are willing to tell it how.
+ */
+static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
+  redisValueState* rvs;
+
+  rvs = prec->dpvt;
+  *io = rvs->out_scan;
   return 0;
 }
 
@@ -82,7 +92,7 @@ struct {
   NULL,
   value_init,
   value_init_bo_record,
-  NULL,
+  value_get_ioint_info,
   value_write_bo
 };
 
