@@ -92,7 +92,6 @@ static long ca_read_ai( aiRecord *prec) {
  */
 static long val_read_ai( aiRecord *prec) {
   static char *id = "val_read_ai";
-  double ourVal;
   char tmp[128];
   char pgtmp[128];
   int dontSet;
@@ -100,9 +99,6 @@ static long val_read_ai( aiRecord *prec) {
   redisValueState *rvs;
 
   rvs = prec->dpvt;
-
-  fprintf( stderr, "%s: %s\n", id, prec->name);
-
   if( rvs == NULL) {
     fprintf( stderr, "%s: Missing redis value state for %s\n", id, prec->name);
     return 1;
@@ -114,8 +110,7 @@ static long val_read_ai( aiRecord *prec) {
     prec->val = strtod( rvs->stringVal, NULL);
     dontSet = 1;
   } else {
-    ourVal = prec->val;
-    snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, ourVal);
+    snprintf( tmp, sizeof(tmp)-1, "%.*f", prec->prec, prec->val);
     tmp[sizeof(tmp)-1] = 0;
   
     if( strstr( rvs->setter, "kvset") != NULL) {

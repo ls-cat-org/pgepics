@@ -54,7 +54,7 @@ for k in keys:
             if obj.has_key(n):
                 print '  field( %s,           "%s")' % (n, obj[n])
         if obj.has_key( 'OUT'):
-            print  '  field( OUT,            "%s")' % (obj["OUT"])
+            print  '  field( OUT,            "%s CA")' % (obj["OUT"])
         if obj.has_key( 'PREC'):
             print '  field( PREC,            "%s")' % (obj["PREC"])
         if obj["OUT_RECORD"] == 'ao':
@@ -76,7 +76,7 @@ for k in keys:
             if obj.has_key(n):
                 print '  field( %s,           "%s")' % (n, obj[n])
         if obj.has_key( 'INP'):
-            print  '  field( INP,            "%s")' % (obj["INP"])
+            print  '  field( INP,            "%s CPP")' % (obj["INP"])
         if obj.has_key( 'PREC'):
             print '  field( PREC,            "%s")' % (obj["PREC"])
         if obj["IN_RECORD"] == 'ai':

@@ -68,6 +68,14 @@ configList = {
         { "inp": "PA:21ID:E_CRASH_BUTTON_2",     "key": "pss.crash_button_2",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:E_CRASH_BUTTON_3",     "key": "pss.crash_button_3",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         #
+        #
+        #
+        { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
+        { "inp": "21:E1:DT:Z0:ActPos",           "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
+        { "inp": "21:ECAMS:Edge1:VerticalFound", "key": "capDetected",                 "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "21:E1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:E1:TB:L:ActPos",            "key": "table.x.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        #
         # MD2 originated PVs
         #  setter allows write access
         #
@@ -133,17 +141,17 @@ configList = {
         { "key": "robot.path",         "ro": "stringout", "oscan": "I/O Intr", "dtyp": "Redis Source"},  # CatsOk.py
 
         { "pv": "saxs:start_RBV",       "key": "saxs.start",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
-        {                               "key": "saxs.start",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.start",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
         { "pv": "saxs:abort_RBV",       "key": "saxs.abort",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
-        {                               "key": "saxs.abort",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.abort",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
         { "pv": "saxs:pause_RBV",       "key": "saxs.pause",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
-        {                               "key": "saxs.pause",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.pause",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
         { "pv": "saxs:snap_RBV",        "key": "saxs.snap",        "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
-        {                               "key": "saxs.snap",        "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.snap",        "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
         { "pv": "saxs:retake_RBV",      "key": "saxs.retake",      "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
-        {                               "key": "saxs.retake",      "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
+        {                               "key": "saxs.retake",      "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
         { "pv": "saxs:retakeframe_RBV", "key": "saxs.retakeframe", "ro": "longout",                      "oscan": "I/O Intr", "dtyp": "Redis Source"},
-        {                               "key": "saxs.retakeframe", "ri": "longin",    "setter": "redis", "iscan": "Passive",  "dtyp": "Redis Source"},
+        {                               "key": "saxs.retakeframe", "ri": "longin",    "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
         { "pv": "saxs:directory_RBV",   "key": "saxs.directory",   "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},
         {                               "key": "saxs.directory",   "ri": "stringin",  "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
         { "pv": "saxs:prefix_RBV",      "key": "saxs.prefix",      "ro": "stringout",                    "oscan": "I/O Intr", "dtyp": "Redis Source"},

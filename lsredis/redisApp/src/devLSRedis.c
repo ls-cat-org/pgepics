@@ -712,16 +712,18 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
   }
   strncpy( rvs->stringVal, r->str, rvs->nsv - 1);
   rvs->stringVal[rvs->nsv - 1] = 0;
-
   epicsMutexUnlock(   rvs->lock);
 
-  if( rvs->in_scan)
+  fprintf( stderr, "%s: adding %s with value %s\n", id, rvs->redisKey, rvs->stringVal);
+
+  //  if( rvs->inputPV && rvs->inputPV->scan == SCAN_PASSIVE)
+  //    dbScanPassive( NULL, rvs->inputPV);
+
+  if( rvs->inputPV && rvs->inputPV->scan == SCAN_IO_EVENT)
     scanIoRequest( rvs->in_scan);
 
-  if( rvs->out_scan)
+  if( rvs->outputPV && rvs->outputPV->scan == SCAN_IO_EVENT)
     scanIoRequest( rvs->out_scan);
-
-  fprintf( stderr, "%s:  '%s' = '%s'\n", id, rvs->redisKey, rvs->stringVal);
 }
 
 /** Service a message comming from the subscription connection
@@ -730,7 +732,7 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
  **
  */
 static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privdata) {
-  //  static char *id = "devRedisSubscribeCB";
+  static char *id = "devRedisSubscribeCB";
   redisReply *r;
   char *key;
   char *publisher;
@@ -762,11 +764,12 @@ static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privda
     //
     // is this self published?
     //
-    if( strstr( publisher, rvs->redisConnector)) {
+    if( strstr( publisher, rvs->redisConnector) != NULL) {
       //
       // put this on our queue for the main thread to request lower
       // the pact flag
       //
+      fprintf( stderr, "%s: queuing %s\n", id, rvs->redisKey);
       epicsMutexMustLock( rvs->rs->queueLock);
       rvs->rs->queue[ (rvs->rs->queueIn++ % rvs->rs->queueSize)] = rvs;
       epicsMutexUnlock( rvs->rs->queueLock);
@@ -872,16 +875,25 @@ static void worker(void *raw) {
   dbInitEntry( pdbbase, pdbentry);
   for( status = dbFirstRecordType(pdbentry); !status; status = dbNextRecordType(pdbentry)) {
     for( status = dbFirstRecord( pdbentry); !status; status = dbNextRecord( pdbentry)) {
-      dbFindField( pdbentry, "DTYP");
-      if( dbFoundField( pdbentry) && (strcmp(dbGetString( pdbentry),"Redis Source")==0 || strcmp(dbGetString( pdbentry), "VAL Source")==0)) {
-	dbFindField( pdbentry, "DPVT");
-	if( dbFoundField( pdbentry)) {
-	  rvs = ((aiRecord *)(pdbentry->precnode->precord))->dpvt;
+      dbFindField( pdbentry, "DPVT");
+      if( dbFoundField( pdbentry)) {
+	rvs = ((struct dbCommon *)(pdbentry->precnode->precord))->dpvt;
 
+	dbFindField( pdbentry, "DTYP");
+	//
+	// For these the initial value is stored in redis
+	//
+	if( dbFoundField( pdbentry) && (strcmp( dbGetString( pdbentry),"Redis Source")==0 || strcmp(dbGetString( pdbentry), "VAL Source")==0)) {
 	  epicsMutexMustLock( rs->lock);
 	  redisAsyncCommand( rs->rc, devRedis_setPVCB, rvs, "HGET %s VALUE", rvs->redisKey);
 	  epicsMutexUnlock(   rs->lock);
 	}
+	/*
+	if( dbFoundField( pdbentry) && (strcmp( dbGetString( pdbentry), "CA Source")==0 )) {
+	  if( rvs->inputPV && rvs->inputPV->scan == SCAN_PASSIVE)
+	    dbScanPassive( NULL, rvs->inputPV);
+	}
+	*/
       }
     }
   }
@@ -1023,14 +1035,12 @@ static long get_ioint_info(int dir,dbCommon* prec,IOSCANPVT* io) {
  **
  */
 static long write_stringout( stringoutRecord *prec) {
-  static char *id = "write_stringout";
+  //  static char *id = "write_stringout";
   redisState      *rs;
   redisValueState *rvs;
   int udf;
 
   rs = prec->dpvt;
-
-  fprintf( stderr, "%s: servicing %s\n", id, prec->name);
 
   epicsMutexMustLock( rs->queueLock);
   prec->udf = 0;
@@ -1041,8 +1051,6 @@ static long write_stringout( stringoutRecord *prec) {
     //
     strncpy( prec->val, rvs->redisKey, sizeof( prec->val)-1);
     prec->val[sizeof( prec->val)-1] = 0;
-    
-    fprintf( stderr, "%s:      %s\n", id, rvs->redisKey);
 
     //
     // get epics to do some work

@@ -40,7 +40,6 @@ static long ca_read_stringin( stringinRecord *prec) {
   if( rvs == NULL)
     return 1;
 
-
   dbGetLink( &prec->inp, DBR_STRING, ourVal, NULL, NULL);
 
   //
@@ -100,7 +99,6 @@ static long ca_read_stringin( stringinRecord *prec) {
  */
 static long val_read_stringin( stringinRecord *prec) {
   static char *id = "val_read_stringin";
-  char ourVal[MAX_STRING_SIZE];
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -110,10 +108,8 @@ static long val_read_stringin( stringinRecord *prec) {
   if( rvs == NULL)
     return 1;
 
-  strncpy( prec->val, ourVal, sizeof( prec->val) - 1);
-  prec->val[sizeof( prec->val)-1] = 0;
-
   dontSet = 0;
+
   epicsMutexMustLock( rvs->lock);
   if( prec->udf) {
     strncpy( prec->val, rvs->stringVal, sizeof( prec->val) - 1);
@@ -121,7 +117,7 @@ static long val_read_stringin( stringinRecord *prec) {
     dontSet = 1;
   } else {
     if( strcmp( rvs->setter, "redis") == 0) {
-      snprintf( tmp, sizeof(tmp)-1, "%s", ourVal);
+      snprintf( tmp, sizeof(tmp)-1, "%s", prec->val);
       tmp[sizeof(tmp)-1] = 0;
     }
     
@@ -129,12 +125,12 @@ static long val_read_stringin( stringinRecord *prec) {
     // TODO: use prepared statements to remove SQL injection risk
     //
     if( strstr( rvs->setter, "kvset") != NULL) {
-      if( strchr( ourVal, '\'') != NULL) {
-	fprintf( stderr, "%s: TODO: use prepared statements so we can process strings like this: %s\n", id, ourVal);
+      if( strchr( prec->val, '\'') != NULL) {
+	fprintf( stderr, "%s: TODO: use prepared statements so we can process strings like this: %s\n", id, prec->val);
 	return 0;
       }
 
-      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%s')", rvs->redisKey, ourVal);
+      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%s')", rvs->redisKey, prec->val);
       pgtmp[sizeof(pgtmp)-1] = 0;
     }
   }
@@ -143,7 +139,6 @@ static long val_read_stringin( stringinRecord *prec) {
 
   if( dontSet)
     return 0;
-
 
   //
   // Redis Acync callbacks not needed here because our subscriber
@@ -154,7 +149,7 @@ static long val_read_stringin( stringinRecord *prec) {
     setRedis( rvs, tmp);
 
     // see note for AI support
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

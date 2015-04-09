@@ -49,6 +49,8 @@ static long ca_read_bi( biRecord *prec) {
 
   ourVal = ourVal == 0 ? 0 : 1;
 
+  fprintf( stderr, "%s: %s = %d\n", id, prec->name, ourVal);
+
   if( !prec->udf && prec->val == ourVal)
     return 2;
 
@@ -76,7 +78,7 @@ static long ca_read_bi( biRecord *prec) {
     setRedis( rvs, tmp);
 
     // TODO: see note for AI support
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
@@ -132,11 +134,11 @@ static long val_read_bi( biRecord *prec) {
     dontSet    = 1;
   } else {
     if( strstr( rvs->setter, "redis") != NULL) {
-      snprintf( tmp, sizeof(tmp)-1, "%d", ourVal);
+      snprintf( tmp, sizeof(tmp)-1, "%d", prec->val);
       tmp[sizeof(tmp)-1] = 0;
     }
     if( strstr( rvs->setter, "kvset") != NULL) {
-      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal);
+      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, prec->val);
       pgtmp[sizeof(pgtmp)-1] = 0;
     }
   }
@@ -155,7 +157,7 @@ static long val_read_bi( biRecord *prec) {
     setRedis( rvs, tmp);
 
     // TODO: see note for AI support
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strstr( rvs->setter, "kvset") != NULL) {
@@ -173,7 +175,7 @@ struct {
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  read_bi;
 } devBiCASource = {
-  5, /* space for 6 functions */
+  5, /* space for 5 functions */
   NULL,
   value_init,
   value_init_bi_record,
@@ -191,7 +193,7 @@ struct {
   DEVSUPFUN  get_ioint_info;
   DEVSUPFUN  read_bi;
 } devBiVALSource = {
-  5, /* space for 6 functions */
+  5, /* space for 5 functions */
   NULL,
   value_init,
   value_init_bi_record,

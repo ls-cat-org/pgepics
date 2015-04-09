@@ -32,7 +32,7 @@ static long value_get_ioint_info( int dir, dbCommon* prec, IOSCANPVT* io) {
  **
  */
 static long ca_read_longin( longinRecord *prec) {
-  //  static char *id = "ca_read_longin";
+  static char *id = "ca_read_longin";
   epicsInt32 ourVal;
   char tmp[128];
   char pgtmp[128];
@@ -43,6 +43,8 @@ static long ca_read_longin( longinRecord *prec) {
     return 1;
 
   dbGetLink( &prec->inp, DBR_LONG, &ourVal, NULL, NULL);
+
+  fprintf( stderr, "%s: %s = %d\n", id, prec->name, ourVal);
 
   if( !prec->udf && prec->val == ourVal)
     return 2;
@@ -86,7 +88,6 @@ static long ca_read_longin( longinRecord *prec) {
  */
 static long val_read_longin( longinRecord *prec) {
   //  static char *id = "val_read_longin";
-  epicsInt32 ourVal;
   char tmp[128];
   char pgtmp[128];
   redisValueState *rvs;
@@ -104,12 +105,12 @@ static long val_read_longin( longinRecord *prec) {
     dontSet = 1;
   } else {    
     if( strcmp( rvs->setter, "redis") == 0) {
-      snprintf( tmp, sizeof(tmp)-1, "%d", ourVal);
+      snprintf( tmp, sizeof(tmp)-1, "%d", prec->val);
       tmp[sizeof(tmp)-1] = 0;
     }
     
     if( strcmp( rvs->setter, "kvset") == 0) {
-      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, ourVal);
+      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%d')", rvs->redisKey, prec->val);
       pgtmp[sizeof(pgtmp)-1] = 0;
     }
   }
@@ -128,7 +129,7 @@ static long val_read_longin( longinRecord *prec) {
     setRedis( rvs, tmp);
 
     // TODO: see note for AI support
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 0;		// Set back to one when we see that redis has published our new value
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
