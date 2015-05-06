@@ -1021,6 +1021,17 @@ record( bi, "$(P):pss:di_water_flow4_trip") {
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
+record( bi, "$(P):pss:door_1_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_DOOR_1_CLOSED CPP")
+  info(  redisKey,       "$(S).pss.door_1_a")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
 record( bi, "$(P):pss:door_1_b") {
   field( DTYP,           "CA Source")
   field( DESC,           "Reids Bridge")
@@ -1029,6 +1040,17 @@ record( bi, "$(P):pss:door_1_b") {
   field( ONAM,           "On")
   field( INP,            "PB:21ID:E_DOOR_1_CLOSED CPP")
   info(  redisKey,       "$(S).pss.door_1_b")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:door_2_a") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_DOOR_2_CLOSED CPP")
+  info(  redisKey,       "$(S).pss.door_2_a")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
@@ -1109,6 +1131,17 @@ record( bi, "$(P):pss:e_user_key") {
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
+record( bi, "$(P):pss:enabled") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_APS_KEY CPP")
+  info(  redisKey,       "$(S).pss.enabled")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
 record( bi, "$(P):pss:fe_eps") {
   field( DTYP,           "CA Source")
   field( DESC,           "Reids Bridge")
@@ -1142,6 +1175,28 @@ record( bi, "$(P):pss:global_online") {
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
+record( bi, "$(P):pss:searched") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_SEARCHED CPP")
+  info(  redisKey,       "$(S).pss.searched")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:searching") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_VOICE_SEARCHING CPP")
+  info(  redisKey,       "$(S).pss.searching")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
 record( bi, "$(P):pss:stn_shutter") {
   field( DTYP,           "CA Source")
   field( DESC,           "Reids Bridge")
@@ -1150,6 +1205,17 @@ record( bi, "$(P):pss:stn_shutter") {
   field( ONAM,           "On")
   field( INP,            "PA:21ID:SES_BLOCKING_BEAM CPP")
   info(  redisKey,       "$(S).pss.stn_shutter")
+  info(  redisConnector, "$(P)")
+  info(  setter,         "redis")
+}
+record( bi, "$(P):pss:user_key") {
+  field( DTYP,           "CA Source")
+  field( DESC,           "Reids Bridge")
+  field( SCAN,           "Passive")
+  field( ZNAM,           "Off")
+  field( ONAM,           "On")
+  field( INP,            "PA:21ID:E_USER_KEY CPP")
+  info(  redisKey,       "$(S).pss.user_key")
   info(  redisConnector, "$(P)")
   info(  setter,         "redis")
 }
