@@ -35,12 +35,12 @@ configList = {
         { "inp": "PA:21ID:DIW_FLOW_2_LOW_SPT",   "key": "pss.di_water_flow2_trip",     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:DIW_FLOW_3_LOW_SPT",   "key": "pss.di_water_flow3_trip",     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:DIW_FLOW_4_LOW_SPT",   "key": "pss.di_water_flow4_trip",     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PA:21ID:E_APS_KEY",            "key": "pss.e_enabled",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PA:21ID:E_DOOR_1_CLOSED",      "key": "pss.e_door_1_a",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PA:21ID:E_DOOR_2_CLOSED",      "key": "pss.e_door_2_a",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PA:21ID:E_SEARCHED",           "key": "pss.e_searched",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PA:21ID:E_USER_KEY",           "key": "pss.e_user_key",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PA:21ID:E_VOICE_SEARCHING",    "key": "pss.e_searching",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PA:21ID:E_APS_KEY",            "key": "pss.enabled",                 "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PA:21ID:E_DOOR_1_CLOSED",      "key": "pss.door_1_a",                "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PA:21ID:E_DOOR_2_CLOSED",      "key": "pss.door_2_a",                "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PA:21ID:E_SEARCHED",           "key": "pss.searched",                "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PA:21ID:E_USER_KEY",           "key": "pss.user_key",                "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PA:21ID:E_VOICE_SEARCHING",    "key": "pss.searching",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:FAULT_EXISTS",         "key": "pss.chain_a_fault",           "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:FES_BLOCKING_BEAM",    "key": "pss.fe_shutter",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:SES_BLOCKING_BEAM",    "key": "pss.stn_shutter",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
@@ -68,13 +68,6 @@ configList = {
         { "inp": "PA:21ID:E_CRASH_BUTTON_2",     "key": "pss.crash_button_2",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:E_CRASH_BUTTON_3",     "key": "pss.crash_button_3",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         #
-        #
-        #
-        { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
-        { "inp": "21:E1:DT:Z0:ActPos",           "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
-        { "inp": "21:ECAMS:Edge1:VerticalFound", "key": "capDetected",                 "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "21:E1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
-        { "inp": "21:E1:TB:L:ActPos",            "key": "table.x.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
         #
         # MD2 originated PVs
         #  setter allows write access
