@@ -1,0 +1,17 @@
+#! /bin/bash
+
+export EPICS_CA_ADDR_LIST='10.1.255.255 164.54.253.255'
+export EPICS_CA_AUTO_ADDR_LIST=NO
+
+#
+# Allow enough time for the system to become sane.  TODO: replace with a test for redis and postgres availability
+#
+sleep 10
+
+#
+# We intend that this run (only) at boot time.  TODO: put in test to
+# see if we are running already and to do something like kill the old
+# process first or refuse to start (but not both).
+#
+
+screen -d -m /usr/local/epics/synApps_5_7/support/lsredis/bin/linux-x86_64/redis /usr/local/epics/synApps_5_7/support/lsredis/iocBoot/iocredis1/$1
