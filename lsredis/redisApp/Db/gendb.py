@@ -1,15 +1,16 @@
 import redis
-
-keyBase = 'stns.2'
+import platform
 
 r = redis.Redis()
+
+keyBase = r.hget( 'config.%s' % (platform.node().lower()), 'HEAD')
+
 keys = r.keys( '%s.*' % (keyBase))
 
 nams = [
     'ZNAM',
     'ONAM'
     ]
-
 
 print """
 record(stringout,"$(P)") {
