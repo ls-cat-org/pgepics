@@ -53,7 +53,7 @@ static long ca_read_ai( aiRecord *prec) {
   tmp[sizeof(tmp)-1] = 0;
 
   if( strcmp( rvs->setter, "kvset") == 0) {
-    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%f')", rvs->redisKey, prec->val);
+    snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvsetioc( '%s', '%f')", rvs->redisKey, prec->val);
     pgtmp[sizeof(pgtmp)-1] = 0;
   }
   epicsMutexUnlock( rvs->lock);
@@ -114,7 +114,7 @@ static long val_read_ai( aiRecord *prec) {
     tmp[sizeof(tmp)-1] = 0;
   
     if( strstr( rvs->setter, "kvset") != NULL) {
-      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvset( -1, '%s', '%f')", rvs->redisKey, prec->val);
+      snprintf( pgtmp, sizeof( pgtmp)-1, "select px.kvsetioc( '%s', '%f')", rvs->redisKey, prec->val);
       pgtmp[sizeof(pgtmp)-1] = 0;
     }
   }
