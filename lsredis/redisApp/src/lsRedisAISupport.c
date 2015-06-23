@@ -77,7 +77,7 @@ static long ca_read_ai( aiRecord *prec) {
   if( strcmp( rvs->setter, "redis") == 0) {
     setRedis( rvs, tmp);
 
-    prec->pact = 1;		// Set back to zero when we see that redis has published our new value
+    prec->pact = 0;		// Should set back to zero when we see that redis has published our new value. TODO
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {

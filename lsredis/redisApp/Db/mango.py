@@ -5,7 +5,7 @@ configList = {
         # EPICS originated pvs
         #
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
-
+        { "inp": "21:G1:scaler1_cts3.A",         "key": "I0",                          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 0},
         { "inp": "21:G1:DT:D:ActPos",            "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:G1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:G1:TB:L:ActPos",            "key": "table.x.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},

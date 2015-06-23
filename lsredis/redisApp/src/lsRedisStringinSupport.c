@@ -84,7 +84,7 @@ static long ca_read_stringin( stringinRecord *prec) {
     setRedis( rvs, tmp);
 
     // see note for AI support
-    prec->pact = 1;		// Set back to one when we see that redis has published our new value
+    prec->pact = 0;		// Should set back to zero when we see that redis has published our new value. TODO
   }
   
   if( strcmp( rvs->setter, "kvset") == 0) {
