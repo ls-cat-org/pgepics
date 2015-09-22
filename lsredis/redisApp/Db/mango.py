@@ -74,6 +74,9 @@ configList = {
         # MD2 originated PVs
         #  setter allows write access
         #
+        { "pv": "phase",                    "key": "phase",                         "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "stringin"},
+        { "pv": "phase_RBV",                "key": "phase",                                            "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "stringout"},
+        { "pv": "md2_status_code",          "key": "md2_status_code",                                  "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
         { "pv": "align:x",                  "key": "align.x.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
         { "pv": "align:x_RBV",              "key": "align.x.position",                                 "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
         { "pv": "align:y",                  "key": "align.y.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
