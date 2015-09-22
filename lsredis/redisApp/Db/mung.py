@@ -73,6 +73,9 @@ configList = {
         # MD2 originated PVs
         #  setter allows write access
         #
+        { "pv": "phase",                    "key": "phase",                         "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "stringin"},
+        { "pv": "phase_RBV",                "key": "phase",                                            "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "stringout"},
+        { "pv": "md2_status_code",          "key": "md2_status_code",                                  "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "0"},
         { "pv": "align:x",                  "key": "align.x.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
         { "pv": "align:x_RBV",              "key": "align.x.position",                                 "oscan": "I/O Intr", "dtyp": "Redis Source", "ro": "ao", "prec": "3"},
         { "pv": "align:y",                  "key": "align.y.position",              "setter": "kvset", "iscan": "Passive",  "dtyp": "VAL Source",   "ri": "ai", "prec": "3"},
@@ -133,6 +136,15 @@ configList = {
         #
         { "key": "esaf",               "ro": "longout",   "oscan": "I/O Intr", "dtyp": "Redis Source"},  # kvRedis.js
         { "key": "robot.path",         "ro": "stringout", "oscan": "I/O Intr", "dtyp": "Redis Source"},  # CatsOk.py
+
+        { "pv": "bnp:fb:offon",         "key": "bnp.fb.offon",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off",  "onam": "On"},
+        { "pv": "bnp:fb:fullscan",      "key": "bnp.fb.fullscan",    "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off",  "onam": "On"},
+        { "pv": "bnp:fb:partialscan",   "key": "bnp.fb.partialscan", "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off",  "onam": "On"},
+        { "pv": "bnp:fb:peakx",         "key": "bnp.fb.peakx",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "bnp:fb:peaky",         "key": "bnp.fb.peaky",       "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "bnp:fb:detune",        "key": "bnp.fb.detune",      "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "bnp:fb:target",        "key": "bnp.fb.target",      "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
+        { "pv": "bnp:fb:fwhm",          "key": "bnp.fb.fwhm",        "ri": "ai",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source"},
 
         { "pv": "saxs:start_RBV",       "key": "saxs.start",       "ro": "bo",                           "oscan": "I/O Intr", "dtyp": "Redis Source", "znam": "Off", "onam": "On"},
         {                               "key": "saxs.start",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off", "onam": "On"},
