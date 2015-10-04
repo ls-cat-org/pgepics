@@ -134,8 +134,8 @@ configList = {
         #
         # Script sourced variables
         #
-        { "key": "esaf",               "ro": "longout",   "oscan": "I/O Intr", "dtyp": "Redis Source"},  # kvRedis.js
-        { "key": "robot.path",         "ro": "stringout", "oscan": "I/O Intr", "dtyp": "Redis Source"},  # CatsOk.py
+        { "pv": "esaf",                     "key": "esaf",               "ro": "longout",   "oscan": "I/O Intr", "dtyp": "Redis Source"},  # kvRedis.js
+        { "pv": "robot:path",               "key": "robot.path",         "ro": "stringout", "oscan": "I/O Intr", "dtyp": "Redis Source"},  # CatsOk.py
 
         { "pv": "bnp:fb:offon",         "key": "bnp.fb.offon",       "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off",  "onam": "On"},
         { "pv": "bnp:fb:fullscan",      "key": "bnp.fb.fullscan",    "ri": "bi",        "setter": "redis", "iscan": "Passive",  "dtyp": "VAL Source",   "znam": "Off",  "onam": "On"},
