@@ -5,13 +5,15 @@ configList = {
         # EPICS originated pvs
         #
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:D1:AttAct",                 "key": "attenuation.actual",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:D1:AttRqs",                 "key": "attenuation.request",         "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:D1:AttUnit",                "key": "attenuation.unit",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Factor", "onam": "Percent"},
         { "inp": "21:G1:scaler1_cts3.A",         "key": "I0",                          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 0},
         { "inp": "21:G1:DT:D:ActPos",            "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:G1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:G1:TB:L:ActPos",            "key": "table.x.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:G1:DM:QB:ActPos",           "key": "mono.horz.position",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:G1:DM:R:ActPos",            "key": "mono.vert.position",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
-
         { "inp": "21:GCAMS:Edge1:VerticalFound", "key": "capDetected",                 "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "EPS:21:ID:BLEPS:SPER",         "key": "pss.bleps_fe_shutter_permit", "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "EPS:21:ID:BLEPS:VACPER",       "key": "pss.bleps_fe_vacuum_permit",  "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
