@@ -5,9 +5,9 @@ configList = {
         # EPICS originated pvs
         #
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
-        { "inp": "21:D1:AttAct",                 "key": "attenuation.actual",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
-        { "inp": "21:D1:AttRqs",                 "key": "attenuation.request",         "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
-        { "inp": "21:D1:AttUnit",                "key": "attenuation.unit",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Factor", "onam": "Percent"},
+        { "inp": "21:E1:AttAct",                 "key": "attenuation.actual",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:E1:AttRqs",                 "key": "attenuation.request",         "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:E1:AttUnit",                "key": "attenuation.unit",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Factor", "onam": "Percent"},
         { "inp": "21:E1:DT:Z0:ActPos",           "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:E1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:E1:TB:L:ActPos",            "key": "table.x.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
