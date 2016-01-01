@@ -78,6 +78,41 @@ configList = {
         { "inp": "PA:21ID:D_CRASH_BUTTON_3",     "key": "pss.crash_button_3",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:D_CRASH_BUTTON_4",     "key": "pss.crash_button_4",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         #
+        # Eiger
+        # These are just the readback values.  The setter is the postgres caput as that allows us to verify that the user is authorized to control the station.
+        #
+        { "inp": "21:eiger1:cam1:AcquirePeriod_RBV",   "key": "eiger.acquirePeriod",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:eiger1:cam1:AcquireTime_RBV",     "key": "eiger.acquireTime",      "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:eiger1:cam1:Armed",               "key": "eiger.armed",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Unarmed", "onam": "Armed"},
+        { "inp": "21:eiger1:cam1:BeamX_RBV",           "key": "eiger.beamX",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:eiger1:cam1:BeamY_RBV",           "key": "eiger.beamY",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:eiger1:cam1:DetDist_RBV",         "key": "eiger.detDist",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:eiger1:cam1:DetectorState_RBV",   "key": "eiger.detectorState",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:FWCompression_RBV",   "key": "eiger.FWCompression",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Disabled", "onam": "Enabled"},
+        { "inp": "21:eiger1:cam1:FWNImagesPerFile_RBV","key": "eiger.FWNImagesPerFile", "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:FWNamePattern_RBV",   "key": "eiger.FWNamePattern",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "stringin"},
+        { "inp": "21:eiger1:cam1:FlatfieldApplied_RBV","key": "eiger.flatfieldApplied", "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Disabled", "onam": "Enabled"},
+        { "inp": "21:eiger1:cam1:Humid0_RBV",          "key": "eiger.humid0",           "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
+        { "inp": "21:eiger1:cam1:Link0_RBV",           "key": "eiger.link0",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
+        { "inp": "21:eiger1:cam1:Link1_RBV",           "key": "eiger.link1",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
+        { "inp": "21:eiger1:cam1:Link2_RBV",           "key": "eiger.link2",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
+        { "inp": "21:eiger1:cam1:Link3_RBV",           "key": "eiger.link3",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
+        { "inp": "21:eiger1:cam1:ManualTrigger_RBV",   "key": "eiger.manualTrigger",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:NumImages_RBV",       "key": "eiger.numImages",        "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:NumTriggers_RBV",     "key": "eiger.numTriggers",      "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:PhotonEnergy_RBV",    "key": "eiger.photonEnergy",     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:SWVersion_RBV",       "key": "eiger.SWVersion",        "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "stringin"},
+        { "inp": "21:eiger1:cam1:SaveFiles_RBV",       "key": "eiger.saveFiles",        "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "No", "onam": "Yes"},
+        { "inp": "21:eiger1:cam1:SequenceId",          "key": "eiger.sequenceId",       "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"},
+        { "inp": "21:eiger1:cam1:SerialNumber_RBV",    "key": "eiger.serialNumber",     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "stringin"},
+        { "inp": "21:eiger1:cam1:TemperatureActual",   "key": "eiger.temperatureActual","setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
+        { "inp": "21:eiger1:cam1:Temp0_RBV",           "key": "eiger.temp0",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "1"},
+        { "inp": "21:eiger1:cam1:ThresholdEnergy_RBV", "key": "eiger.thresholdEnergy",  "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "3"},
+        { "inp": "21:eiger1:cam1:TriggerExposure_RBV", "key": "eiger.triggerExposure",  "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "6"},
+        { "inp": "21:eiger1:cam1:TriggerMode_RBV",     "key": "eiger.triggerMode",      "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "0"}, # really mbbi
+        { "inp": "21:eiger1:cam1:Wavelength_RBV",      "key": "eiger.wavelength",       "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": "4"},
+        
+        #
         # MD2 originated PVs
         #  setter allows write access
         #
