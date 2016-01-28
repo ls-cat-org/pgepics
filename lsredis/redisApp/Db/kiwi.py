@@ -4,8 +4,8 @@ configList = {
         #
         # EPICS originated pvs
         #
-        { "inp": "21:F1:DT:BCX",                 "key": "detector.beam.x",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
-        { "inp": "21:F1:DT:BCY",                 "key": "detector.beam.y",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:F1:DT:BCX",                 "key": "detector.beam.x",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
+        { "inp": "21:F1:DT:BCY",                 "key": "detector.beam.y",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:F1:AttAct",                 "key": "attenuation.actual",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:F1:AttRqs",                 "key": "attenuation.request",         "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
