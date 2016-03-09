@@ -4,6 +4,8 @@ configList = {
         #
         # EPICS originated pvs
         #
+        { "inp": "21:D1:pmac20:acc65e:1:rb14",   "key": "detector.cover",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
+        { "out": "21:D1:pmac20:acc65e:1:bo14",   "key": "detector.cover",                                 "oscan": "Passive", "dtyp": "CA Source", "ro": "bo", "znam": "Down", "onam": "Up"},
         { "inp": "21:D1:DT:BCX",                 "key": "detector.beam.x",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:D1:DT:BCY",                 "key": "detector.beam.y",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
@@ -22,7 +24,7 @@ configList = {
         { "inp": "21:DCAMS:Edge1:VerticalFound", "key": "capDetected",                 "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "EPS:21:ID:BLEPS:SPER",         "key": "pss.bleps_fe_shutter_permit", "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "EPS:21:ID:BLEPS:VACPER",       "key": "pss.bleps_fe_vacuum_permit",  "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
-        { "inp": "PC:21ID:SES_BLEPS_PERMIT",     "key": "pss.bleps_station_permit",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
+        { "inp": "PC:21ID:SDS_BLEPS_PERMIT",     "key": "pss.bleps_station_permit",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:ACIS_FES_PERMIT",      "key": "pss.acis_permit",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:ACIS_GLOBAL_ONLINE",   "key": "pss.global_online",           "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
         { "inp": "PA:21ID:A_APS_KEY",            "key": "pss.a_enabled",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
