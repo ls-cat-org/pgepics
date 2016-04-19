@@ -19,6 +19,7 @@ configList = {
         { "inp": "ID21us:Energy",                "key": "insertionDevice.actualEnergy","setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:D1:2:userCalc2",            "key": "I0",                          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 0},
         { "inp": "21:D1:DT:Z0:ActPos",           "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
+        { "inp": "21:D1:Dt:Z0:RqsPos.DRVL",      "key": "detector.minPosition",        "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "pres": 2},
         { "inp": "21:D1:TB:H:ActPos",            "key": "table.y.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:D1:TB:L:ActPos",            "key": "table.x.position",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:DCAMS:Edge1:VerticalFound", "key": "capDetected",                 "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Off", "onam": "On"},
