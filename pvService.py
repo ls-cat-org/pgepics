@@ -1,8 +1,9 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 # 
 #  Support for epics process variables
 # 
-#  Copyright 2008-2013 by Keith Brister, Northwestern University
+#  Copyright 2008-2016 by Northwestern University
+#  Author: Keith Brister
 # 
 #    This file is part of the LS-CAT Beamline Control Package which is
 #    free software: you can redistribute it and/or modify it under the
@@ -19,7 +20,7 @@
 #    along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
 # 
 
-import EpicsCA
+import epics
 import pg
 import mmap
 import select
@@ -34,10 +35,10 @@ class PVServiceError( Exception):
 
     def __init__( self, value):
         self.value = value
-        print >> sys.stderr, sys.exc_info()[0]
-        print >> sys.stderr, '-'*60
+        print(sys.exc_info()[0], file=sys.stderr)
+        print('-'*60, file=sys.stderr)
         traceback.print_exc(file=sys.stderr)
-        print >> sys.stderr, '-'*60
+        print('-'*60, file=sys.stderr)
 
     def __str__( self):
         return repr( self.value)
@@ -68,10 +69,10 @@ class _Q:
             qr = self.db.query(qs)
         except:
             if self.db.status == 1:
-                print >> sys.stderr, sys.exc_info()[0]
-                print >> sys.stderr, '-'*60
+                print(sys.exc_info()[0], file=sys.stderr)
+                print('-'*60, file=sys.stderr)
                 traceback.print_exc(file=sys.stderr)
-                print >> sys.stderr, '-'*60
+                print('-'*60, file=sys.stderr)
                 return None
             # reset the connection, should
             # put in logic here to deal with transactions
@@ -101,11 +102,28 @@ class _Q:
 
 class PvService:
     mmfn = "/mnt/pvs/pvService"
-
+    workList = []
+    connectionList = []
 
     def intHandler( self, signum, frame):
-        print >> sys.stderr, "Caught signal, exiting"
+        print("Caught signal, exiting", file=sys.stderr)
         self.okToRun = False
+
+    def updateCB( self, pvname=None, value=None, char_value=None, **kw):
+        if not self.running:
+            return
+
+        tmp  = str(value)
+        if tmp == None or len(tmp) == 0:
+            tmp = str("505.505")   # SOS in leet
+
+        self.workList.append({"pvname": pvname, "value": tmp})
+
+    def updateConnectionCB( self, pvname=None, conn=None, **kw):
+        print( "Connection %s: %s" % (pvname, repr(conn)))
+        if conn:
+            self.connectionList.append(pvname)
+
 
     def __init__( self):
         self.mms  = None
@@ -116,7 +134,7 @@ class PvService:
         self.putOnlyList = {}
         self.okToRun = True
 
-        print >> sys.stderr, "Initialization...\n"
+        print("Initialization...\n", file=sys.stderr)
 
         self.q = _Q()
 
@@ -133,8 +151,8 @@ class PvService:
         qr = self.q.query( "select index, name from epics.getpvnames( %d) order by index" % (self.pid))
         maxIndex = 0
         for r in qr.dictresult():
-            print r["index"], r["name"]
-            self.pvList[r["name"]] = { "index" : int(r["index"]), "pv" : EpicsCA.PV( r["name"])}
+            print(r["index"], r["name"])
+            self.pvList[r["name"]] = { "index" : int(r["index"]), "pv" : epics.PV( r["name"], callback=self.updateCB, connection_callback=self.updateConnectionCB)}
             if int( r["index"]) > maxIndex:
                 maxIndex = int( r["index"])
 
@@ -150,7 +168,7 @@ class PvService:
         # We have to be sure that postgresql can read this.
         # Probably these permissions are not strict enough
         #
-        os.chmod( self.mmfn, 0666)
+        os.chmod( self.mmfn, 0o666)
 
         #
         # now we'll open the file with the correct mode
@@ -160,54 +178,13 @@ class PvService:
         self.mms = mmap.mmap( self.mmf.fileno(), (maxIndex+1)*256)
         
         #
-        # Initialize the values
-        #
-        for p in self.pvList.keys():
-            try:
-                tmp = str(self.pvList[p]["pv"].get())
-            except:
-                print >> sys.stderr, "Failed to get %s" % (self.pvList[p]["pv"].pvname)
-                tmp = str("505.505")
-
-            if tmp == None or len(tmp) == 0:
-                print >> sys.stderr, "Failed to get %s" % (self.pvList[p]["pv"].pvname)
-                tmp = str("505.505")  # SOS in leet
-
-            #
-            # Write the value onto the disk
-            #
-            i = 256 * self.pvList[p]["index"]
-            self.mms.seek( i)
-            self.mms.write( tmp)
-            self.mms.write( "\0")
-            
-        self.mms.flush()
-
-        #
         # Setup callback to monitor the variables
         #
-        for p in self.pvList.keys():
-            self.pvList[p]["pv"].add_callback( callback=self.updateCB)
-
-    def updateCB( self, pv=None, **kw):
-        if not self.running:
-            return
-        indx = self.pvList[pv.pvname]["index"]
-        i = 256*indx
-        tmp  = str( pv.get())
-        if tmp == None or len(tmp) == 0:
-            tmp = str("505.505")   # SOS in leet
-
-        qs = "select pg_advisory_lock( 14852, %d) as tal" % (indx)
-        self.q.query( qs)
-        self.mms.seek( i)
-        self.mms.write( tmp)
-        self.mms.write( "\0")
-        self.mms.flush()
-        self.q.query( "select pg_advisory_unlock( 14852, %d)" % (indx))
+        #for p in list(self.pvList.keys()):
+        #    self.pvList[p]["pv"].add_callback( callback=self.updateCB)
 
     def run( self):
-        print >> sys.stderr, "Running\n"
+        print("Running\n", file=sys.stderr)
 
         # Set up to capture ^C and exit "gracefully"
         #
@@ -217,7 +194,30 @@ class PvService:
 
         tryAgain = False
         while self.okToRun:
-            EpicsCA.pend_event( t=0.05)
+            time.sleep(0.01)
+
+            while len(self.connectionList):
+                ci = self.connectionList.pop(0)
+                value = str(self.pvList[ci]["pv"].get())
+                self.workList.append({"pvname": ci, "value": value})
+
+            while len(self.workList):
+                wi = self.workList.pop(0)
+                indx = self.pvList[wi["pvname"]]["index"]
+                i    = 256 * indx
+                qs = "select pg_advisory_lock( 14852, %d) as tal" % (indx)
+                self.q.query( qs)
+                self.mms.seek( i)
+                if wi["value"] == None:
+                    print("Bad value",wi, file=sys.stderr);
+                else:
+                    self.mms.write( str.encode(wi["value"]))
+
+                self.mms.write( b'\x00')
+                self.mms.flush()
+                self.q.query( "select pg_advisory_unlock( 14852, %d)" % (indx))
+
+
             if tryAgain or self.q.getnotify() != None:
                 qr = self.q.query( "select cappv, capval from epics.caputpop()")
                 foundOne = False
@@ -225,12 +225,12 @@ class PvService:
                     foundOne = True
                     nam = r["cappv"]
                     val = r["capval"]
-                    print "moving ",nam," to ",val
-                    if self.pvList.has_key( nam):
+                    print("moving ",nam," to ",val)
+                    if nam in self.pvList:
                         self.pvList[nam]["pv"].put( val)
                     else:
-                        if not self.putOnlyList.has_key( nam):
-                            self.putOnlyList["nam"] = EpicsCA.PV( nam)
+                        if nam not in self.putOnlyList:
+                            self.putOnlyList["nam"] = epics.PV( nam)
                         self.putOnlyList["nam"].put( val)
                     #
                     # pause to keep commands from bumping into one another
@@ -239,7 +239,7 @@ class PvService:
         #
         # Remove callbacks
         #
-        for p in self.pvList.keys():
+        for p in list(self.pvList.keys()):
             self.pvList[p]["pv"].clear_callbacks()
 
 if __name__ == "__main__":
