@@ -1,5 +1,5 @@
 #! /usr/bin/python
-import EpicsCA
+import epics
 import pg
 import time
 
@@ -29,139 +29,165 @@ class RemoteControl:
         self.detectorSaved   = None
         self.armReturn       = False
         self.waitingForCover = False
+        self.lastReadyA      = None
+        self.lastReadyB      = None
 
+        self.actionList = []
         self.pvd = pvd
         self.db = db
-        self.voicePv = EpicsCA.PV(pvd["voice"])
-        self.lastVoice = self.voicePv.get()
-        self.voicePv.add_callback( callback=self.voiceCB)
-
-        self.shutterPv = EpicsCA.PV( pvd["shutter"])
-        self.lastShutter = self.shutterPv.get()
-
-        self.doorPv = EpicsCA.PV( pvd["door"])
-        self.lastDoor = self.doorPv.get()
-        self.doorPv.add_callback( callback=self.doorCB)
-
-        self.readyAPv = EpicsCA.PV( pvd["readyA"])
-        self.readyAPv.get()
-        self.readyAPv.add_callback( callback=self.readyCB)
-
-        self.readyBPv = EpicsCA.PV( pvd["readyB"])
-        self.readyBPv.get()
-        self.readyBPv.add_callback( callback=self.readyCB)
-
-        
-        if pvd.has_key("detectorLowerLimit"):
-            self.detectorLLPV = EpicsCA.PV( pvd["detectorLowerLimit"])
-            self.detectorLLPV.get()
-            self.detectorLLPV.add_callback( callback=self.detectorLLCB)
-
-        if pvd.has_key("cover"):
-            self.cover = pvd["cover"]
-            self.coverPV = EpicsCA.PV( self.cover)
-            self.coverPV.get()
-
-        if pvd.has_key("coverOpen"):
-            self.coverOpen   = pvd["coverOpen"]
-            self.coverOpenPV = EpicsCA.PV( self.coverOpen);
-            self.coverOpenedSaved = self.coverOpenPV.get()
-
-        if pvd.has_key("coverClosed"):
-            self.coverClosed   = pvd["coverClosed"]
-            self.coverClosedPV = EpicsCA.PV( self.coverClosed)
-            self.coverClosedPV.get()
 
         self.detector = pvd["detector"]
         qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
         self.detectorSaved = float(qr.dictresult()[0]["p"])
 
-    def detectorLLCB( self, pv=None, **kw):
-        print "detectorLLCB val: %d  waitingForCover: %s  detectorSaved: %f" % (pv.get(), self.waitingForCover, self.detectorSaved)
+        self.voicePv = epics.PV(pvd["voice"])
+        print("waiting for %s" % (pvd["voice"]))
+        self.voicePv.wait_for_connection(1);
+        print("done waiting for %s" % (pvd["voice"]))
+        self.lastVoice = self.voicePv.value
+        print("voicePv value:", self.lastVoice)
+        self.voicePv.add_callback(callback=self.voiceCB)
+
+        self.shutterPv = epics.PV( pvd["shutter"])
+        print("waiting for %s" % (pvd["shutter"]))
+        self.shutterPv.wait_for_connection(1);
+        self.lastShutter = self.shutterPv.value
+        print("done waiting.  Got value: ", self.lastShutter)
+
+        self.doorPv = epics.PV( pvd["door"])
+        self.lastDoor = self.doorPv.value
+        self.doorPv.add_callback(callback=self.doorCB)
+
+
+        self.readyAPv = epics.PV( pvd["readyA"])
+        print("waiting for %s" % (pvd["readyA"]))
+        self.readyAPv.wait_for_connection()
+        print("Done waiting.  Value:", self.readyAPv.value)
+        self.lastReadyA = self.readyAPv.value
+
+        self.readyBPv = epics.PV( pvd["readyB"], callback=self.readyCB)
+        print("waiting for %s" % (pvd["readyB"]))
+        self.readyBPv.wait_for_connection()
+        print("Done waiting.  Value:", self.readyBPv.value)
+        self.lastReadyB = self.readyBPv.value
+
+        self.readyAPv.add_callback(callback=self.readyCB)
+        self.readyBPv.add_callback(callback=self.readyCB)
+        
+        if "detectorLowerLimit" in pvd:
+            self.detectorLLPV = epics.PV( pvd["detectorLowerLimit"], callback=self.detectorLLCB)
+            self.detectorLLPV.value
+
+        if "cover" in pvd:
+            self.cover = pvd["cover"]
+            self.coverPV = epics.PV( self.cover)
+            self.coverPV.value
+
+        if "coverOpen" in pvd:
+            self.coverOpen   = pvd["coverOpen"]
+            self.coverOpenPV = epics.PV( self.coverOpen);
+            self.coverOpenedSaved = self.coverOpenPV.value
+
+        if "coverClosed" in pvd:
+            self.coverClosed   = pvd["coverClosed"]
+            self.coverClosedPV = epics.PV( self.coverClosed)
+            self.coverClosedPV.value
+
+
+    def detectorLLAction(self, value=None, char_value=None):
+        qs = "select epics.moveit( '%s', %f)" % (self.detector, self.detectorSaved)
+        print("    query: %s" % (qs))
+        self.db.query( qs)
+        self.waitingForCover = False
+
+    def detectorLLCB( self, pvname=None, value=None, char_value=None, **kw):
+        print("detectorLLCB val: %d  waitingForCover: %s  detectorSaved: %f" % (value, self.waitingForCover, self.detectorSaved))
 
         if self.waitingForCover and self.detectorSaved < self.IGNORE_DIST:
-            qs = "select epics.moveit( '%s', %f)" % (self.detector, self.detectorSaved)
-            print "    query: %s" % (qs)
-            self.db.query( qs)
-            self.waitingForCover = False
+            self.actionList.append((self.detectorLLAction, value, char_value))
 
-    def voiceCB( self, pv=None, **kw):
-        print "[%s] voiceCB  voice: %d,  lastVoice: %d" % (time.strftime('%Y-%m-%d %H:%M:%S'), pv.get(), self.lastVoice)
+    def voiceCB( self, pvname=None, value=None, char_value=None, **kw):
+        print("[%s] voiceCB  voice: %d,  lastVoice: %d" % (time.strftime('%Y-%m-%d %H:%M:%S'), value, self.lastVoice))
 
-        v = int(pv.get())
+        v = int(value)
         if v == 1 and self.lastVoice == 0:
             self.armReturn = True
 
-        self.lastVoice = int(pv.get())
+        self.lastVoice = int(value)
 
-    def coverOpenedCB( self, pv=None, **kw):
-        print 'coverOpenedCB', pv.get()
+
+    def coverOpenedCB( self, pvname=None, value=None, char_value=None, **kw):
+        print('coverOpenedCB', value)
         if self.lastDoor == 1:
-            self.coverOpenedSave = pv.get()
+            self.coverOpenedSave = value
 
 
-    def doorCB( self, pv=None, **kw):
-        print 'doorCB', pv.get()
+    def moveDetectorBackAction(self, value=None, char_value=None):
+        qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
+        self.detectorSaved = float(qr.dictresult()[0]["p"])
+
+        if self.coverOpen != None:
+            self.coverOpenSaved = self.coverOpenPV.value
+                
+        if self.detectorSaved < self.IGNORE_DIST:
+            #
+            # Only move the detector back if it is close to that some amount
+            #
+            self.db.query( "select epics.moveit( '%s', %f)" % (self.detector, self.MOVE_TO_DIST))
+            
+        if self.coverClosed != None:
+            if self.coverClosedPV.value != 0:
+                #
+                # close cover if it is not closed now
+                #
+                self.coverPV.value = 0
+
+
+    def moveDetectorForwardAction(self, value=None, charValue=None):
+        if self.cover != None and self.coverOpenSaved != None:
+            print('doorCB B')
+            self.coverPV.value = ( 1 - self.coverOpenSaved)
+            self.waitingForCover = True
+
+        if self.detectorSaved < self.IGNORE_DIST and not self.waitingForCover:
+            qs = "select epics.moveit( '%s', %f)" % (self.detector, self.detectorSaved)
+            print("    query: %s" % (qs))
+            self.db.query( qs)
+
+        self.armReturn = False
+        print('doorCB D')
+
+    def doorCB( self, pvname=None, value=None, char_value=None, **kw):
+        print('doorCB', value)
 
         #
         # maybe move the detector back
         #
-        if pv.get() == 0 and self.lastDoor == 1:
-            qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
-            self.detectorSaved = float(qr.dictresult()[0]["p"])
-
-            if self.coverOpen != None:
-                self.coverOpenSaved = self.coverOpenPV.get()
-                
-
-            print 'doorCB', pv.get(), 'detectorSaved', self.detectorSaved
-            if self.detectorSaved < self.IGNORE_DIST:
-                #
-                # Only move the detector back if it is close to that some amount
-                #
-                self.db.query( "select epics.moveit( '%s', %f)" % (self.detector, self.MOVE_TO_DIST))
-
-                print 'doorCB', pv.get(), 'moveit', self.MOVE_TO_DIST
-
-            if self.coverClosed != None:
-                if self.coverClosedPV.get() != 0:
-                    #
-                    # close cover if it is not closed now
-                    #
-                    self.coverPV.put(0)
-
+        if value == 0 and self.lastDoor == 1:
+            self.actionList.append((self.moveDetectorBackAction, value, char_value))
         
-
         #
         # maybe move the detector forward
         #
-        if self.armReturn and pv.get() == 1 and self.lastDoor == 0:
-            print 'doorCB A'
-            if self.cover != None and self.coverOpenSaved != None:
-                print 'doorCB B'
-                self.coverPV.put( 1 - self.coverOpenSaved)
-                self.waitingForCover = True
-
-            if self.detectorSaved < self.IGNORE_DIST and not self.waitingForCover:
-                print 'doorCB C'
-
-                qs = "select epics.moveit( '%s', %f)" % (self.detector, self.detectorSaved)
-                print "    query: %s" % (qs)
-                self.db.query( qs)
-
-            self.armReturn = False
-            print 'doorCB D'
+        if self.armReturn and value == 1 and self.lastDoor == 0:
+            self.actionList.append((self.moveDetectorForwardAction, value, char_value))
 
 
-        self.lastDoor = pv.get()
-        print 'doorCB E'
+        self.lastDoor = value
 
-    def readyCB( self, pv=None, **kw):
-        if self.readyAPv.get() == 1 and self.readyBPv.get() == 1 and (self.lastReadyA == 0 or self.lastReadyB == 0):
-            self.shutterPv.put( 1)
 
-        self.lastReadyA = self.readyAPv.get()
-        self.lastReadyB = self.readyBPv.get()
+    def readyAction(self, value=None, charValue=None):
+        print("opening shutter", self.shutterPv.pvname)
+        self.shutterPv.put(1)
+        
+
+    def readyCB( self, pvname=None, value=None, char_value=None, **kw):
+        print('readyCB', pvname, value, char_value)
+        if self.readyAPv.value == 1 and self.readyBPv.value == 1 and (self.lastReadyA == 0 or self.lastReadyB == 0):
+            self.actionList.append((self.readyAction, value, char_value))
+
+        self.lastReadyA = self.readyAPv.value
+        self.lastReadyB = self.readyBPv.value
         
 
 class Doors:
@@ -186,13 +212,18 @@ class Doors:
     def __init__( self):
         self.db       = pg.connect(dbname='ls',user='lsuser', host='contrabass.ls-cat.org')
         for pvs in self.pvN:
-            print pvs
+            print(pvs)
             self.rcL[pvs["station"]] = RemoteControl( pvs, self.db)
             
     def run( self):
-        while 1:
-            EpicsCA.pend_event( t=1.1)
+        while True:
+            time.sleep(0.01)
 
+            for pvs in self.pvN:
+                actionList = self.rcL[pvs["station"]].actionList
+                while len(actionList):
+                    (action, value, char_value) = actionList.pop(0)
+                    action(value, char_value)
 
 if __name__ == "__main__":
     doors = Doors()
