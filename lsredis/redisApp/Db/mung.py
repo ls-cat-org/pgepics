@@ -6,6 +6,10 @@ configList = {
         #
         { "inp": "21:D1:pmac20:acc65e:1:rb14",   "key": "detector.cover",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
         { "out": "21:D1:pmac20:acc65e:1:bo14",   "key": "detector.cover",                                 "oscan": "Passive", "dtyp": "CA Source", "ro": "bo", "znam": "Down", "onam": "Up"},
+        { "inp": "21:D1:DT:H0:ActPos",           "key": "detector.height",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
+        { "out": "21:D1:DT:H0:RqsPos",           "key": "detector.height",                                "oscan": "Passive", "dtyp": "CA Source", "ro": "ao", "prec": 3},
+        { "inp": "21:D1:DT:XC:ActPos",           "key": "detector.horizontalOffset",   "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
+        { "out": "21:D1:DT:XC:RqsPos",           "key": "detector.horizontalOffset",                      "oscan": "Passive", "dtyp": "CA Source", "ro": "ao", "prec": 3},
         { "inp": "21:D1:DT:BCX",                 "key": "detector.beam.x",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:D1:DT:BCY",                 "key": "detector.beam.y",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "S:SRcurrentAI",                "key": "current",                     "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
