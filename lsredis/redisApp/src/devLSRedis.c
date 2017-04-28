@@ -104,8 +104,14 @@ void devRedis_cleanup( void *data) {
  **
  */
 static void devRedisDBChangedCB( redisAsyncContext *c, void *reply, void *privdata) {
+  static const char *id = __FILE__ " " "devRedisDBChangedCB";
   redisReply *r;
   
+  if (reply == NULL) {
+    fprintf(stderr, "%s: NULL reply: %s, host: %s\n", id, c->errstr, c->c.tcp.host);
+    return;
+  }
+
   r = reply;
   if( r->type == REDIS_REPLY_ERROR) {
     //
@@ -695,6 +701,11 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
   redisReply  *r;
   redisValueState *rvs;
 
+  if (reply == NULL) {
+    fprintf(stderr, "%s: NULL reply: %s, host: %s\n", id, c->errstr, c->c.tcp.host);
+    return;
+  }
+
   r = reply;
   rvs   = (redisValueState *)privdata;
 
@@ -732,13 +743,18 @@ static void devRedis_setPVCB( redisAsyncContext *c, void *reply, void *privdata)
  **
  */
 static void devRedisSubscribeCB( redisAsyncContext *c, void *reply, void *privdata) {
-  static char *id = "devRedisSubscribeCB";
+  static char *id = __FILE__ " " "devRedisSubscribeCB";
   redisReply *r;
   char *key;
   char *publisher;
   redisState *rs;
   redisValueState *rvs;
   redisPollFDData *prsfd;
+
+  if (reply == NULL) {
+    fprintf(stderr, "%s: NULL reply: %s, host: %s\n", id, c->errstr, c->c.tcp.host);
+    return;
+  }
 
   r  = reply;
 
