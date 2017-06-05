@@ -4,6 +4,8 @@ configList = {
         #
         # EPICS originated pvs
         #
+        { "inp": "21:D1:DAC1_5",                 "key": "vfm.position",                "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
+        { "inp": "21:D1:DAC1_6",                 "key": "hfm.position",                "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21:D1:pmac20:acc65e:1:rb14",   "key": "detector.cover",              "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Down", "onam": "Up"},
         { "out": "21:D1:pmac20:acc65e:1:bo14",   "key": "detector.cover",                                 "oscan": "Passive", "dtyp": "CA Source", "ro": "bo", "znam": "Down", "onam": "Up"},
         { "inp": "21:D1:DT:H0:ActPos",           "key": "detector.height",             "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
@@ -21,6 +23,7 @@ configList = {
         { "inp": "21linux:mono:ChEnWrkng",       "key": "mono.changeEnergyRunning",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Idle", "onam": "Working"},
         { "inp": "21:C1:MO:E:ActPos",            "key": "mono.actualEnergy",           "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "ID21us:Energy",                "key": "insertionDevice.actualEnergy","setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
+        { "inp": "ID21us:HarmonicValue",         "key": "insertionDevice.harmonic",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 0},
         { "inp": "21:D1:2:userCalc2",            "key": "I0",                          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 0},
         { "inp": "21:D1:DT:Z0:ActPos",           "key": "detector.dist",               "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 1},
         { "inp": "21:D1:DT:Z0:RqsPos.DRVL",      "key": "detector.minPosition",        "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 2},
