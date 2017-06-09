@@ -22,6 +22,7 @@ configList = {
         { "inp": "21linux:mono:RqsEn",           "key": "mono.requestedEnergy",        "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "ai", "prec": 3},
         { "inp": "21linux:mono:ChEnWrkng",       "key": "mono.changeEnergyRunning",    "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Idle", "onam": "Working"},
         { "inp": "21linux:mono:CentrWrkng",      "key": "mono.centerRunning",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Idle", "onam": "Working"},
+        { "inp": "21linux:mono:Msg9",            "key": "mono.statusMessage",          "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "stringin"},
         { "inp": "21:D1:FluoScanWrkng",          "key": "fluoScan.running",            "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "bi", "znam": "Idle", "onam": "Working"},
         { "inp": "21:D1:EdgeName",               "key": "fluoScan.edgeName",           "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "stringin"},
         { "inp": "21:D1:FluoFilePrefix",         "key": "fluoScan.filePrefix",         "setter": "redis", "iscan": "Passive", "dtyp": "CA Source", "ri": "stringin"},
