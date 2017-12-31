@@ -409,6 +409,7 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns bo
   DECLARE
     mrec   record;	-- motions record
     usmrec record;	-- Corresponding _motions record
+    ignore_soft_limits boolean;
   BEGIN
     -- Update epics variables
     PERFORM epics.updatePvmVars( pvname);
@@ -439,17 +440,23 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns bo
     --
     -- Check Soft Limits
     --
-    IF mrec.mll = mrec.mhl THEN
+    IF mrec.mll = 0 and mrec.mhl = 0 THEN
+      ignore_soft_limits = true;
+    ELSE
+      ignore_soft_limits = false;
+    END IF;
+
+    IF not ignore_soft_limits and (mrec.mll = mrec.mhl) THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'The high and low soft limits for motor '||pvname||' are both '||mrec.mll::text||'.  Please contact beamline staff.');
       return false;
     END IF;      
 
-    IF mrec.mll > reqpos THEN
+    IF not ignore_soft_limits and (mrec.mll > reqpos) THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is less than lower limit of '|| mrec.mll::text);
       return false;
     END IF;
 
-    IF mrec.mhl < reqpos THEN
+    IF not ignore_soft_limits and (mrec.mhl < reqpos) THEN
       INSERT INTO epics.errors (epvn, emsg) VALUES ( pvname,  'Requested postion for "'||pvname||'" of '||reqpos::text||' is greater than upper limit of '|| mrec.mhl::text);
       return false;
     END IF;
@@ -517,6 +524,30 @@ CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
 ALTER FUNCTION epics.position( text) OWNER TO lsadmin;
+
+CREATE OR REPLACE FUNCTION epics.reqposition( pv text) returns numeric as $$
+  DECLARE
+    rtn numeric;
+    tmp text;
+  BEGIN
+    SELECT INTO tmp epics._caget( pvmMonitorIndex) FROM epics._pvmonitors WHERE pvmKey IN (SELECT mRqsPos FROM epics._motions WHERE mMotorPvName=$1 LIMIT 1);
+    IF NOT FOUND THEN
+      SELECT INTO tmp epics._caget( pv);
+    END IF;
+
+    IF tmp = 'None' THEN
+      rtn := '99999.99999';
+    ELSE
+      SELECT INTO rtn tmp::numeric;
+      IF abs(rtn) < 1e-20 THEN
+        rtn = 0;
+      END IF;
+      PERFORM epics.updatePvmVars( pv);
+    END IF;
+    return rtn;
+  END;
+$$ LANGUAGE PLPGSQL SECURITY DEFINER;
+ALTER FUNCTION epics.reqposition( text) OWNER TO lsadmin;
 
 CREATE OR REPLACE FUNCTION epics.isthere( pv text) returns boolean as $$
   DECLARE
