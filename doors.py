@@ -37,6 +37,7 @@ class RemoteControl:
         self.db = db
 
         self.detector = pvd["detector"]
+        print self.detector
         qr = self.db.query( "select epics.position( '%s') as p" % (self.detector))
         self.detectorSaved = float(qr.dictresult()[0]["p"])
 
