@@ -87,7 +87,7 @@ class RemoteControl:
         if "coverOpen" in pvd:
             self.coverOpen   = pvd["coverOpen"]
             self.coverOpenPV = epics.PV( self.coverOpen);
-            self.coverOpenedSaved = self.coverOpenPV.value
+            self.coverOpenSaved = self.coverOpenPV.value
 
         if "coverClosed" in pvd:
             self.coverClosed   = pvd["coverClosed"]
@@ -120,7 +120,7 @@ class RemoteControl:
     def coverOpenedCB( self, pvname=None, value=None, char_value=None, **kw):
         print('coverOpenedCB', value)
         if self.lastDoor == 1:
-            self.coverOpenedSave = value
+            self.coverOpenSaved = value
 
 
     def moveDetectorBackAction(self, value=None, char_value=None):
