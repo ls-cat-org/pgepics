@@ -28,7 +28,7 @@ CREATE TABLE epics._historyPvNames (
 	hpnKey serial primary key,		-- table key
 	hpnName text NOT NULL unique		-- name of pv
 );
-ALTER TABLE epics._historyPvNames OWNER TO lsadmin;
+ALTER TABLE epics._historyPvNames OWNER TO administrators;
 
 CREATE TABLE epics._historyPvs (
 	hpKey serial primary key,			-- table key
@@ -36,7 +36,7 @@ CREATE TABLE epics._historyPvs (
 	hpValue text,					-- the value
 	hpTS timestamp with time zone default now()	-- when we were created
 );
-ALTER TABLE epics._historyPvs OWNER TO lsadmin;
+ALTER TABLE epics._historyPvs OWNER TO administrators;
 
 CREATE INDEX _historyPvsPvIndex ON epics._historyPvs (hpN);
 CREATE INDEX _historyPvsTSIndex ON epics._historyPvs (hpTS);
@@ -58,7 +58,7 @@ CREATE TABLE epics._pvmonitors (
 	pvmHistoryKey bigint NOT NULL UNIQUE		-- pointer to this pv's name in the history table (should it really be stored in pvmonitors too?)
 		references epics._historyPvNames (hpnKey)
 );
-ALTER TABLE epics._pvmonitors OWNER TO lsadmin;
+ALTER TABLE epics._pvmonitors OWNER TO administrators;
 
 CREATE TABLE epics._actionList (
 --
@@ -68,7 +68,7 @@ CREATE TABLE epics._actionList (
 	alKey serial primary key,
 	alAction     text NOT NULL UNIQUE
 );
-ALTER TABLE epics._actionList OWNER TO lsadmin;
+ALTER TABLE epics._actionList OWNER TO administrators;
 
 INSERT INTO epics._actionList (alAction) VALUES ('epics._openSesame');
 
@@ -97,7 +97,7 @@ CREATE TABLE epics._pvactions (
 	pvaLastTrigger    timestamp with time zone default NULL,	-- time of last trigger
 	pvaLastReset      timestamp with time zone default NULL		-- time of last reset
 );
-ALTER TABLE epics._pvactions OWNER TO lsadmin;
+ALTER TABLE epics._pvactions OWNER TO administrators;
 
       
 INSERT INTO epics._pvactions (pvaPv, pvaTrigIsEqual, pvaTrigResetEqual, pvaAction) VALUES (
@@ -195,7 +195,7 @@ CREATE OR REPLACE FUNCTION epics._pvmUpdateTF2() RETURNS TRIGGER AS $$
     return NULL;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._pvmUpdateTF2() OWNER TO lsadmin;
+ALTER FUNCTION epics._pvmUpdateTF2() OWNER TO administrators;
 CREATE TRIGGER pvmonitorUpdateTrigger2 AFTER UPDATE ON epics._pvmonitors FOR EACH ROW EXECUTE PROCEDURE epics._pvmUpdateTF2();
 
 
@@ -208,7 +208,7 @@ CREATE TABLE epics._shutterOpenTable (
 	soSO  bigint NOT NULL			-- pointer to shutter open PV
 		references epics._pvmonitors (pvmKey) ON UPDATE CASCADE
 );
-ALTER TABLE epics._shutterOpenTable OWNER TO lsadmin;
+ALTER TABLE epics._shutterOpenTable OWNER TO administrators;
 
 INSERT INTO epics._shutterOpenTable (soBrA, soBrB, soSo) VALUES (
 	(select pvmkey from epics._pvmonitors where pvmname='PA:21ID:STA_D_BEAM_READY'),
@@ -247,7 +247,7 @@ CREATE OR REPLACE FUNCTION epics._openSesame( pvmk bigint, value numeric) RETURN
     return;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._openSesame( bigint, numeric) OWNER TO lsadmin;
+ALTER FUNCTION epics._openSesame( bigint, numeric) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics._maybeKillMotor( pvmk bigint, value numeric) RETURNS void AS $$
   --
@@ -267,14 +267,14 @@ CREATE OR REPLACE FUNCTION epics._maybeKillMotor( pvmk bigint, value numeric) RE
     return;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._maybeKillMotor( bigint, numeric) OWNER TO lsadmin;
+ALTER FUNCTION epics._maybeKillMotor( bigint, numeric) OWNER TO administrators;
 
 
 CREATE TABLE epics._motionkillprefs (
 -- Preferences for kill/abort of motors afterwards
 	mkp text primary key
 );
-ALTER TABLE epics._motionkillprefs OWNER TO lsadmin;
+ALTER TABLE epics._motionkillprefs OWNER TO administrators;
 
 INSERT INTO epics._motionkillprefs (mkp) VALUES ( 'killafter');
 INSERT INTO epics._motionkillprefs (mkp) VALUES ( 'leaveon');
@@ -318,7 +318,7 @@ CREATE TABLE epics._motions (
 	mPrevAmpEna boolean default NULL,	-- previous amplifier enabled (for mkillprefs = 'restore')
 	mWeAreInControl boolean default False	-- Indicates we initialed the motion and will reset kill/abort
 );
-ALTER TABLE epics._motions OWNER TO lsadmin;
+ALTER TABLE epics._motions OWNER TO administrators;
 
 CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, mRqsPos, mActPos, mInPos, mLl, mHl, mLlHit, mHlHit, mAbort, mKill, mAmpEna, mManMode, mKillPrefs, mPrevAmpEna, mWeAreInControl, mRunPrg, mRequestTS) AS
         SELECT mKey, mMotorPvName, mAssemblyPvName, mPrec, mDelta, 
@@ -352,7 +352,7 @@ CREATE OR REPLACE VIEW epics.motions ( mkey, mMotorPvName, mAssemblyPvName, mPre
                 LEFT JOIN epics._pvmonitors AS mManModePv ON mManModePv.pvmKey = m.mManMode
                 LEFT JOIN epics._pvmonitors AS mRunPrgPv  ON mRunPrgPv.pvmKey = m.mRunPrg;
 
-ALTER TABLE epics.motions OWNER TO lsadmin;
+ALTER TABLE epics.motions OWNER TO administrators;
 GRANT SELECT ON epics.motions TO PUBLIC;
 
 CREATE TABLE epics.errors (
@@ -365,7 +365,7 @@ CREATE TABLE epics.errors (
        emsg text not null
 );
 create index error_idx on epics.errors (epvn);
-ALTER TABLE epics.errors OWNER TO lsadmin;
+ALTER TABLE epics.errors OWNER TO administrators;
 
 
 CREATE OR REPLACE FUNCTION epics.updatePvmVar( pv text) returns void AS $$
@@ -374,7 +374,7 @@ CREATE OR REPLACE FUNCTION epics.updatePvmVar( pv text) returns void AS $$
     UPDATE epics._pvmonitors SET pvmValueN=pvmValue::numeric WHERE pvmName=pv;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.updatePvmVar( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.updatePvmVar( text) OWNER TO administrators;
 
 
 CREATE OR REPLACE FUNCTION epics.updatePvmVars( pv text) returns void as $$
@@ -399,7 +399,7 @@ CREATE OR REPLACE FUNCTION epics.updatePvmVars( pv text) returns void as $$
     return;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.updatePvmVars( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.updatePvmVars( text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns boolean AS $$
   --
@@ -498,7 +498,7 @@ CREATE OR REPLACE FUNCTION epics.moveit( pvname text, reqpos numeric) returns bo
     return true;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics.moveit( text, numeric) OWNER TO lsadmin;
+ALTER FUNCTION epics.moveit( text, numeric) OWNER TO administrators;
 
 
 CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
@@ -523,7 +523,7 @@ CREATE OR REPLACE FUNCTION epics.position( pv text) returns numeric as $$
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.position( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.position( text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.reqposition( pv text) returns numeric as $$
   DECLARE
@@ -547,7 +547,7 @@ CREATE OR REPLACE FUNCTION epics.reqposition( pv text) returns numeric as $$
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.reqposition( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.reqposition( text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.isthere( pv text) returns boolean as $$
   DECLARE
@@ -559,7 +559,7 @@ CREATE OR REPLACE FUNCTION epics.isthere( pv text) returns boolean as $$
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.isthere( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.isthere( text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.isthere( pv text, pos numeric) returns boolean as $$
   DECLARE
@@ -571,7 +571,7 @@ CREATE OR REPLACE FUNCTION epics.isthere( pv text, pos numeric) returns boolean 
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.isthere( text, numeric) OWNER TO lsadmin;
+ALTER FUNCTION epics.isthere( text, numeric) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.isstopped( pv text) returns boolean as $$
   DECLARE
@@ -600,7 +600,7 @@ CREATE OR REPLACE FUNCTION epics.isstopped( pv text) returns boolean as $$
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.isstopped( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.isstopped( text) OWNER TO administrators;
 
 
 
@@ -612,7 +612,7 @@ CREATE TABLE epics._mfields (
         mfUsePrec boolean,		-- Flag to use precision field or use zero
 	mfUseDelta boolean		-- Flag to use delta
 );
-ALTER TABLE epics._mfields OWNER TO lsadmin;
+ALTER TABLE epics._mfields OWNER TO administrators;
 
 INSERT INTO epics._mfields (mf, mc, mfMorA, mfUsePrec, mfUseDelta) VALUES ( ':RqsPos',      'mRqsPos', True,  True,  True);
 INSERT INTO epics._mfields (mf, mc, mfMorA, mfUsePrec, mfUseDelta) VALUES ( ':ActPos',      'mActPos', True,  True,  True);
@@ -635,7 +635,7 @@ CREATE TABLE epics._pv2motion (
 	pv2mNotify text   NOT NULL,
 	UNIQUE (pv2mPv, pv2mM, pv2mNotify)			-- the notify to call
 );
-ALTER TABLE epics._pv2motion OWNER TO lsadmin;
+ALTER TABLE epics._pv2motion OWNER TO administrators;
 
 
 
@@ -664,7 +664,7 @@ CREATE OR REPLACE FUNCTION epics._pvmonitorInsert() RETURNS trigger AS $$
     RETURN NEW;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._pvmonitorInsert() OWNER TO lsadmin;
+ALTER FUNCTION epics._pvmonitorInsert() OWNER TO administrators;
 
 CREATE TRIGGER pvmonitorInsertTrigger BEFORE INSERT ON epics._pvmonitors FOR EACH ROW EXECUTE PROCEDURE epics._pvmonitorInsert();
 
@@ -683,7 +683,7 @@ CREATE OR REPLACE FUNCTION epics._pvmonitorUpdate() RETURNS trigger AS $$
     RETURN NEW;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._pvmonitorUpdate() OWNER TO lsadmin;
+ALTER FUNCTION epics._pvmonitorUpdate() OWNER TO administrators;
 
 
 CREATE OR REPLACE FUNCTION epics.pvUpdateValue( thePid bigint, index int, value text) RETURNS void AS $$
@@ -696,7 +696,7 @@ CREATE OR REPLACE FUNCTION epics.pvUpdateValue( thePid bigint, index int, value 
     UPDATE epics._pvmonitors SET pvmts=now(), pvmValue=value, pvmValuen=value::numeric WHERE pvmMonitorIndex = index;      
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics.pvUpdateValue( bigint, int, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.pvUpdateValue( bigint, int, text) OWNER TO administrators;
 
 CREATE TRIGGER pvmonitorUpdateTrigger BEFORE UPDATE ON epics._pvmonitors FOR EACH ROW EXECUTE PROCEDURE epics._pvmonitorUpdate();
 
@@ -756,14 +756,14 @@ CREATE OR REPLACE FUNCTION epics._genmotionpvs( k int) RETURNS  void AS $$
 
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._genmotionpvs( int) OWNER TO lsadmin;
+ALTER FUNCTION epics._genmotionpvs( int) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics._genmotionpvs() RETURNS void AS $$
   BEGIN
     PERFORM epics._genmotionpvs( mkey) FROM epics._motions;   
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics._genmotionpvs() OWNER TO lsadmin;
+ALTER FUNCTION epics._genmotionpvs() OWNER TO administrators;
 
 CREATE TYPE epics.pvnamestype AS ( index int, name text, delta numeric, dtime numeric, prec int);
 
@@ -782,7 +782,7 @@ CREATE OR REPLACE FUNCTION epics.getPvNames( thePid bigint) RETURNS SETOF epics.
     RETURN;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics.getPvNames( bigint) OWNER TO lsadmin;
+ALTER FUNCTION epics.getPvNames( bigint) OWNER TO administrators;
 
 
 
@@ -795,13 +795,13 @@ CREATE TABLE epics._putqueue (
 	pqRunAfterTS timestamptz   default now(),		-- Don't run until at least this time
 	pqRunExpiresTS timestamptz default now()+'5 seconds'	-- don't run, just delete after this time
 );
-ALTER TABLE epics._putqueue OWNER TO lsadmin;
+ALTER TABLE epics._putqueue OWNER TO administrators;
 
 CREATE TABLE epics._pids (
 -- table of valid process IDs for camonitor
 	pid serial primary key	-- table key
 );
-ALTER TABLE epics._pids OWNER TO lsadmin;
+ALTER TABLE epics._pids OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.iniCAMonitor() RETURNS bigint AS $$
 	DELETE FROM epics._pids;
@@ -809,25 +809,25 @@ CREATE OR REPLACE FUNCTION epics.iniCAMonitor() RETURNS bigint AS $$
 	LISTEN caPutNotify;
 	SELECT currval( 'epics._pids_pid_seq')::bigint;
 $$ LANGUAGE sql SECURITY DEFINER;
-ALTER FUNCTION epics.iniCAMonitor() OWNER TO lsadmin;
+ALTER FUNCTION epics.iniCAMonitor() OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.pushPutQueue( k bigint, v text) RETURNS void AS $$
 	INSERT INTO epics._putQueue (pqIndex, pqValue) SELECT pvmMonitorIndex, $2 FROM epics._pvMonitors WHERE pvmKey=$1;
 	NOTIFY caPutNotify;
 $$ LANGUAGE sql SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.pushPutQueue( k bigint, v text, expires timestamptz) RETURNS void AS $$
 	INSERT INTO epics._putQueue (pqIndex, pqValue, pqRunExpiresTS) SELECT pvmMonitorIndex, $2, $3 FROM epics._pvMonitors WHERE pvmKey=$1;
 	NOTIFY caPutNotify;
 $$ LANGUAGE sql SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.pushPutQueue( k bigint, v text, delayed timestamptz, expires timestamptz) RETURNS void AS $$
 	INSERT INTO epics._putQueue (pqIndex, pqValue, pqRunAfterTS, pqRunExpiresTS) SELECT pvmMonitorIndex, $2, $3, $4 FROM epics._pvMonitors WHERE pvmKey=$1;
 	NOTIFY caPutNotify;
 $$ LANGUAGE sql SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.pushPutQueue( bigint, text) OWNER TO administrators;
 
 
 
@@ -836,13 +836,13 @@ CREATE TABLE epics.caPutQueue (
        capPv text not null,
        capVal text not null
 );
-ALTER TABLE epics.caPutQueue OWNER TO lsadmin;
+ALTER TABLE epics.caPutQueue OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.caPutPush( pv text, val text) returns void as $$
   INSERT INTO epics.caPutQueue (capPv, capVal) VALUES ($1, $2);
   NOTIFY caPutNotify;
 $$ LANGUAGE SQL SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.caPutPush( text, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.caPutPush( text, text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics.caPutPop() returns setof epics.caPutQueue AS $$
   DECLARE
@@ -855,13 +855,13 @@ CREATE OR REPLACE FUNCTION epics.caPutPop() returns setof epics.caPutQueue AS $$
     return;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER VOLATILE;
-ALTER FUNCTION epics.caPutPop() OWNER TO lsadmin;
+ALTER FUNCTION epics.caPutPop() OWNER TO administrators;
 
 
 CREATE OR REPLACE FUNCTION epics.checkPID( thePid bigint) RETURNS int AS $$
 	SELECT pid FROM epics._pids WHERE pid=$1;
 $$ LANGUAGE sql SECURITY DEFINER;
-ALTER FUNCTION epics.checkPID( bigint) OWNER TO lsadmin;
+ALTER FUNCTION epics.checkPID( bigint) OWNER TO administrators;
 
 
 CREATE TYPE epics.putQueueType AS ( index int, value text);
@@ -894,7 +894,7 @@ CREATE OR REPLACE FUNCTION epics.popPutQueue( thePid bigint) RETURNS SETOF epics
     RETURN;
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics.popPutQueue( bigint) OWNER TO lsadmin;
+ALTER FUNCTION epics.popPutQueue( bigint) OWNER TO administrators;
 
 
 INSERT INTO epics._motions ( mMotorPvName, mAssemblyPvName, mPrec, mDelta) VALUES ( '21:G1:DT:D',  '21:G1:DT:St', 1, 0.02);
@@ -939,18 +939,18 @@ CREATE OR REPLACE FUNCTION epics.caget( pv text) returns text as $$
     return rtn;
   END;
 $$ LANGUAGE PLPGSQL SECURITY DEFINER;
-ALTER FUNCTION epics.caget( text) OWNER TO lsadmin;
+ALTER FUNCTION epics.caget( text) OWNER TO administrators;
 
 CREATE OR REPLACE FUNCTION epics._caget( text) returns text as $$
   SELECT epics.caget( $1);
 $$ LANGUAGE SQL SECURITY DEFINER;
-ALTER FUNCTION epics._caget( text) OWNER TO lsadmin;
+ALTER FUNCTION epics._caget( text) OWNER TO administrators;
 
 
 CREATE OR REPLACE FUNCTION epics.caput( pv text, v text) returns void as $$
   select  epics.caputpush( $1, $2);
 $$ LANGUAGE SQL SECURITY DEFINER;
-ALTER FUNCTION epics.caput( text, text) OWNER TO lsadmin;
+ALTER FUNCTION epics.caput( text, text) OWNER TO administrators;
 
 CREATE TABLE epics.blstatuspvs (
   blspkey serial primary key,
@@ -963,4 +963,4 @@ CREATE OR REPLACE FUNCTION epics.blstatus() returns setof epics.blstatustype AS 
   BEGIN
   END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
-ALTER FUNCTION epics.blstatus() OWNER TO lsadmin;
+ALTER FUNCTION epics.blstatus() OWNER TO administrators;
